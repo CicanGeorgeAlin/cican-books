@@ -30,6 +30,10 @@ if (duplicates.length) errors.push("Duplicate catalog IDs: " + [...new Set(dupli
 
 const allowedStatuses = new Set(Object.values(statuses));
 const TECHNICALLY_READY = statuses.READY_TO_PUBLISH;
+
+const readyChecks = [
+  "sourceRepo", "sourceEbookId", "sourceUrl", "rightsStatus"
+];
 for (const book of catalog) {
   let bookSource;
   if (book.bookSource && fs.existsSync(path.join(ROOT, book.bookSource))) {
@@ -52,6 +56,9 @@ for (const book of catalog) {
   }
 
   if (book.status === statuses.PUBLISHED || book.status === TECHNICALLY_READY) {
+    for (const field of readyChecks) {
+      if (!book[field]) errors.push(book.id + ": readiness gate missing " + field);
+    }
     for (const field of ["sourceRepo", "sourceEbookId", "sourceUrl", "rightsStatus"]) {
       if (!book[field]) errors.push(book.id + ": published catalog record missing " + field);
     }
@@ -62,7 +69,7 @@ for (const book of catalog) {
       if (!bookSource || !new RegExp(field + "\s*:").test(bookSource)) errors.push(book.id + ": published book missing " + field);
     }
     if (!bookSource || !/targetWords\s*:\s*\d+/.test(bookSource)) errors.push(book.id + ": published book missing numeric targetWords");
-    if (bookSource && !/fullTextUrl\s*:/.test(bookSource)) warnings.push(book.id + ": published book has no fullTextUrl; FULL BOOK may be unavailable.");
+    if (bookSource && !/fullTextUrl\s*:/.test(bookSource)) warnings.push(book.id + ": published/ready book has no fullTextUrl; FULL BOOK may be unavailable.");
   }
 }
 
