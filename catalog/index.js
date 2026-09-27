@@ -13,10 +13,10 @@ export const CATALOG = Object.freeze([
   { id:"meditations", title:"MEDITATIONS", author:"Marcus Aurelius", category:"Philosophy", translator:"", targetMinutes:15, bookSource:"books/meditations.js" },
   { id:"walden", title:"WALDEN", author:"Henry David Thoreau", category:"Nature", translator:"", targetMinutes:15, bookSource:"books/walden.js" },
   { id:"thus-spake-zarathustra", title:"THUS SPAKE ZARATHUSTRA", author:"Friedrich Nietzsche", category:"Philosophy", translator:"Thomas Common", targetMinutes:15, bookSource:"books/thus-spake-zarathustra.js" },
-  { id:"frankenstein", title:"FRANKENSTEIN", author:"Mary Shelley", category:"Classic Fiction", translator:"", targetMinutes:15, bookSource:"books/frankenstein.js" },
+  { id:"frankenstein", title:"FRANKENSTEIN", author:"Mary Shelley", category:"Classic Fiction", translator:"", targetMinutes:15, status:"CONTENT_REVIEW", bookSource:"books/frankenstein.js" },
   { id:"dracula", title:"DRACULA", author:"Bram Stoker", category:"Classic Fiction", translator:"", targetMinutes:15, bookSource:"books/dracula.js" },
-  { id:"the-great-gatsby", title:"THE GREAT GATSBY", author:"F. Scott Fitzgerald", category:"Classic Fiction", translator:"", targetMinutes:15, bookSource:"books/the-great-gatsby.js" },
-  { id:"nineteen-eighty-four", title:"NINETEEN EIGHTY-FOUR", author:"George Orwell", category:"Classic Fiction", translator:"", targetMinutes:15, bookSource:"books/nineteen-eighty-four.js" }
+  { id:"the-great-gatsby", title:"THE GREAT GATSBY", author:"F. Scott Fitzgerald", category:"Classic Fiction", translator:"", targetMinutes:15, status:"CONTENT_REVIEW", bookSource:"books/the-great-gatsby.js" },
+  { id:"nineteen-eighty-four", title:"NINETEEN EIGHTY-FOUR", author:"George Orwell", category:"Classic Fiction", translator:"", targetMinutes:15, status:"CONTENT_REVIEW", bookSource:"books/nineteen-eighty-four.js" }
 ]);
 
 export function findCatalogBook(id) {
