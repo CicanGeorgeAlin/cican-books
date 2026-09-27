@@ -1,35 +1,98 @@
-# CICAN — SACRED LIBRARY
+# CICAN — PLAY THE BOOK
 
 **NOT JUST A NAME. CICAN.**
 
-## PLAY THE BOOK
+## EXPERIENCE → UNDERSTAND → READ
 
-A free interactive way to experience, understand, and read sacred and ancient texts.
+CICAN is a reading platform built around a simple idea: a book can be entered through experience, understood through context, and then read directly.
 
-### First Sacred Library experience
+### Current architecture
 
-**The Dhammapada**  
-Buddhism · translated by F. Max Müller
+- `index.html` — public landing page
+- `library.html` — book discovery and selection
+- `play-v17.html` — current V17 reading/experience surface
+- `engine/` — reusable platform modules
+- `books/` — book data/configuration
+- `fulltext/` — verified canonical source files where available
+- `manifest.webmanifest` — PWA metadata
+- `service-worker.js` — offline app-shell foundation
+- `docs/` — product, book-contract, and Play Store architecture
+- `v14.html`, `v15.html`, `v16.html` — protected historical/reference versions
 
-The CICAN experience separates:
+### Product model
 
-- **SOURCE** — the text itself
-- **INTERPRETATION** — historical, scholarly, and contextual material
-- **CICAN EXPERIENCE** — the interactive game layer
+A book contains:
 
-### Architecture
+- source / edition information
+- a coherent 15-minute encounter
+- a canonical full-book reading path where legally appropriate
+- book DNA and concepts
+- a short CICAN experience
+- factual context
 
-- `index.html` — Sacred Library landing page
-- `v16.html` — protected multi-book experience engine
-- `books/` — individual book configurations
-- `v14.html` — locked earlier master
-- `v15.html` — timer backup / production version
-- `v17.html` — separate game experiment
+The reader itself is shared. Books do not receive custom reader implementations.
 
-The earlier classic-literature book files remain preserved in `books/` while the public direction moves to the Sacred Library.
+### Reading modes
 
-## Philosophy
+**15 MIN**  
+The signature CICAN reading encounter.
 
-**EXPERIENCE → UNDERSTAND → READ**
+**FULL BOOK**  
+The canonical source-text reading experience.
 
-The goal is not to tell the reader what to believe. It is to create a memorable path into the text itself.
+Future:
+
+- LISTEN
+- highlights
+- notes
+- bookmarks
+- reading history
+- ASK THE BOOK
+- concept discovery and reading journeys
+
+### Game boundary
+
+The current repository contains the **short CICAN doorway into books**.
+
+The larger CICAN game/evolution system remains a separate experimental direction so it does not overwhelm the reading platform.
+
+### Protected lineage
+
+```
+V14
+ ↓
+V15
+ ↓
+V16  ← protected core
+ ↓
+V17  ← platform foundation
+ ↓
+future reader / app architecture
+```
+
+Protected versions are never rewritten simply to add new product features.
+
+### Quality philosophy
+
+CICAN is being designed for both the open web and a future Google Play release.
+
+Priority order:
+
+1. reading quality
+2. source transparency
+3. accessibility
+4. performance
+5. offline reliability
+6. privacy
+7. cross-device continuity
+8. discovery
+9. audio
+10. monetization
+
+The goal is not to copy summary apps. The 15-minute format is a doorway; the book remains the center.
+
+For the detailed architecture, see:
+
+- `docs/CICAN-PLATFORM-SPEC.md`
+- `docs/BOOK-CONTRACT.md`
+- `docs/PLAY-STORE-READINESS.md`
