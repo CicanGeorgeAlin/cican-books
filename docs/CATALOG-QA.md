@@ -72,3 +72,24 @@ A title with a rights-related FAIL is never published automatically.
 A title with content or metadata WARN may be queued for human review.
 
 The purpose of QA is to make large-scale expansion safer, not merely faster.
+
+
+## Ready-to-publish gate
+
+A record may use `READY_TO_PUBLISH` only after technical checks pass:
+
+- catalog metadata is complete
+- source repository and source ebook identifier are recorded
+- source landing page is recorded
+- rights status is explicitly recorded
+- book source exists
+- book metadata contains title, author, category, target minutes and target words
+- 15-minute text is present and plausibly sized
+- source provenance fields are present
+- declared full-text asset exists when supplied
+- content is free of obvious source-header/editorial contamination
+- reader and mobile QA have been completed by the project workflow
+
+`READY_TO_PUBLISH` is a technical readiness state. It does not itself authorize public distribution.
+
+`PUBLISHED` requires the same technical checks plus resolved distribution rights. A territorial-rights review state must never coexist with `PUBLISHED`.
