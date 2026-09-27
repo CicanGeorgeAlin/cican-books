@@ -1081,7 +1081,10 @@ const BOOK_SOURCES = {
     "frankenstein": "books/frankenstein.js",
     "dracula": "books/dracula.js",
     "dhammapada": "books/dhammapada.js",
-    "tao-te-ching": "books/tao-te-ching.js"
+    "tao-te-ching": "books/tao-te-ching.js",
+    "the-republic": "books/the-republic.js",
+    "walden": "books/walden.js",
+    "thus-spake-zarathustra": "books/thus-spake-zarathustra.js"
 };
 
 const requestedBookId =
@@ -1576,7 +1579,19 @@ let readerLastTime = 0;
 
 let readerScrollPosition = 0;
 
-const TARGET_READING_SECONDS = 900;
+const TARGET_READING_SECONDS =
+    Math.max(
+        60,
+        Number(
+            BOOK_READ &&
+            BOOK_READ.targetMinutes
+        ) * 60 || 900
+    );
+
+const READER_STATE_PREFIX =
+    "cican_reader_position:";
+
+let lastReaderSaveTime = 0;
 
 
 /* =================================================
@@ -2731,8 +2746,8 @@ function openReader() {
     requestAnimationFrame(
         function() {
 
-            readerScrollPosition =
-                0;
+            readerText.scrollTop =
+                readerScrollPosition;
 
             readerLastTime =
                 performance.now();
@@ -2836,6 +2851,13 @@ function fluidAutoReader(now) {
         pixelsPerSecond *
         delta;
 
+    if (
+        now - lastReaderSaveTime >
+        2000
+    ) {
+        saveReaderPosition(now);
+    }
+
 
     readerScrollPosition =
         Math.min(
@@ -2900,6 +2922,47 @@ function fluidAutoReader(now) {
 /* =================================================
    FINISH READER
 ================================================= */
+
+function saveReaderPosition(now) {
+
+    if (
+        !currentBook ||
+        !window.CICAN_ACTIVE_BOOK_ID
+    ) {
+        return;
+    }
+
+    try {
+        localStorage.setItem(
+            READER_STATE_PREFIX +
+            window.CICAN_ACTIVE_BOOK_ID,
+            String(
+                Math.max(
+                    0,
+                    readerScrollPosition
+                )
+            )
+        );
+        lastReaderSaveTime =
+            now || performance.now();
+    } catch (_) {}
+}
+
+
+function clearReaderPosition() {
+
+    if (!window.CICAN_ACTIVE_BOOK_ID) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(
+            READER_STATE_PREFIX +
+            window.CICAN_ACTIVE_BOOK_ID
+        );
+    } catch (_) {}
+}
+
 
 function finishReader() {
 
@@ -2988,6 +3051,8 @@ readerPause.addEventListener(
             readerComplete
         ) {
 
+            clearReaderPosition();
+
             openReader();
 
             return;
@@ -3045,6 +3110,10 @@ readerPause.addEventListener(
 ================================================= */
 
 function closeReader() {
+
+    saveReaderPosition(
+        performance.now()
+    );
 
     stopReaderAnimation();
 
