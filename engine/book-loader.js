@@ -13,12 +13,12 @@ export function getBookSource(bookId) {
   return BOOK_SOURCES[bookId] || null;
 }
 
-export function getCatalogRecord(bookId) {
+export function isPublishedBook(bookId) {\n  const record = getCatalogRecord(bookId);\n  return !!record && (!record.status || record.status === "PUBLISHED");\n}\n\nexport function getCatalogRecord(bookId) {
   return findCatalogBook(bookId);
 }
 
 export async function loadBook(bookId) {
-  const src = getBookSource(bookId);
+  const src = getBookSource(bookId);\n\n  if (!isPublishedBook(bookId)) {\n    throw new Error("Book is not published: " + bookId);\n  }
 
   if (!src) {
     throw new Error("Unknown CICAN book: " + bookId);
