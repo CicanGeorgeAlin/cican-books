@@ -1,0 +1,21 @@
+{
+  "name": "CICAN — PLAY THE BOOK",
+  "short_name": "CICAN",
+  "description": "Experience, understand, and read books.",
+  "lang": "en-GB",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "cican-preview.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
