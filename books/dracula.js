@@ -15,7 +15,7 @@ window.BOOK_READ = {
     targetMinutes:
         15,
 
-    targetWords:
+    targetWords: 2600,
 
     sourceEdition: "Project Gutenberg eBook #345, 1897 text",
     sourceTranslator: "",
