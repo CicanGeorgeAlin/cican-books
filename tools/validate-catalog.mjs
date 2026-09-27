@@ -27,6 +27,10 @@ if (duplicates.length) errors.push("Duplicate catalog IDs: " + [...new Set(dupli
 
 const allowedStatuses = new Set(Object.values(statuses));
 for (const book of catalog) {
+  let bookSource;
+  if (book.bookSource && fs.existsSync(path.join(ROOT, book.bookSource))) {
+    try { bookSource = fs.readFileSync(path.join(ROOT, book.bookSource), "utf8"); } catch {}
+  }
   for (const field of ["id", "title", "author", "category", "bookSource"]) {
     if (!book[field]) errors.push((book.id || "<unknown>") + ": missing " + field);
   }
@@ -41,6 +45,14 @@ for (const book of catalog) {
 
   if (book.bookSource && !fs.existsSync(path.join(ROOT, book.bookSource))) {
     errors.push(book.id + ": missing book source " + book.bookSource);
+  }
+
+  if (book.status === statuses.PUBLISHED) {
+    for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
+      if (!bookSource || !new RegExp(field + "\\s*:").test(bookSource)) errors.push(book.id + ": published book missing " + field);
+    }
+    if (!bookSource || !/targetWords\s*:\s*\d+/.test(bookSource)) errors.push(book.id + ": published book missing numeric targetWords");
+    if (bookSource && !/fullTextUrl\s*:/.test(bookSource)) warnings.push(book.id + ": published book has no fullTextUrl; FULL BOOK may be unavailable.");
   }
 }
 
