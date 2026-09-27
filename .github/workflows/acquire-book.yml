@@ -45,6 +45,7 @@ jobs:
           fs.appendFileSync(process.env.GITHUB_OUTPUT, 'output_file=' + (book.canonicalOutput || ('fulltext/' + id + '.txt')) + '\n');
           fs.appendFileSync(process.env.GITHUB_OUTPUT, 'start_marker=' + Buffer.from(book.normalizationRules.startMarker).toString('base64') + '\n');
           fs.appendFileSync(process.env.GITHUB_OUTPUT, 'stop_marker=' + Buffer.from(book.normalizationRules.stopMarker).toString('base64') + '\n');
+          if (book.normalizationRules.bodyStopMarker) fs.appendFileSync(process.env.GITHUB_OUTPUT, 'body_stop_marker=' + Buffer.from(book.normalizationRules.bodyStopMarker).toString('base64') + '\n');
           NODE
         env:
           BOOK_ID: ${{ inputs.book_id }}
@@ -55,6 +56,7 @@ jobs:
           OUTPUT_FILE: ${{ steps.record.outputs.output_file }}
           START_MARKER_B64: ${{ steps.record.outputs.start_marker }}
           STOP_MARKER_B64: ${{ steps.record.outputs.stop_marker }}
+          BODY_STOP_MARKER_B64: ${{ steps.record.outputs.body_stop_marker }}
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs/promises';
@@ -70,8 +72,13 @@ jobs:
           const start = source.indexOf(startMarker);
           if (start < 0) throw new Error('Start marker not found');
           const bodyStart = start + startMarker.length;
-          const end = source.indexOf(stopMarker, bodyStart);
+          let end = source.indexOf(stopMarker, bodyStart);
           if (end < 0) throw new Error('Stop marker not found');
+          const bodyStopMarker = process.env.BODY_STOP_MARKER_B64 ? Buffer.from(process.env.BODY_STOP_MARKER_B64, 'base64').toString() : '';
+          if (bodyStopMarker) {
+            const editorialEnd = source.indexOf(bodyStopMarker, bodyStart);
+            if (editorialEnd >= 0 && editorialEnd < end) end = editorialEnd;
+          }
 
           let text = source.slice(bodyStart, end)
             .replace(/^\uFEFF/, '')
