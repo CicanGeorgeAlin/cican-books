@@ -2751,10 +2751,6 @@ async function openReader(modeOverride) {
         TARGET_READING_SECONDS;
 
 
-    readerScrollPosition =
-        0;
-
-
     /*
         RENDER THE ENTIRE BOOK.
 
@@ -2807,9 +2803,7 @@ async function openReader(modeOverride) {
     document.getElementById("readerTimer").textContent = isFullBook && fullAvailable ? "FULL" : formatTime(readerSeconds);
 
 
-    readerText.scrollTop =
-        0;
-
+    readerScrollPosition = loadReaderPosition();
 
     readerPause.style.display = isFullBook ? "none" : "";
     readerPause.textContent = "PAUSE";
@@ -2928,7 +2922,8 @@ function fluidAutoReader(now) {
         CONSTANT FLUID SPEED.
 
         Complete scroll distance is
-        divided across exactly 900 seconds.
+        divided across this book's configured
+        15-minute target duration.
     */
 
     const pixelsPerSecond =
@@ -3011,6 +3006,22 @@ function fluidAutoReader(now) {
 /* =================================================
    FINISH READER
 ================================================= */
+
+function readerPositionKey() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return null;
+    return READER_STATE_PREFIX + window.CICAN_ACTIVE_BOOK_ID + ":" + readingMode;
+}
+
+function loadReaderPosition() {
+    const key = readerPositionKey();
+    if (!key) return 0;
+    try {
+        const value = Number(localStorage.getItem(key));
+        return Number.isFinite(value) && value >= 0 ? value : 0;
+    } catch (_) {
+        return 0;
+    }
+}
 
 function saveReaderPosition(now) {
 
@@ -3124,7 +3135,6 @@ mode15.addEventListener("pointerdown", function(e) {
     if (readingMode !== "15") {
         readingMode = "15";
         saveReaderMode();
-        clearReaderPosition();
         openReader("15");
     }
 });
@@ -3135,7 +3145,6 @@ modeFull.addEventListener("pointerdown", async function(e) {
     if (readingMode !== "full") {
         readingMode = "full";
         saveReaderMode();
-        clearReaderPosition();
         await openReader("full");
     }
 });
