@@ -97,6 +97,10 @@ export function validateBook(book) {
     throw new Error("Catalog author mismatch for " + book.id);
   }
 
+  if (catalog.status === "PUBLISHED" && catalog.fullTextUrl) {
+    // Full-text existence is checked by catalog QA; runtime keeps the loader lightweight.
+  }
+
   return true;
 }
 
