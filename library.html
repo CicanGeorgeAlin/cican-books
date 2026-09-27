@@ -60,6 +60,7 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 .background-track,.book,.enter{animation:none;transition:none}
 }
 </style>
+    <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 <div class="background" aria-hidden="true">
@@ -178,6 +179,11 @@ document.activeElement.classList.contains("book")
 selectBook(document.activeElement);
 }
 });
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("service-worker.js").catch(() => {}));
+}
 </script>
 </body>
 </html>
