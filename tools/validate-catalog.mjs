@@ -6,8 +6,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
 const warnings = [];
 
-const countWords = text => String(text || "").trim().split(/\\s+/).filter(Boolean).length;
-const readBookTextField = source => { const m = source?.match(/\\btext\\s*:\s*[`"]([\\s\\S]*?)[`"]\\s*,?\\s*prologueScenes/); return m ? m[1] : ""; };
+const countWords = text => String(text || "").trim().split(/\s+/).filter(Boolean).length;
+const readBookTextField = source => { const m = source?.match(/\btext\s*:\s*[`"]([\s\S]*?)[`"]\s*,?\s*prologueScenes/); return m ? m[1] : ""; };
 
 const catalogPath = path.join(ROOT, "catalog", "index.js");
 const queuePath = path.join(ROOT, "catalog", "acquisition-queue.json");
@@ -52,7 +52,7 @@ for (const book of catalog) {
 
   if (book.status === statuses.PUBLISHED) {
     for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
-      if (!bookSource || !new RegExp(field + "\\s*:").test(bookSource)) errors.push(book.id + ": published book missing " + field);
+      if (!bookSource || !new RegExp(field + "\s*:").test(bookSource)) errors.push(book.id + ": published book missing " + field);
     }
     if (!bookSource || !/targetWords\s*:\s*\d+/.test(bookSource)) errors.push(book.id + ": published book missing numeric targetWords");
     if (bookSource && !/fullTextUrl\s*:/.test(bookSource)) warnings.push(book.id + ": published book has no fullTextUrl; FULL BOOK may be unavailable.");
