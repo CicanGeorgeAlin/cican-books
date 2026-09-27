@@ -14,8 +14,8 @@ export const CATALOG_STATUS = Object.freeze({
 });
 
 export const CATALOG = Object.freeze([
-  { id:"dhammapada", title:"THE DHAMMAPADA", author:"F. Max Müller", category:"Buddhism", translator:"F. Max Müller", targetMinutes:15, status:"PUBLISHED" bookSource:"books/dhammapada.js" },
-  { id:"tao-te-ching", title:"TAO TE CHING", author:"Laozi", category:"Taoism", translator:"James Legge", targetMinutes:15, status:"PUBLISHED" bookSource:"books/tao-te-ching.js" },
+  { id:"dhammapada", title:"THE DHAMMAPADA", author:"F. Max Müller", category:"Buddhism", translator:"F. Max Müller", targetMinutes:15, status:"PUBLISHED", bookSource:"books/dhammapada.js" },
+  { id:"tao-te-ching", title:"TAO TE CHING", author:"Laozi", category:"Taoism", translator:"James Legge", targetMinutes:15, status:"PUBLISHED", bookSource:"books/tao-te-ching.js" },
   { id:"the-republic", title:"THE REPUBLIC", author:"Plato", category:"Philosophy", translator:"Benjamin Jowett", targetMinutes:15, status:"PUBLISHED" bookSource:"books/the-republic.js" },
   { id:"meditations", title:"MEDITATIONS", author:"Marcus Aurelius", category:"Philosophy", translator:"", targetMinutes:15, status:"PUBLISHED" bookSource:"books/meditations.js" },
   { id:"walden", title:"WALDEN", author:"Henry David Thoreau", category:"Nature", translator:"", targetMinutes:15, status:"PUBLISHED" bookSource:"books/walden.js" },
