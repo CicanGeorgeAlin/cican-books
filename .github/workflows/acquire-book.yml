@@ -84,8 +84,9 @@ jobs:
           const words = text.split(/\s+/).filter(Boolean).length;
           if (words < 500) throw new Error('Normalized text unexpectedly short: ' + words + ' words');
 
-          if (/project gutenberg|you may copy it|end of the project gutenberg ebook/i.test(text)) {
-            throw new Error('Gutenberg transport contamination detected in normalized text');
+          const edge = (text.slice(0, 2500) + '\n' + text.slice(-2500)).toLowerCase();
+          if (/project gutenberg|you may copy it|end of the project gutenberg ebook/i.test(edge)) {
+            throw new Error('Gutenberg transport contamination detected near normalized text boundaries');
           }
 
           const out = path.resolve(process.env.OUTPUT_FILE);
