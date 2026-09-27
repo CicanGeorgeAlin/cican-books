@@ -1,11 +1,15 @@
 name: Acquire verified book text
 
 on:
+  push:
+    paths:
+      - 'catalog/acquisition-queue.json'
   workflow_dispatch:
     inputs:
       book_id:
         description: "Queue/catalog book ID"
-        required: true
+        required: false
+        default: "pride-and-prejudice"
         type: string
 
 permissions:
@@ -28,7 +32,7 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
-          const id = process.env.BOOK_ID;
+          const id = process.env.BOOK_ID || 'pride-and-prejudice';
           const q = JSON.parse(fs.readFileSync('catalog/acquisition-queue.json','utf8'));
           const book = q.candidates.find(x => x.id === id);
           if (!book) throw new Error('Book not found in acquisition queue: ' + id);
