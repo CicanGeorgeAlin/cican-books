@@ -1,0 +1,99 @@
+name: Acquire verified book text
+
+on:
+  workflow_dispatch:
+    inputs:
+      book_id:
+        description: "Queue/catalog book ID"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Read acquisition record
+        id: record
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const id = process.env.BOOK_ID;
+          const q = JSON.parse(fs.readFileSync('catalog/acquisition-queue.json','utf8'));
+          const book = q.candidates.find(x => x.id === id);
+          if (!book) throw new Error('Book not found in acquisition queue: ' + id);
+          if (book.sourceStatus !== 'SOURCE_VERIFIED') throw new Error('Source is not verified: ' + id);
+          if (!book.sourceTextUrl) throw new Error('sourceTextUrl missing: ' + id);
+          if (!book.normalizationRules?.startMarker || !book.normalizationRules?.stopMarker) {
+            throw new Error('Normalization boundaries missing: ' + id);
+          }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'source_url=' + book.sourceTextUrl + '\n');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'output_file=' + (book.canonicalOutput || ('fulltext/' + id + '.txt')) + '\n');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'start_marker=' + Buffer.from(book.normalizationRules.startMarker).toString('base64') + '\n');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'stop_marker=' + Buffer.from(book.normalizationRules.stopMarker).toString('base64') + '\n');
+          NODE
+        env:
+          BOOK_ID: ${{ inputs.book_id }}
+
+      - name: Acquire and normalize
+        env:
+          SOURCE_URL: ${{ steps.record.outputs.source_url }}
+          OUTPUT_FILE: ${{ steps.record.outputs.output_file }}
+          START_MARKER_B64: ${{ steps.record.outputs.start_marker }}
+          STOP_MARKER_B64: ${{ steps.record.outputs.stop_marker }}
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs/promises';
+          import path from 'node:path';
+
+          const source = await (await fetch(process.env.SOURCE_URL, {
+            headers: { 'User-Agent': 'CICAN-PLAY-THE-BOOK acquisition pipeline' }
+          })).text();
+
+          const startMarker = Buffer.from(process.env.START_MARKER_B64, 'base64').toString();
+          const stopMarker = Buffer.from(process.env.STOP_MARKER_B64, 'base64').toString();
+
+          const start = source.indexOf(startMarker);
+          if (start < 0) throw new Error('Start marker not found');
+          const bodyStart = start + startMarker.length;
+          const end = source.indexOf(stopMarker, bodyStart);
+          if (end < 0) throw new Error('Stop marker not found');
+
+          let text = source.slice(bodyStart, end)
+            .replace(/^\uFEFF/, '')
+            .replace(/\r\n?/g, '\n')
+            .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+            .replace(/[ \t]+\n/g, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .trim() + '\n';
+
+          const words = text.split(/\s+/).filter(Boolean).length;
+          if (words < 500) throw new Error('Normalized text unexpectedly short: ' + words + ' words');
+
+          if (/project gutenberg|you may copy it|end of the project gutenberg ebook/i.test(text)) {
+            throw new Error('Gutenberg transport contamination detected in normalized text');
+          }
+
+          const out = path.resolve(process.env.OUTPUT_FILE);
+          await fs.mkdir(path.dirname(out), { recursive: true });
+          await fs.writeFile(out, text, 'utf8');
+          console.log(JSON.stringify({ output: process.env.OUTPUT_FILE, words, characters: text.length }, null, 2));
+          NODE
+
+      - name: Commit normalized asset
+        run: |
+          git config user.name "CICAN acquisition bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${{ steps.record.outputs.output_file }}"
+          git diff --cached --quiet || git commit -m "Acquire normalized text for ${{ inputs.book_id }}"
+          git push
