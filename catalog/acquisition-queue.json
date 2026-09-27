@@ -19,7 +19,25 @@
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
       "edition": "1813 text; R. W. Chapman edited source",
-      "textStatus": "SOURCE_TEXT_VERIFIED"
+      "textStatus": "SOURCE_TEXT_VERIFIED",
+      "normalizationRules": {
+        "startMarker": "*** START OF THE PROJECT GUTENBERG EBOOK PRIDE AND PREJUDICE ***",
+        "stopMarker": "*** END OF THE PROJECT GUTENBERG EBOOK PRIDE AND PREJUDICE ***",
+        "preserve": [
+          "literary text",
+          "chapter headings",
+          "paragraph boundaries",
+          "original spelling and punctuation"
+        ],
+        "remove": [
+          "Project Gutenberg license/header/footer",
+          "transport metadata"
+        ],
+        "manualReview": [
+          "illustration captions",
+          "transcription notes"
+        ]
+      }
     },
     {
       "id": "moby-dick",
