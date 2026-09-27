@@ -15,8 +15,11 @@
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
       "nextStep": "Acquire and normalize full text; verify Irish/EU distribution status.",
-      "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 1
+      "queueStage": "TEXT_ACQUISITION",
+      "priority": 1,
+      "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
+      "edition": "1813 text; R. W. Chapman edited source",
+      "textStatus": "SOURCE_TEXT_VERIFIED"
     },
     {
       "id": "moby-dick",
