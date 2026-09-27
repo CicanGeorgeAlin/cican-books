@@ -1591,6 +1591,7 @@ let readerLastTime = 0;
 
 let readerScrollPosition = 0;
 let readingMode = "15";
+let fullTextLoading = false;
 
 const TARGET_READING_SECONDS =
     Math.max(
@@ -2638,7 +2639,7 @@ function updateReaderModeUI() {
     const fullAvailable = !!(currentBook && currentBook.fullText);
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
-    modeFull.disabled = !fullAvailable;
+    modeFull.disabled = fullTextLoading || !fullAvailable;
     readerModeNote.textContent = readingMode === "full"
         ? (fullAvailable ? "FULL SOURCE TEXT" : "FULL BOOK NOT YET LOADED FOR THIS EDITION")
         : "15-MINUTE ENCOUNTER";
@@ -2720,7 +2721,7 @@ function stopReaderAnimation() {
    OPEN READER
 ================================================= */
 
-function openReader(modeOverride) {
+async function openReader(modeOverride) {
 
     stopReaderAnimation();
 
@@ -2762,8 +2763,33 @@ function openReader(modeOverride) {
         No typing effect.
     */
 
-    const fullAvailable = !!currentBook.fullText;
     const isFullBook = readingMode === "full";
+
+    if (isFullBook && !currentBook.fullText) {
+        if (!currentBook.fullTextUrl) {
+            readerModeNote.textContent = "FULL BOOK NOT YET LOADED FOR THIS EDITION";
+            updateReaderModeUI();
+            return;
+        }
+        fullTextLoading = true;
+        modeFull.disabled = true;
+        readerModeNote.textContent = "LOADING FULL BOOK";
+        try {
+            const response = await fetch(currentBook.fullTextUrl, { cache: "no-store" });
+            if (!response.ok) throw new Error("Full text request failed");
+            const sourceText = await response.text();
+            if (sourceText.trim().length < 1000) throw new Error("Full text is unexpectedly short");
+            currentBook.fullText = sourceText.replace(/\\r\\n/g, "\\n");
+        } catch (_) {
+            fullTextLoading = false;
+            updateReaderModeUI();
+            readerModeNote.textContent = "FULL BOOK COULD NOT BE LOADED";
+            return;
+        }
+        fullTextLoading = false;
+    }
+
+    const fullAvailable = !!currentBook.fullText;
 
     readerText.textContent =
         isFullBook && fullAvailable
@@ -2785,8 +2811,8 @@ function openReader(modeOverride) {
         0;
 
 
-    readerPause.textContent =
-        isFullBook && !fullAvailable ? "CLOSE" : "PAUSE";
+    readerPause.style.display = isFullBook ? "none" : "";
+    readerPause.textContent = "PAUSE";
 
 
     readerStatus.textContent =
@@ -3103,14 +3129,14 @@ mode15.addEventListener("pointerdown", function(e) {
     }
 });
 
-modeFull.addEventListener("pointerdown", function(e) {
+modeFull.addEventListener("pointerdown", async function(e) {
     e.preventDefault();
-    if (!currentBook || !currentBook.fullText) return;
+    if (!currentBook || fullTextLoading) return;
     if (readingMode !== "full") {
         readingMode = "full";
         saveReaderMode();
         clearReaderPosition();
-        openReader("full");
+        await openReader("full");
     }
 });
 
@@ -3118,6 +3144,8 @@ readerText.addEventListener("scroll", function() {
     if (readingMode !== "full") return;
     readerScrollPosition = readerText.scrollTop;
     updateReaderUI();
+    const maxScroll = Math.max(0, readerText.scrollHeight - readerText.clientHeight);
+    readerStatus.textContent = maxScroll > 0 && readerScrollPosition >= maxScroll - 2 ? "COMPLETE" : "FULL BOOK";
     const now = performance.now();
     if (now - lastReaderSaveTime > 700) saveReaderPosition(now);
 });
