@@ -42,6 +42,7 @@ h1{font-size:clamp(32px,8vw,58px);font-weight:900;letter-spacing:-.06em}
 .footer{text-align:center;margin-top:55px;color:rgba(255,255,255,.20);font-size:9px;font-weight:800;letter-spacing:.3em}
 @media(max-width:620px){.grid{grid-template-columns:1fr}.card.wide{grid-column:auto}.hero{padding:55px 0 35px}.card{padding:20px}}
 </style>
+    <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 <main class="page">
@@ -113,6 +114,11 @@ document.getElementById("content").innerHTML=
 '<article class="card"><div class="label">04 · KEY CONCEPTS</div><div class="tags">'+concepts+"</div></article>"+
 '<article class="card"><div class="label">05 · INTERPRETATIONS</div><p>'+b.interpretation+'</p></article>'+
 '<article class="card source"><div class="label">06 · SOURCE</div><p>'+b.source+'</p><a class="source-link" href="'+b.url+'" target="_blank" rel="noopener">OPEN SOURCE</a></article>';
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("service-worker.js").catch(() => {}));
+}
 </script>
 </body>
 </html>
