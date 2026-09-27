@@ -16,6 +16,12 @@ window.BOOK_READ = {
         15,
 
     targetWords:
+
+    sourceEdition: "Project Gutenberg eBook #2680, Meric Casaubon translation",
+    sourceTranslator: "Meric Casaubon",
+    sourceNote: "Canonical full-text asset is maintained separately for FULL BOOK; the 15-minute text is a calibrated selection.",
+    sourceUrl: "https://www.gutenberg.org/ebooks/2680",
+    fullTextUrl: "fulltext/meditations.txt",
         2500,
 
     prologueScenes: [
