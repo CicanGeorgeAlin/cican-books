@@ -29,3 +29,25 @@ export const CATALOG = Object.freeze([
 export function findCatalogBook(id) {
   return CATALOG.find(book => book.id === id) || null;
 }
+
+export function getPublishedCatalog() {
+  return CATALOG.filter(book => !book.status || book.status === CATALOG_STATUS.PUBLISHED);
+}
+
+export function getCatalogByStatus(status) {
+  return CATALOG.filter(book => (book.status || CATALOG_STATUS.PUBLISHED) === status);
+}
+
+export function searchCatalog(query, { publishedOnly = true } = {}) {
+  const q = String(query || "").trim().toLowerCase();
+  const source = publishedOnly ? getPublishedCatalog() : CATALOG;
+  if (!q) return source.slice();
+
+  return source.filter(book =>
+    [book.title, book.author, book.category, book.translator]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase()
+      .includes(q)
+  );
+}
