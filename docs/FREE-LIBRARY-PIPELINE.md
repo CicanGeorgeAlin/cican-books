@@ -97,3 +97,22 @@ The book count is a product objective. The reader engine remains shared.
 ## Legal note
 
 This document is an engineering/content policy, not legal advice. Territorial copyright and distribution rights must be checked before publishing or distributing each work, especially for a product operated from Ireland.
+
+## Text normalization standard
+
+CICAN keeps a clean canonical text asset separate from the raw source transport file.
+
+For Project Gutenberg acquisitions:
+
+1. Verify the exact ebook identifier and selected edition.
+2. Preserve the source landing page and source-text endpoint as provenance.
+3. Locate the Gutenberg start/end boundaries in the source text.
+4. Remove only transport material such as Gutenberg licensing boilerplate and technical footer material.
+5. Preserve the literary work's wording, spelling, punctuation, chapter headings, and paragraph boundaries.
+6. Do not silently modernize, rewrite, summarize, or correct the source text.
+7. Treat illustrations, captions, transcription notes, editorial notes, and unusual front/back matter as review items rather than automatically deleting them.
+8. Record the normalization rules used for every acquired title.
+9. Generate a word count and contamination report before the text can enter the book contract.
+10. Keep the raw-source provenance even after the normalized CICAN asset is created.
+
+The normalized asset is the reader's canonical full text. The raw source remains the provenance reference.
