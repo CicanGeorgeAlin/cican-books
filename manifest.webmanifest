@@ -10,12 +10,4 @@
   "background_color": "#000000",
   "theme_color": "#000000",
   "orientation": "portrait-primary",
-  "icons": [
-    {
-      "src": "cican-preview.png",
-      "sizes": "1200x630",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ]
 }
