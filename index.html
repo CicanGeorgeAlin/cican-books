@@ -77,6 +77,7 @@ html{scroll-behavior:auto}
 .play-button{transition:none}
 }
 </style>
+    <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 <div class="background" aria-hidden="true">
@@ -97,5 +98,10 @@ html{scroll-behavior:auto}
 </section>
 <footer class="footer"><div class="footer-brand">CICAN</div></footer>
 </main>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("service-worker.js").catch(() => {}));
+}
+</script>
 </body>
 </html>
