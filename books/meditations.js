@@ -15,7 +15,7 @@ window.BOOK_READ = {
     targetMinutes:
         15,
 
-    targetWords:
+    targetWords: 2500,
 
     sourceEdition: "Project Gutenberg eBook #2680, Meric Casaubon translation",
     sourceTranslator: "Meric Casaubon",
