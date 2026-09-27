@@ -116,3 +116,18 @@ For Project Gutenberg acquisitions:
 10. Keep the raw-source provenance even after the normalized CICAN asset is created.
 
 The normalized asset is the reader's canonical full text. The raw source remains the provenance reference.
+
+
+## Automated acquisition workflow
+
+A verified queue record may supply an exact `sourceTextUrl` plus normalization boundaries. The acquisition tool writes the canonical full-text asset but does not change rights status or publish a book.
+
+After acquisition:
+
+`SOURCE_TEXT_VERIFIED → TEXT_ACQUISITION → TEXT_CLEANED → BOOK_CONTRACT → READER_QA → MOBILE_QA → RIGHTS_REVIEW → PUBLISHED`
+
+The automation must never infer distribution rights from successful download. A downloaded source is evidence of acquisition, not authorization to distribute.
+
+Each generated asset should retain a provenance record containing the source URL, source ebook ID, selected edition, normalization markers, word count, and acquisition timestamp.
+
+For large batches, failures must be isolated per title and reported explicitly; one malformed source must not silently produce a partial catalog.
