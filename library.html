@@ -25,9 +25,15 @@ body{min-height:100vh;overflow-x:hidden}
 .eyebrow{color:rgba(255,255,255,.42);font-size:10px;font-weight:700;letter-spacing:.35em;text-transform:uppercase;margin-bottom:22px}
 h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-align:center}
 .intro{margin-top:15px;color:rgba(255,255,255,.38);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center}
-.books{width:100%;margin-top:55px;display:flex;flex-direction:column;gap:10px}
+.search{align-self:stretch;margin-top:34px;color:rgba(255,255,255,.28);font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+.book-search{width:100%;margin-top:8px;padding:14px 16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.025);color:#fff;font-size:14px;outline:none}
+.book-search:focus{border-color:rgba(255,255,255,.42)}
+.book-search::placeholder{color:rgba(255,255,255,.22)}
+.books{width:100%;margin-top:18px;display:flex;flex-direction:column;gap:10px}
 .book{width:100%;display:grid;grid-template-columns:50px minmax(0,1fr) 70px;align-items:center;min-height:82px;padding:12px 20px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(255,255,255,.018);color:#fff;cursor:pointer;text-align:left;transition:background .2s ease,border-color .2s ease,transform .2s ease}
 .book:hover{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.25);transform:translateY(-2px)}
+.book[hidden]{display:none}
+.book:focus-visible,.enter:focus-visible,.back:focus-visible,.logo:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .book.selected{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.72)}
 .number{color:rgba(255,255,255,.30);font-size:11px;font-weight:700;letter-spacing:.12em}
 .info{min-width:0}
@@ -43,7 +49,8 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 @media(max-width:600px){
 .page{padding:22px 14px 34px}
 .main{padding:55px 0}
-.books{margin-top:40px}
+.search{margin-top:24px}
+.books{margin-top:14px}
 .book{grid-template-columns:36px minmax(0,1fr) 54px;min-height:74px;padding:10px 13px}
 .title{font-size:14px}
 .meta{font-size:8px}
@@ -66,10 +73,12 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 <a class="back" href="index.html">BACK</a>
 </header>
 <section class="main" aria-labelledby="heading">
-<div class="eyebrow">SACRED LIBRARY</div>
-<h1 id="heading">CHOOSE A TEXT</h1>
-<div class="intro">The library chooses the texts. You choose the journey.</div>
-<div class="books" role="listbox" aria-label="Choose a sacred text">
+<div class="eyebrow">CICAN LIBRARY</div>
+<h1 id="heading">CHOOSE A BOOK</h1>
+<div class="intro">Choose a world. Enter it. Read for fifteen minutes.</div>
+<label class="search" for="bookSearch">SEARCH THE LIBRARY</label>
+<input id="bookSearch" class="book-search" type="search" placeholder="Search title, author, tradition..." autocomplete="off" aria-label="Search the library">
+<div class="books" role="listbox" aria-label="Choose a book">
 <button class="book selected" type="button" data-book="dhammapada" aria-selected="true">
 <span class="number">01</span>
 <span class="info"><span class="title">THE DHAMMAPADA</span><span class="meta">Buddhism · F. Max Müller</span></span>
@@ -78,6 +87,46 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 <button class="book" type="button" data-book="tao-te-ching" aria-selected="false">
 <span class="number">02</span>
 <span class="info"><span class="title">TAO TE CHING</span><span class="meta">Taoism · Laozi · James Legge</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="the-republic" aria-selected="false">
+<span class="number">03</span>
+<span class="info"><span class="title">THE REPUBLIC</span><span class="meta">Philosophy · Plato · Benjamin Jowett</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="meditations" aria-selected="false">
+<span class="number">04</span>
+<span class="info"><span class="title">MEDITATIONS</span><span class="meta">Philosophy · Marcus Aurelius</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="walden" aria-selected="false">
+<span class="number">05</span>
+<span class="info"><span class="title">WALDEN</span><span class="meta">Nature · Henry David Thoreau</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="thus-spake-zarathustra" aria-selected="false">
+<span class="number">06</span>
+<span class="info"><span class="title">THUS SPAKE ZARATHUSTRA</span><span class="meta">Philosophy · Friedrich Nietzsche · Thomas Common</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="frankenstein" aria-selected="false">
+<span class="number">07</span>
+<span class="info"><span class="title">FRANKENSTEIN</span><span class="meta">Classic Fiction · Mary Shelley</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="dracula" aria-selected="false">
+<span class="number">08</span>
+<span class="info"><span class="title">DRACULA</span><span class="meta">Classic Fiction · Bram Stoker</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="the-great-gatsby" aria-selected="false">
+<span class="number">09</span>
+<span class="info"><span class="title">THE GREAT GATSBY</span><span class="meta">Classic Fiction · F. Scott Fitzgerald</span></span>
+<span class="time">15 MIN</span>
+</button>
+<button class="book" type="button" data-book="nineteen-eighty-four" aria-selected="false">
+<span class="number">10</span>
+<span class="info"><span class="title">NINETEEN EIGHTY-FOUR</span><span class="meta">Classic Fiction · George Orwell</span></span>
 <span class="time">15 MIN</span>
 </button>
 </div>
@@ -90,7 +139,9 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 <script>
 const books = Array.from(document.querySelectorAll(".book"));
 const enter = document.getElementById("enter");
+const search = document.getElementById("bookSearch");
 let selected = "dhammapada";
+
 function selectBook(button){
 books.forEach(item => {
 const active = item === button;
@@ -99,12 +150,31 @@ item.setAttribute("aria-selected", active ? "true" : "false");
 });
 selected = button.dataset.book;
 }
-books.forEach(button => button.addEventListener("click", () => selectBook(button)));
-enter.addEventListener("click", () => {
-window.location.href = "v16.html?book=" + encodeURIComponent(selected);
+
+books.forEach(button =>
+button.addEventListener("click", () => selectBook(button))
+);
+
+search.addEventListener("input", () => {
+const query = search.value.trim().toLowerCase();
+books.forEach(button => {
+const match = button.textContent.toLowerCase().includes(query);
+button.hidden = !match;
 });
+});
+
+enter.addEventListener("click", () => {
+window.location.href =
+"v16.html?book=" +
+encodeURIComponent(selected);
+});
+
 document.addEventListener("keydown", event => {
-if(event.key === "Enter" && document.activeElement.classList.contains("book")) {
+if(
+event.key === "Enter" &&
+document.activeElement &&
+document.activeElement.classList.contains("book")
+){
 selectBook(document.activeElement);
 }
 });
