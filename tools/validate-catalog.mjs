@@ -69,7 +69,19 @@ for (const book of catalog) {
       if (!bookSource || !new RegExp(field + "\s*:").test(bookSource)) errors.push(book.id + ": published book missing " + field);
     }
     if (!bookSource || !/targetWords\s*:\s*\d+/.test(bookSource)) errors.push(book.id + ": published book missing numeric targetWords");
-    if (bookSource && !/fullTextUrl\s*:/.test(bookSource)) warnings.push(book.id + ": published/ready book has no fullTextUrl; FULL BOOK may be unavailable.");
+    if (bookSource && !/fullTextUrl\s*:/.test(bookSource)) {
+      warnings.push(book.id + ": published/ready book has no fullTextUrl; FULL BOOK may be unavailable.");
+    } else if (bookSource) {
+      const fullTextMatch = bookSource.match(/fullTextUrl\s*:\s*["'`]([^"'`]+)["'`]/);
+      if (fullTextMatch) {
+        const fullTextPath = fullTextMatch[1];
+        if (/^https?:\/\//i.test(fullTextPath)) {
+          warnings.push(book.id + ": fullTextUrl is remote; local asset existence cannot be verified by this validator.");
+        } else if (!fs.existsSync(path.join(ROOT, fullTextPath))) {
+          errors.push(book.id + ": declared fullTextUrl asset is missing: " + fullTextPath);
+        }
+      }
+    }
   }
 }
 
