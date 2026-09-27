@@ -16,7 +16,7 @@ if (duplicates.length) errors.push("Duplicate catalog IDs: " + [...new Set(dupli
 for (const id of ids) {
   const marker = `  { id:"${id}"`;
   const start = catalogSource.indexOf(marker);
-  const end = catalogSource.indexOf("\n  }", start);
+  const end = catalogSource.indexOf("\n", start);
   if (start < 0 || end < 0) { errors.push(id + ": could not parse catalog record."); continue; }
   const record = catalogSource.slice(start, end);
   for (const field of ["title", "author", "category", "bookSource"]) {
