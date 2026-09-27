@@ -51,6 +51,9 @@ for (const book of catalog) {
   }
 
   if (book.status === statuses.PUBLISHED) {
+    for (const field of ["sourceRepo", "sourceEbookId", "sourceUrl", "rightsStatus"]) {
+      if (!book[field]) errors.push(book.id + ": published catalog record missing " + field);
+    }
     for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
       if (!bookSource || !new RegExp(field + "\s*:").test(bookSource)) errors.push(book.id + ": published book missing " + field);
     }
