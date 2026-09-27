@@ -1,23 +1,20 @@
 /**
  * CICAN book loader.
- * Book data stays separate from reader/game code.
+ * The catalog is the discovery source; book records remain separate content assets.
  */
 
-const BOOK_SOURCES = Object.freeze({
-  "dhammapada": "books/dhammapada.js",
-  "tao-te-ching": "books/tao-te-ching.js",
-  "the-republic": "books/the-republic.js",
-  "meditations": "books/meditations.js",
-  "walden": "books/walden.js",
-  "thus-spake-zarathustra": "books/thus-spake-zarathustra.js",
-  "frankenstein": "books/frankenstein.js",
-  "dracula": "books/dracula.js",
-  "the-great-gatsby": "books/the-great-gatsby.js",
-  "nineteen-eighty-four": "books/nineteen-eighty-four.js"
-});
+import { CATALOG, findCatalogBook } from "../catalog/index.js";
+
+export const BOOK_SOURCES = Object.freeze(
+  Object.fromEntries(CATALOG.map(book => [book.id, book.bookSource]))
+);
 
 export function getBookSource(bookId) {
   return BOOK_SOURCES[bookId] || null;
+}
+
+export function getCatalogRecord(bookId) {
+  return findCatalogBook(bookId);
 }
 
 export async function loadBook(bookId) {
@@ -78,7 +75,20 @@ export function validateBook(book) {
     throw new Error("Invalid targetWords for " + book.title);
   }
 
+  const catalog = getCatalogRecord(book.id);
+  if (!catalog) {
+    throw new Error("Book is missing from CICAN catalog: " + book.id);
+  }
+
+  if (catalog.title !== String(book.title).toUpperCase()) {
+    throw new Error("Catalog title mismatch for " + book.id);
+  }
+
+  if (catalog.author && !String(book.author).toLowerCase().includes(catalog.author.toLowerCase())) {
+    throw new Error("Catalog author mismatch for " + book.id);
+  }
+
   return true;
 }
 
-export { BOOK_SOURCES };
+export { CATALOG };
