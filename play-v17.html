@@ -2651,12 +2651,6 @@ function saveReaderMode() {
 
 function updateReaderUI() {
 
-    if (readingMode === "full") {
-        readerAnimation = null;
-        updateReaderUI();
-        return;
-    }
-
     const maxScroll =
         Math.max(
             0,
@@ -2784,7 +2778,7 @@ function openReader(modeOverride) {
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = !fullAvailable;
-    readerTimer.textContent = isFullBook && fullAvailable ? "FULL" : formatTime(readerSeconds);
+    document.getElementById("readerTimer").textContent = isFullBook && fullAvailable ? "FULL" : formatTime(readerSeconds);
 
 
     readerText.scrollTop =
@@ -2796,7 +2790,7 @@ function openReader(modeOverride) {
 
 
     readerStatus.textContent =
-        "AUTO-READING";
+        isFullBook && fullAvailable ? "FULL BOOK" : "AUTO-READING";
 
 
     reader.classList.add(
@@ -3124,7 +3118,8 @@ readerText.addEventListener("scroll", function() {
     if (readingMode !== "full") return;
     readerScrollPosition = readerText.scrollTop;
     updateReaderUI();
-    saveReaderPosition(performance.now());
+    const now = performance.now();
+    if (now - lastReaderSaveTime > 700) saveReaderPosition(now);
 });
 
 readerPause.addEventListener(
