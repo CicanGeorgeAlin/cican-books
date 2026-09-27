@@ -54,6 +54,9 @@ for (const book of catalog) {
     for (const field of ["sourceRepo", "sourceEbookId", "sourceUrl", "rightsStatus"]) {
       if (!book[field]) errors.push(book.id + ": published catalog record missing " + field);
     }
+    if (book.rightsStatus === "TERRITORIAL_REVIEW_REQUIRED" || book.rightsStatus === "REVIEW_REQUIRED") {
+      errors.push(book.id + ": cannot be PUBLISHED while territorial rights remain under review");
+    }
     for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
       if (!bookSource || !new RegExp(field + "\s*:").test(bookSource)) errors.push(book.id + ": published book missing " + field);
     }
