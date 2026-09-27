@@ -29,6 +29,7 @@ const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
 if (duplicates.length) errors.push("Duplicate catalog IDs: " + [...new Set(duplicates)].join(", "));
 
 const allowedStatuses = new Set(Object.values(statuses));
+const TECHNICALLY_READY = statuses.READY_TO_PUBLISH;
 for (const book of catalog) {
   let bookSource;
   if (book.bookSource && fs.existsSync(path.join(ROOT, book.bookSource))) {
@@ -50,11 +51,11 @@ for (const book of catalog) {
     errors.push(book.id + ": missing book source " + book.bookSource);
   }
 
-  if (book.status === statuses.PUBLISHED) {
+  if (book.status === statuses.PUBLISHED || book.status === TECHNICALLY_READY) {
     for (const field of ["sourceRepo", "sourceEbookId", "sourceUrl", "rightsStatus"]) {
       if (!book[field]) errors.push(book.id + ": published catalog record missing " + field);
     }
-    if (book.rightsStatus === "TERRITORIAL_REVIEW_REQUIRED" || book.rightsStatus === "REVIEW_REQUIRED") {
+    if (book.status === statuses.PUBLISHED && (book.rightsStatus === "TERRITORIAL_REVIEW_REQUIRED" || book.rightsStatus === "REVIEW_REQUIRED")) {
       errors.push(book.id + ": cannot be PUBLISHED while territorial rights remain under review");
     }
     for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
