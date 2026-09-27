@@ -2636,7 +2636,7 @@ function formatTime(
 ================================================= */
 
 function updateReaderModeUI() {
-    const fullAvailable = !!(currentBook && currentBook.fullText);
+    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl));
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = fullTextLoading || !fullAvailable;
