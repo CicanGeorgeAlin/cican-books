@@ -28,7 +28,7 @@ if (duplicates.length) errors.push("Duplicate catalog IDs: " + [...new Set(dupli
 const allowedStatuses = new Set(Object.values(statuses));
 for (const book of catalog) {
   for (const field of ["id", "title", "author", "category", "bookSource"]) {
-    if (!book[field]) errors.push(book.id || "<unknown>" + ": missing " + field);
+    if (!book[field]) errors.push((book.id || "<unknown>") + ": missing " + field);
   }
 
   if (!allowedStatuses.has(book.status)) {
