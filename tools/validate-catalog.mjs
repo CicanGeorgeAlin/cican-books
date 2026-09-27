@@ -6,6 +6,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
 const warnings = [];
 
+const countWords = text => String(text || "").trim().split(/\\s+/).filter(Boolean).length;
+const readBookTextField = source => { const m = source?.match(/\\btext\\s*:\s*[`"]([\\s\\S]*?)[`"]\\s*,?\\s*prologueScenes/); return m ? m[1] : ""; };
+
 const catalogPath = path.join(ROOT, "catalog", "index.js");
 const queuePath = path.join(ROOT, "catalog", "acquisition-queue.json");
 
