@@ -13,6 +13,7 @@ window.BOOK_READ = {
     sourceTranslator: "Thomas Common",
     sourceNote: "CICAN 15-minute reading edition: a coherent selected opening from the cited edition. The complete source remains available through the source edition.",
     sourceUrl: "https://www.gutenberg.org/ebooks/1998",
+    fullTextUrl: "fulltext/thus-spake-zarathustra.txt",
     prologueScenes: [
         {text: "THE WAY TO YOURSELF", button: "CONTINUE"},
         {text: "A fifteen-minute encounter with Thus Spake Zarathustra. CICAN leads into the source text itself rather than replacing it with a summary.", button: "CONTINUE"},

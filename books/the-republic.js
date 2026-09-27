@@ -13,6 +13,7 @@ window.BOOK_READ = {
     sourceTranslator: "Benjamin Jowett",
     sourceNote: "CICAN 15-minute reading edition: a coherent selected opening from the cited edition. The complete source remains available through the source edition.",
     sourceUrl: "https://www.gutenberg.org/ebooks/1497",
+    fullTextUrl: "fulltext/the-republic.txt",
     prologueScenes: [
         {text: "THE QUESTION OF JUSTICE", button: "CONTINUE"},
         {text: "A fifteen-minute encounter with The Republic. CICAN leads into the source text itself rather than replacing it with a summary.", button: "CONTINUE"},
