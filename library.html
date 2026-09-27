@@ -79,106 +79,55 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 <div class="intro">Choose a book. Enter it. Read for fifteen minutes — or keep reading the full text.</div>
 <label class="search" for="bookSearch">SEARCH THE LIBRARY</label>
 <input id="bookSearch" class="book-search" type="search" placeholder="Search title, author, category..." autocomplete="off" aria-label="Search the library">
-<div class="books" role="listbox" aria-label="Choose a book">
-<button class="book selected" type="button" data-book="dhammapada" aria-selected="true">
-<span class="number">01</span>
-<span class="info"><span class="title">THE DHAMMAPADA</span><span class="meta">Buddhism · F. Max Müller</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="tao-te-ching" aria-selected="false">
-<span class="number">02</span>
-<span class="info"><span class="title">TAO TE CHING</span><span class="meta">Taoism · Laozi · James Legge</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="the-republic" aria-selected="false">
-<span class="number">03</span>
-<span class="info"><span class="title">THE REPUBLIC</span><span class="meta">Philosophy · Plato · Benjamin Jowett</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="meditations" aria-selected="false">
-<span class="number">04</span>
-<span class="info"><span class="title">MEDITATIONS</span><span class="meta">Philosophy · Marcus Aurelius</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="walden" aria-selected="false">
-<span class="number">05</span>
-<span class="info"><span class="title">WALDEN</span><span class="meta">Nature · Henry David Thoreau</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="thus-spake-zarathustra" aria-selected="false">
-<span class="number">06</span>
-<span class="info"><span class="title">THUS SPAKE ZARATHUSTRA</span><span class="meta">Philosophy · Friedrich Nietzsche · Thomas Common</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="frankenstein" aria-selected="false">
-<span class="number">07</span>
-<span class="info"><span class="title">FRANKENSTEIN</span><span class="meta">Classic Fiction · Mary Shelley</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="dracula" aria-selected="false">
-<span class="number">08</span>
-<span class="info"><span class="title">DRACULA</span><span class="meta">Classic Fiction · Bram Stoker</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="the-great-gatsby" aria-selected="false">
-<span class="number">09</span>
-<span class="info"><span class="title">THE GREAT GATSBY</span><span class="meta">Classic Fiction · F. Scott Fitzgerald</span></span>
-<span class="time">15 MIN</span>
-</button>
-<button class="book" type="button" data-book="nineteen-eighty-four" aria-selected="false">
-<span class="number">10</span>
-<span class="info"><span class="title">NINETEEN EIGHTY-FOUR</span><span class="meta">Classic Fiction · George Orwell</span></span>
-<span class="time">15 MIN</span>
-</button>
-</div>
+<div class="books" id="books" role="listbox" aria-label="Choose a book" aria-live="polite"></div>
 <button class="enter" id="enter" type="button">ENTER</button>
 <div class="hint">SELECT A BOOK · THEN ENTER</div>
 </section>
 <footer class="footer">CICAN</footer>
 </div>
 </main>
-<script>
-const books = Array.from(document.querySelectorAll(".book"));
+<script type="module">
+import { CATALOG } from "./catalog/index.js";
+
+const list = document.getElementById("books");
 const enter = document.getElementById("enter");
 const search = document.getElementById("bookSearch");
-let selected = "dhammapada";
+let selected = CATALOG[0]?.id || null;
 
-function selectBook(button){
-books.forEach(item => {
-const active = item === button;
-item.classList.toggle("selected", active);
-item.setAttribute("aria-selected", active ? "true" : "false");
-});
-selected = button.dataset.book;
+function render(query = "") {
+  const q = query.trim().toLowerCase();
+  list.innerHTML = "";
+  CATALOG.forEach((book, index) => {
+    const haystack = [book.title, book.author, book.category, book.translator].join(" ").toLowerCase();
+    if (q && !haystack.includes(q)) return;
+    const button = document.createElement("button");
+    button.className = "book" + (book.id === selected ? " selected" : "");
+    button.type = "button";
+    button.dataset.book = book.id;
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", book.id === selected ? "true" : "false");
+    const number = String(index + 1).padStart(2, "0");
+    const translator = book.translator ? " · " + book.translator : "";
+    button.innerHTML =
+      '<span class="number">' + number + '</span>' +
+      '<span class="info"><span class="title">' + book.title + '</span>' +
+      '<span class="meta">' + book.category + ' · ' + book.author + translator + '</span></span>' +
+      '<span class="time">' + book.targetMinutes + ' MIN</span>';
+    button.addEventListener("click", () => {
+      selected = book.id;
+      render(search.value);
+    });
+    list.appendChild(button);
+  });
 }
 
-books.forEach(button =>
-button.addEventListener("click", () => selectBook(button))
-);
-
-search.addEventListener("input", () => {
-const query = search.value.trim().toLowerCase();
-books.forEach(button => {
-const match = button.textContent.toLowerCase().includes(query);
-button.hidden = !match;
-});
-});
-
+search.addEventListener("input", () => render(search.value));
 enter.addEventListener("click", () => {
-window.location.href =
-"play-v17.html?book=" +
-encodeURIComponent(selected);
+  if (!selected) return;
+  window.location.href = "play-v17.html?book=" + encodeURIComponent(selected);
 });
 
-document.addEventListener("keydown", event => {
-if(
-event.key === "Enter" &&
-document.activeElement &&
-document.activeElement.classList.contains("book")
-){
-selectBook(document.activeElement);
-}
-});
+render();
 </script>
 <script>
 if ("serviceWorker" in navigator) {
