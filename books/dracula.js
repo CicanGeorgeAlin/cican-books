@@ -16,6 +16,12 @@ window.BOOK_READ = {
         15,
 
     targetWords:
+
+    sourceEdition: "Project Gutenberg eBook #345, 1897 text",
+    sourceTranslator: "",
+    sourceNote: "Canonical full-text asset is maintained separately for FULL BOOK; the 15-minute text is a calibrated selection.",
+    sourceUrl: "https://www.gutenberg.org/ebooks/345",
+    fullTextUrl: "fulltext/dracula.txt",
         2600,
 
 
