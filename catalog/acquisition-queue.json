@@ -14,12 +14,12 @@
       "alternativeSourceUrl": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Acquire and normalize full text; verify Irish/EU distribution status.",
-      "queueStage": "TEXT_ACQUISITION",
+      "nextStep": "Build book contract and 15-minute experience, then complete Irish/EU distribution-rights review before publication",
+      "queueStage": "TEXT_CLEANED",
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
       "edition": "1813 text; R. W. Chapman edited source",
-      "textStatus": "SOURCE_TEXT_VERIFIED",
+      "textStatus": "TEXT_CLEANED",
       "normalizationRules": {
         "startMarker": "*** START OF THE PROJECT GUTENBERG EBOOK PRIDE AND PREJUDICE ***",
         "stopMarker": "*** END OF THE PROJECT GUTENBERG EBOOK PRIDE AND PREJUDICE ***",
@@ -44,7 +44,9 @@
       "automation": "tools/acquire-gutenberg.mjs",
       "canonicalOutput": "fulltext/pride-and-prejudice.txt",
       "acquisitionGate": "DOWNLOAD_AND_NORMALIZE_ONLY__RIGHTS_REVIEW_REQUIRED",
-      "automationRequest": "ACQUIRE_NORMALIZE_V6"
+      "automationRequest": "ACQUIRE_NORMALIZE_V6",
+      "acquiredWordCount": 121811,
+      "acquisitionVerifiedAt": "2026-09-27"
     },
     {
       "id": "moby-dick",
