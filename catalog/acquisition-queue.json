@@ -43,7 +43,7 @@
       "automation": "tools/acquire-gutenberg.mjs",
       "canonicalOutput": "fulltext/pride-and-prejudice.txt",
       "acquisitionGate": "DOWNLOAD_AND_NORMALIZE_ONLY__RIGHTS_REVIEW_REQUIRED",
-      "automationRequest": "ACQUIRE_NORMALIZE_V3"
+      "automationRequest": "ACQUIRE_NORMALIZE_V4"
     },
     {
       "id": "moby-dick",
