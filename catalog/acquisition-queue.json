@@ -37,7 +37,10 @@
           "illustration captions",
           "transcription notes"
         ]
-      }
+      },
+      "automation": "tools/acquire-gutenberg.mjs",
+      "canonicalOutput": "fulltext/pride-and-prejudice.txt",
+      "acquisitionGate": "DOWNLOAD_AND_NORMALIZE_ONLY__RIGHTS_REVIEW_REQUIRED"
     },
     {
       "id": "moby-dick",
