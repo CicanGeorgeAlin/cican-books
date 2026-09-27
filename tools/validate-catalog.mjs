@@ -1,37 +1,93 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { pathToFileURL, fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const catalogPath = path.join(ROOT, "catalog", "index.js");
-const catalogSource = fs.readFileSync(catalogPath, "utf8");
 const errors = [];
 const warnings = [];
-const ids = [...catalogSource.matchAll(/\{ id:"([^"]+)"/g)].map(m => m[1]);
 
-if (!ids.length) errors.push("Catalog contains no book records.");
+const catalogPath = path.join(ROOT, "catalog", "index.js");
+const queuePath = path.join(ROOT, "catalog", "acquisition-queue.json");
+
+let catalogModule;
+try {
+  catalogModule = await import(pathToFileURL(catalogPath).href + "?qa=" + Date.now());
+} catch (error) {
+  errors.push("Catalog module could not be imported: " + error.message);
+}
+
+const catalog = catalogModule?.CATALOG || [];
+const statuses = catalogModule?.CATALOG_STATUS || {};
+const ids = catalog.map(book => book.id);
+
+if (!catalog.length) errors.push("Catalog contains no book records.");
+
 const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
 if (duplicates.length) errors.push("Duplicate catalog IDs: " + [...new Set(duplicates)].join(", "));
 
-for (const id of ids) {
-  const marker = `  { id:"${id}"`;
-  const start = catalogSource.indexOf(marker);
-  const end = catalogSource.indexOf("\n", start);
-  if (start < 0 || end < 0) { errors.push(id + ": could not parse catalog record."); continue; }
-  const record = catalogSource.slice(start, end);
-  for (const field of ["title", "author", "category", "bookSource"]) {
-    if (!record.includes(field + ":")) errors.push(id + ": missing " + field);
+const allowedStatuses = new Set(Object.values(statuses));
+for (const book of catalog) {
+  for (const field of ["id", "title", "author", "category", "bookSource"]) {
+    if (!book[field]) errors.push(book.id || "<unknown>" + ": missing " + field);
   }
-  const sourceMatch = record.match(/bookSource:"([^"]+)"/);
-  if (sourceMatch && !fs.existsSync(path.join(ROOT, sourceMatch[1]))) errors.push(id + ": missing book source " + sourceMatch[1]);
-  const minutes = record.match(/targetMinutes:(\d+(?:\.\d+)?)/);
-  if (!minutes || Number(minutes[1]) <= 0) errors.push(id + ": invalid targetMinutes");
+
+  if (!allowedStatuses.has(book.status)) {
+    errors.push(book.id + ": invalid status " + String(book.status));
+  }
+
+  if (!Number.isFinite(book.targetMinutes) || book.targetMinutes <= 0) {
+    errors.push(book.id + ": invalid targetMinutes");
+  }
+
+  if (book.bookSource && !fs.existsSync(path.join(ROOT, book.bookSource))) {
+    errors.push(book.id + ": missing book source " + book.bookSource);
+  }
 }
 
-if (ids.length < 100) warnings.push("Catalog currently has " + ids.length + " titles. This is expected during foundation work.");
+if (fs.existsSync(queuePath)) {
+  let queue;
+  try {
+    queue = JSON.parse(fs.readFileSync(queuePath, "utf8"));
+  } catch (error) {
+    errors.push("Acquisition queue is not valid JSON: " + error.message);
+  }
+
+  if (queue) {
+    const queueIds = (queue.candidates || []).map(book => book.id);
+    const queueDuplicates = queueIds.filter((id, i) => queueIds.indexOf(id) !== i);
+    if (queueDuplicates.length) {
+      errors.push("Duplicate acquisition queue IDs: " + [...new Set(queueDuplicates)].join(", "));
+    }
+
+    for (const book of queue.candidates || []) {
+      for (const field of ["id", "title", "author", "sourceRepo", "sourceEbookId", "sourceUrl", "sourceStatus", "rightsStatus", "nextStep"]) {
+        if (!book[field]) errors.push("Queue " + (book.id || "<unknown>") + ": missing " + field);
+      }
+      if (ids.includes(book.id)) warnings.push("Queue " + book.id + " is already represented in the catalog.");
+    }
+  }
+} else {
+  warnings.push("No acquisition queue found.");
+}
+
+if (catalog.length < 100) {
+  warnings.push("Catalog currently has " + catalog.length + " titles. This is expected during foundation work.");
+}
+
 console.log("CICAN catalog QA");
 console.log("================");
-console.log("Books checked:", ids.length);
-if (warnings.length) { console.log("\nWARN"); warnings.forEach(w => console.log("- " + w)); }
-if (errors.length) { console.error("\nFAIL"); errors.forEach(e => console.error("- " + e)); process.exit(1); }
+console.log("Published catalog records:", catalog.filter(book => book.status === statuses.PUBLISHED).length);
+console.log("Total catalog records:", catalog.length);
+
+if (warnings.length) {
+  console.log("\nWARN");
+  warnings.forEach(w => console.log("- " + w));
+}
+
+if (errors.length) {
+  console.error("\nFAIL");
+  errors.forEach(e => console.error("- " + e));
+  process.exit(1);
+}
+
 console.log("\nPASS");
