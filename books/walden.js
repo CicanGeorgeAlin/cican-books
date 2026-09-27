@@ -13,6 +13,7 @@ window.BOOK_READ = {
     sourceTranslator: null,
     sourceNote: "CICAN 15-minute reading edition: a coherent selected opening from the cited edition. The complete source remains available through the source edition.",
     sourceUrl: "https://www.gutenberg.org/ebooks/205",
+    fullTextUrl: "fulltext/walden.txt",
     prologueScenes: [
         {text: "THE LIFE YOU CHOOSE", button: "CONTINUE"},
         {text: "A fifteen-minute encounter with Walden. CICAN leads into the source text itself rather than replacing it with a summary.", button: "CONTINUE"},
