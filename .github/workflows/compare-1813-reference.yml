@@ -23,7 +23,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pride-and-prejudice-1813-comparison
-          path: |
-            tmp/pride-and-prejudice-1813-wikisource.txt
-            tmp/pride-and-prejudice-1813-comparison.json
+          path: tmp/pride-and-prejudice-1813-comparison.json
           retention-days: 7
