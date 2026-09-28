@@ -39,15 +39,13 @@ function stripHtml(html) {
     .trim();
 }
 
-async function fetchBatch(titles) {
+async function fetchPage(title) {
   const params = new URLSearchParams({
-    action: "query",
-    prop: "revisions",
-    rvprop: "content",
-    rvslots: "main",
+    action: "parse",
+    page: title,
+    prop: "text",
     format: "json",
-    formatversion: "2",
-    titles: titles.join("|")
+    formatversion: "2"
   });
   const api = "https://en.wikisource.org/w/api.php?" + params.toString();
   let response;
@@ -65,20 +63,19 @@ async function fetchBatch(titles) {
     await new Promise(resolve => setTimeout(resolve, response.status === 429 ? attempt * 10000 : attempt * 2000));
   }
   const data = await response.json();
-  const pages = data.query?.pages ?? [];
-  const byTitle = new Map();
-  for (const page of pages) {
-    const content = page.revisions?.[0]?.slots?.main?.content;
-    if (!content) throw new Error("Wikisource API returned no revision text for: " + page.title);
-    const cleaned = stripHtml(content);
-    byTitle.set(page.title, cleaned);
-    byTitle.set(page.title.replace(/ /g, "_"), cleaned);
+  const html = data.parse?.text;
+  if (!html) throw new Error("Wikisource API returned no rendered text for: " + title);
+  return stripHtml(html);
+}
+
+async function fetchBatch(titles) {
+  const results = [];
+  for (const title of titles) {
+    console.log("Fetching rendered Wikisource page: " + title);
+    results.push(await fetchPage(title));
+    await new Promise(resolve => setTimeout(resolve, 750));
   }
-  return titles.map(title => {
-    const text = byTitle.get(title);
-    if (!text) throw new Error("Missing requested Wikisource page: " + title);
-    return text;
-  });
+  return results;
 }
 
 const sections = [];
