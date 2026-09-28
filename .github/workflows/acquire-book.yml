@@ -38,8 +38,10 @@ jobs:
           const id = requestedId || queued?.id || '';
           if (!id) {
             console.log('No acquisition request is queued; nothing to acquire.');
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, 'should_run=false\n');
             process.exit(0);
           }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'should_run=true\n');
           const book = q.candidates.find(x => x.id === id);
           if (!book) throw new Error('Book not found in acquisition queue: ' + id);
           if (book.sourceStatus !== 'SOURCE_VERIFIED') throw new Error('Source is not verified: ' + id);
@@ -58,6 +60,7 @@ jobs:
           BOOK_ID: ${{ inputs.book_id }}
 
       - name: Acquire and normalize
+        if: steps.record.outputs.should_run == 'true'
         env:
           SOURCE_URL: ${{ steps.record.outputs.source_url }}
           OUTPUT_FILE: ${{ steps.record.outputs.output_file }}
@@ -116,6 +119,7 @@ jobs:
           NODE
 
       - name: Commit normalized asset
+        if: steps.record.outputs.should_run == 'true'
         run: |
           git config user.name "CICAN acquisition bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
