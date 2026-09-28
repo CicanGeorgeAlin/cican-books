@@ -60,11 +60,16 @@ for (const book of catalog) {
       if (!new RegExp(field + "\\s*:").test(bookSource)) errors.push(book.id + ": review-stage book missing " + field);
     }
     if (!/targetWords\s*:\s*\d+/.test(bookSource)) errors.push(book.id + ": review-stage book missing numeric targetWords");
-    if (!/fullTextUrl\s*:/.test(bookSource)) {
-      errors.push(book.id + ": review-stage book has no fullTextUrl");
-    } else {
+    const pendingSource =
+      /readerSourceStatus\s*:\s*"SOURCE_PENDING"/.test(bookSource);
+
+    if (!pendingSource) {
       const fullTextMatch = bookSource.match(/fullTextUrl\s*:\s*"([^"]+)"/);
-      if (fullTextMatch && !/^https?:\/\//i.test(fullTextMatch[1]) && !fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
+      if (!fullTextMatch) {
+        errors.push(book.id + ": ready review-stage book has no local fullTextUrl");
+      } else if (/^https?:\/\//i.test(fullTextMatch[1])) {
+        errors.push(book.id + ": review-stage FULL BOOK source must be stored locally, not remotely");
+      } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
         errors.push(book.id + ": review-stage fullTextUrl asset is missing: " + fullTextMatch[1]);
       }
     }
