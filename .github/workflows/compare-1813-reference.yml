@@ -2,6 +2,12 @@ name: Compare 1813 Reference
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/compare-1813-reference.yml"
+      - "tools/compare-first-edition.mjs"
+      - "tools/fetch-wikisource-1813-reference.mjs"
+      - "fulltext/pride-and-prejudice.txt"
 
 permissions:
   contents: read
