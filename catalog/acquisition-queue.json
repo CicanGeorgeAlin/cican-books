@@ -189,7 +189,18 @@
             "Volume III"
           ],
           "canonicalAsset": "fulltext/pride-and-prejudice.txt",
-          "nextAction": "Compare all 61 chapters against a locally acquired 1813 reference transcription and classify differences before canonical replacement."
+          "nextAction": "Compare all 61 chapters against a locally acquired 1813 reference transcription and classify differences before canonical replacement.",
+          "canonicalStructureCheck": {
+            "status": "MATCHES_61_CHAPTER_STRUCTURE",
+            "canonicalChapterMarkers": 61,
+            "referenceVolumeCounts": [
+              23,
+              19,
+              19
+            ],
+            "canonicalChapterNumbering": "Roman numerals I-LX? sequence checked by marker count; full numeric continuity to be validated by dedicated script",
+            "observation": "The canonical asset contains 61 CHAPTER markers, consistent with the 1813 three-volume chapter structure. This confirms structural coverage only; it does not establish textual identity."
+          }
         }
       }
     },
