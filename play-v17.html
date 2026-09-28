@@ -2159,8 +2159,16 @@ function mergeOnes(
     growing = false;
 
 
-    if (createsKnowledge && currentBook) {
-        /* Full-size merge = READ. */
+    /*
+        A full + full merge is the definitive READ unlock.
+        The selected book is already loaded before gameplay
+        begins, so READ creation must not depend on the
+        mutable reader state variable.
+    */
+    if (
+        createsKnowledge &&
+        (window.CICAN_ACTIVE_BOOK || BOOK_READ)
+    ) {
         createKnowledge(mergeX, mergeY);
     }
 }
@@ -2241,6 +2249,11 @@ function createKnowledge(
         return;
     }
 
+    /*
+        READ is a gameplay object, not part of the reader
+        overlay. Give it a dedicated layer immediately.
+    */
+
     const element =
         document.createElement(
             "div"
@@ -2248,6 +2261,9 @@ function createKnowledge(
 
     element.className =
         "knowledge";
+
+    element.style.zIndex =
+        "3000";
 
     element.textContent =
         "READ";
