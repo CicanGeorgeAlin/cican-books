@@ -36,9 +36,15 @@ async function fetchChapter(volume, chapter) {
   });
   if (!response.ok) throw new Error("HTTP " + response.status + ": " + url);
   const html = await response.text();
-  const marker = html.indexOf("mw-content-text");
-  if (marker < 0) throw new Error("Wikisource content container not found: " + url);
-  return stripHtml(html.slice(marker));
+  const marker = html.indexOf('class="mw-parser-output"');
+  if (marker < 0) throw new Error("Wikisource parser output not found: " + url);
+  const start = html.indexOf(">", marker) + 1;
+  const endCandidates = [
+    html.indexOf('class="printfooter"', start),
+    html.indexOf('id="catlinks"', start)
+  ].filter(index => index >= 0);
+  const end = endCandidates.length ? Math.min(...endCandidates) : html.length;
+  return stripHtml(html.slice(start, end));
 }
 
 const sections = [];
