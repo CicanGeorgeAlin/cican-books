@@ -57,6 +57,9 @@ for (let i = 0; i < chapterCount; i++) {
   const canWords = words(can.text);
   const rows = refWords.length + 1;
   const cols = canWords.length + 1;
+  if (rows * cols > 25000000) {
+    throw new Error("Comparison matrix too large for chapter " + (i + 1) + " (" + rows + "x" + cols + "); split the chapter comparison before running.");
+  }
   const previous = new Uint32Array(cols);
   const current = new Uint32Array(cols);
   let best = 0;
