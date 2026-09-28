@@ -6,6 +6,8 @@ window.BOOK_READ = {
     difficulty: "DENSE_CLASSIC",
     targetMinutes: 15,
     targetWords: 2676,
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
     fullTextSourceType: "COMPLETE_SOURCE_ASSET",
     fullTextSourceVerified: true,
     fullTextSourceVerification: "Repository full-text asset; complete source text for the configured Project Gutenberg edition.",
