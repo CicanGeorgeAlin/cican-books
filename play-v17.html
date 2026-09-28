@@ -3210,21 +3210,20 @@ function finishReader() {
 
 mode15.addEventListener("pointerdown", function(e) {
     e.preventDefault();
-    if (readingMode !== "15") {
-        readingMode = "15";
-        saveReaderMode();
-        openReader("15");
-    }
+    if (!currentBook) return;
+
+    readingMode = "15";
+    saveReaderMode();
+    openReader("15");
 });
 
 modeFull.addEventListener("pointerdown", async function(e) {
     e.preventDefault();
     if (!currentBook || fullTextLoading) return;
-    if (readingMode !== "full") {
-        readingMode = "full";
-        saveReaderMode();
-        await openReader("full");
-    }
+
+    readingMode = "full";
+    saveReaderMode();
+    await openReader("full");
 });
 
 readerText.addEventListener("scroll", function() {
