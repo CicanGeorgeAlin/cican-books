@@ -56,6 +56,13 @@
         "reason": "The source text is based on an edition edited by R. W. Chapman. The underlying 1813 work and the later editorial contribution must be assessed separately for Republic of Ireland distribution.",
         "nextSafeAction": "USE_A_CLEARLY_CLEARED_TEXT_EDITION_OR_COMPLETE_EDITORIAL_RIGHTS_REVIEW",
         "evidenceCheckedAt": "2026-09-28"
+      },
+      "alternativeSourceAssessment": {
+        "source": "Standard Ebooks",
+        "url": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
+        "status": "ALTERNATIVE_EDITION_REQUIRES_SEPARATE_REVIEW",
+        "note": "Standard Ebooks describes its edition as free of copyright restrictions in the US but explicitly warns that restrictions may differ in other countries. It is therefore an alternative source candidate, not an Ireland distribution clearance.",
+        "checkedAt": "2026-09-28"
       }
     },
     {
