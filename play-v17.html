@@ -1096,7 +1096,9 @@ const BOOK_SOURCES = {
     "tao-te-ching": "books/tao-te-ching.js",
     "the-republic": "books/the-republic.js",
     "walden": "books/walden.js",
-    "thus-spake-zarathustra": "books/thus-spake-zarathustra.js"
+    "thus-spake-zarathustra": "books/thus-spake-zarathustra.js",
+    "pride-and-prejudice": "books/pride-and-prejudice.js",
+    "moby-dick": "books/moby-dick.js"
 };
 
 const requestedBookId =
@@ -1178,7 +1180,23 @@ async function startCicanBook() {
     /*
         Clear any previous global book before
         loading the requested book.
+        The central catalog remains the publication gate.
     */
+
+    try {
+        const catalogModule = await import("./catalog/index.js");
+        const record = catalogModule.findCatalogBook(selectedBookId);
+        if (!record || (record.status && record.status !== catalogModule.CATALOG_STATUS.PUBLISHED)) {
+            throw new Error("Book is not published: " + selectedBookId);
+        }
+    } catch (error) {
+        console.warn(error.message || error);
+        window.BOOK_READ = null;
+        window.CICAN_ACTIVE_BOOK = null;
+        window.CICAN_ACTIVE_BOOK_ID = null;
+        initializeCicanBook(null, null);
+        return;
+    }
 
     window.BOOK_READ = null;
 
