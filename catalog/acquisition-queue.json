@@ -93,16 +93,29 @@
           "status": "ALTERNATIVE_EDITION_REQUIRES_SEPARATE_REVIEW"
         },
         "original1813": {
-          "status": "STRONGEST_PROVENANCE_CANDIDATE_FOUND",
+          "status": "PROVENANCE_VERIFIED__OCR_NEXT",
           "edition": "First edition, London, T. Egerton, 1813, three volumes",
-          "volumeSources": [
+          "volume1": {
+            "pages": 320,
+            "source": "Internet Archive / Uttarpara Jaykrishna Public Library",
+            "licenseRecord": "Public Domain Mark"
+          },
+          "volume2": {
+            "pages": 252,
+            "source": "Internet Archive / English Faculty Library, University of Oxford",
+            "licenseRecord": "Public Domain Mark"
+          },
+          "volume3": {
+            "pages": 334,
+            "source": "Internet Archive / Uttarpara Jaykrishna Public Library",
+            "licenseRecord": "Public Domain Mark"
+          },
+          "evidence": [
             "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_1).pdf",
             "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_2).pdf",
             "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_3).pdf"
           ],
-          "provenance": "Wikimedia Commons records the scans as sourced from Internet Archive holdings and identifies them as the 1813 first edition.",
-          "licensingRecord": "Commons marks the files as public domain and states no known copyright restrictions.",
-          "nextAction": "Acquire/inspect all three scans, extract OCR, compare against canonical text, and retain scan provenance metadata. Do not publish until territorial review is separately completed."
+          "nextAction": "Extract OCR from the three scans and compare against the current canonical text before replacing it."
         }
       }
     },
