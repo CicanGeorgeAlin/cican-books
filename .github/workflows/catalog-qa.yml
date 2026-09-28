@@ -1,0 +1,29 @@
+name: CICAN catalog QA
+
+on:
+  push:
+    paths:
+      - 'catalog/**'
+      - 'books/**'
+      - 'fulltext/**'
+      - 'engine/**'
+      - 'tools/validate-catalog.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  catalog-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate catalog
+        run: node tools/validate-catalog.mjs
