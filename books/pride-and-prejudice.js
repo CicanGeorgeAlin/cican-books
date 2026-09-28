@@ -6,6 +6,7 @@ window.BOOK_READ = {
     difficulty: "DENSE_CLASSIC",
     targetMinutes: 15,
     targetWords: 2676,
+    fifteenMinuteStartMarker: "CHAPTER I.",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     fullTextSourceType: "COMPLETE_SOURCE_ASSET",
