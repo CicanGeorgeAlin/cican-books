@@ -21,7 +21,7 @@ window.BOOK_READ = {
     sourceTranslator: "F. Max Müller",
     sourceNote: "Selected complete verses from all 26 chapters for the CICAN 15-minute experience. The deeper reader remains available through the full source edition.",
     sourceUrl: "https://www.gutenberg.org/ebooks/2017",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/2017/pg2017.txt",
+    fullTextUrl: "./fulltext/dhammapada.txt",
     prologueScenes: [
         {
             text: "THE MIND",
