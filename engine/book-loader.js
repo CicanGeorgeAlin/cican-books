@@ -32,6 +32,72 @@ export function getCatalogRecord(bookId) {
   return findCatalogBook(bookId);
 }
 
+function normalizeReaderSource(sourceText) {
+  let text = String(sourceText || "").replace(/\r\n/g, "\n");
+
+  const startMarker = text.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK");
+  const endMarker = text.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK");
+
+  if (startMarker >= 0 && endMarker > startMarker) {
+    text = text
+      .slice(text.indexOf("\n", startMarker) + 1, endMarker)
+      .trim();
+  }
+
+  return text.trim();
+}
+
+function selectFifteenMinuteText(sourceText, targetWords) {
+  const normalized = normalizeReaderSource(sourceText);
+  if (!normalized) return "";
+
+  const limit = Math.max(1, Number(targetWords) || 2700);
+  const words = [...normalized.matchAll(/\S+/g)];
+
+  if (words.length <= limit) return normalized;
+
+  const lastWord = words[limit - 1];
+  return normalized.slice(0, lastWord.index + lastWord[0].length).trim();
+}
+
+async function prepareFifteenMinuteSource(book) {
+  if (!book || book.fifteenMinuteText) return book;
+
+  if (book.fullText && String(book.fullText).trim()) {
+    book.fifteenMinuteText =
+      selectFifteenMinuteText(book.fullText, book.targetWords);
+    return book;
+  }
+
+  if (!book.fullTextUrl) return book;
+
+  const response = await fetch(
+    new URL(book.fullTextUrl, document.baseURI).href,
+    { cache: "no-store" }
+  );
+
+  if (!response.ok) {
+    throw new Error("Could not load complete source for 15-minute reader: " + book.id);
+  }
+
+  const sourceText = await response.text();
+
+  if (sourceText.trim().length < 1000) {
+    throw new Error("Complete source is unexpectedly short for " + book.id);
+  }
+
+  const normalized = normalizeReaderSource(sourceText);
+
+  if (!normalized) {
+    throw new Error("Complete source is empty after normalization for " + book.id);
+  }
+
+  book.fifteenMinuteText =
+    selectFifteenMinuteText(normalized, book.targetWords);
+
+  return book;
+}
+
 export async function loadBook(bookId) {
   const src = getBookSource(bookId);
 
@@ -57,10 +123,24 @@ export async function loadBook(bookId) {
     throw new Error("Book did not provide BOOK_READ: " + bookId);
   }
 
-  return {
+  const book = {
     id: bookId,
     ...window.BOOK_READ
   };
+
+  /*
+   * Resolve the calibrated 15-minute source before the reader opens.
+   * fullTextUrl is a location only; never treat the path string as text.
+   */
+  try {
+    await prepareFifteenMinuteSource(book);
+  } catch (error) {
+    if (book.readerSourceStatus === "SOURCE_READY") {
+      throw error;
+    }
+  }
+
+  return book;
 }
 
 export function validateBook(book) {
