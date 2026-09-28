@@ -1660,7 +1660,12 @@ function createTaoFlows() {
         return;
     }
 
-    for (let i = 0; i < 30; i++) {
+    /*
+        Tao atmosphere is intentionally lightweight.
+        It must never compete with the canonical CICAN
+        movement, growth, split, merge, or READ loop.
+    */
+    for (let i = 0; i < 8; i++) {
 
         const element =
             document.createElement("div");
@@ -1681,8 +1686,12 @@ function createTaoFlows() {
 
         taoFlows.push(flow);
 
-        element.style.left = flow.x + "px";
-        element.style.top = flow.y + "px";
+        element.style.transform =
+            "translate3d(" +
+            flow.x +
+            "px," +
+            flow.y +
+            "px,0) translate(-50%,-50%)";
     }
 }
 
@@ -1692,6 +1701,10 @@ function updateTaoExperience() {
         return;
     }
 
+    /*
+        Keep the book atmosphere separate from the game.
+        One clock value is shared by all visual particles.
+    */
     const dx =
         selectedOne.x - taoLastX;
 
@@ -1704,13 +1717,19 @@ function updateTaoExperience() {
     taoLastX = selectedOne.x;
     taoLastY = selectedOne.y;
 
+    const now =
+        performance.now();
+
+    const waveTime =
+        now * 0.00035;
+
     for (const flow of taoFlows) {
 
         const wave =
             Math.sin(
                 flow.y * 0.008 +
                 flow.phase +
-                performance.now() * 0.00035
+                waveTime
             );
 
         flow.vy += wave * 0.0025;
@@ -1777,11 +1796,12 @@ function updateTaoExperience() {
             flow.y = -12;
         }
 
-        flow.element.style.left =
-            flow.x + "px";
-
-        flow.element.style.top =
-            flow.y + "px";
+        flow.element.style.transform =
+            "translate3d(" +
+            flow.x +
+            "px," +
+            flow.y +
+            "px,0) translate(-50%,-50%)";
     }
 }
 
