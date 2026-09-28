@@ -18,7 +18,7 @@ window.BOOK_READ = {
     fullTextSourceVerified: true,
     fullTextSourceVerification: "Repository full-text asset; complete source text for Project Gutenberg eBook #205 edition.",
 
-    sourceNote: "CICAN 15-minute reading edition: a coherent selected opening from the cited edition. The complete source remains available through the source edition.",
+    sourceNote: "The 15-minute reader is calibrated directly from the verified complete Walden source, beginning with the work itself. FULL BOOK uses the same complete source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/205",
     fullTextUrl: "fulltext/walden.txt",
     prologueScenes: [
