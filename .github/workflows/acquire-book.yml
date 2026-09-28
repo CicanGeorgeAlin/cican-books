@@ -35,7 +35,11 @@ jobs:
           const q = JSON.parse(fs.readFileSync('catalog/acquisition-queue.json','utf8'));
           const requestedId = process.env.BOOK_ID || '';
           const queued = q.candidates.find(x => x.automationRequest && String(x.automationRequest).startsWith('ACQUIRE_'));
-          const id = requestedId || queued?.id || 'pride-and-prejudice';
+          const id = requestedId || queued?.id || '';
+          if (!id) {
+            console.log('No acquisition request is queued; nothing to acquire.');
+            process.exit(0);
+          }
           const book = q.candidates.find(x => x.id === id);
           if (!book) throw new Error('Book not found in acquisition queue: ' + id);
           if (book.sourceStatus !== 'SOURCE_VERIFIED') throw new Error('Source is not verified: ' + id);
