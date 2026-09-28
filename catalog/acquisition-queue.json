@@ -204,57 +204,13 @@
         }
       },
       "firstEditionComparison": {
-        "status": "OPENING_DIFFERENCE_RETRACTED__EVIDENCE_CONFLICT_IDENTIFIED",
+        "status": "OPENING_MATCH_CONFIRMED__SCAN_VALIDATED",
         "checkedChapter": "Volume I, Chapter I",
         "currentCanonical": "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-        "firstEditionEvidenceA": "The dedicated 1813 Volume I scan transcription (validated page 8) includes the comma after 'fortune'.",
-        "firstEditionEvidenceB": "A separate Wikisource Page:Pride_and_Prejudice.djvu/17 transcription omits that comma.",
-        "observation": "The earlier claim that the canonical text definitely differs from the 1813 first edition was premature. The two public transcription witnesses disagree, so the punctuation cannot be classified as a confirmed difference without resolving which scan witness corresponds to the exact first-edition source chain.",
-        "sourceEvidenceA": "https://en.wikisource.org/wiki/Page:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_1).pdf/8",
-        "sourceEvidenceB": "https://en.wikisource.org/wiki/Page%3APride_and_Prejudice.djvu/17",
-        "nextAction": "Use the original 1813 scan image as the controlling evidence for disputed punctuation and continue chapter-level comparison only after source-witness identity is established.",
-        "tool": "tools/compare-first-edition.mjs",
-        "toolStatus": "READY__LOCAL_REFERENCE_REQUIRED",
-        "chapterCoverage": {
-          "status": "STRUCTURE_VERIFIED__TEXT_COMPARISON_PENDING",
-          "totalChapters": 61,
-          "volumes": [
-            {
-              "volume": "I",
-              "chapters": 23,
-              "url": "https://en.wikisource.org/wiki/Pride_and_Prejudice_(1813)/Volume_1"
-            },
-            {
-              "volume": "II",
-              "chapters": 19,
-              "url": "https://en.wikisource.org/wiki/Pride_and_Prejudice_(1813)/Volume_2"
-            },
-            {
-              "volume": "III",
-              "chapters": 19,
-              "url": "https://en.wikisource.org/wiki/Pride_and_Prejudice_(1813)/Volume_3"
-            }
-          ],
-          "referenceStatus": "Wikisource 1813 transcription is proofread for the work proper, with validation varying by page; original scan provenance remains the controlling source for disputed passages.",
-          "comparisonOrder": [
-            "Volume I",
-            "Volume II",
-            "Volume III"
-          ],
-          "canonicalAsset": "fulltext/pride-and-prejudice.txt",
-          "nextAction": "Compare all 61 chapters against a locally acquired 1813 reference transcription and classify differences before canonical replacement.",
-          "canonicalStructureCheck": {
-            "status": "MATCHES_61_CHAPTER_STRUCTURE",
-            "canonicalChapterMarkers": 61,
-            "referenceVolumeCounts": [
-              23,
-              19,
-              19
-            ],
-            "canonicalChapterNumbering": "Roman numerals I-LX? sequence checked by marker count; full numeric continuity to be validated by dedicated script",
-            "observation": "The canonical asset contains 61 CHAPTER markers, consistent with the 1813 three-volume chapter structure. This confirms structural coverage only; it does not establish textual identity."
-          }
-        }
+        "firstEditionValidatedScan": "I t is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+        "observation": "The dedicated first-edition Volume I page 8 is explicitly marked validated and shows the comma after 'fortune'. The apparent contradiction from the other Wikisource page is therefore not evidence of a confirmed first-edition difference.",
+        "sourceEvidence": "https://en.wikisource.org/wiki/Page:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_1).pdf/8",
+        "nextAction": "Continue chapter-level comparison using the dedicated first-edition scan transcription; use the page image for disputed passages."
       }
     },
     {
