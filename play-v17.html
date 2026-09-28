@@ -2727,14 +2727,41 @@ async function openReader(modeOverride) {
             if (!response.ok) throw new Error("Full text request failed");
             const sourceText = await response.text();
             if (sourceText.trim().length < 1000) throw new Error("Full text is unexpectedly short");
-            currentBook.fullText = sourceText.replace(/\\r\\n/g, "\\n");
+
+            const normalizedText = sourceText.replace(/\\r\\n/g, "\\n");
+
+            if (
+                openToken !== readerOpenToken ||
+                readingMode !== requestedMode
+            ) {
+                currentBook.fullText = normalizedText;
+                fullTextLoading = false;
+                return;
+            }
+
+            currentBook.fullText = normalizedText;
         } catch (_) {
+            if (
+                openToken !== readerOpenToken ||
+                readingMode !== requestedMode
+            ) {
+                fullTextLoading = false;
+                return;
+            }
+
             fullTextLoading = false;
             updateReaderModeUI();
             readerModeNote.textContent = "FULL BOOK COULD NOT BE LOADED";
             return;
         }
         fullTextLoading = false;
+    }
+
+    if (
+        openToken !== readerOpenToken ||
+        readingMode !== requestedMode
+    ) {
+        return;
     }
 
     const fullAvailable = !!currentBook.fullText;
