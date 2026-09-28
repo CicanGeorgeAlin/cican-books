@@ -84,7 +84,7 @@ for (let i = 0; i < chapterCount; i++) {
   });
 }
 
-const refWords = words(reference);
+const structureMismatch = refChapters.length !== canChapters.length || refChapters.some((x, i) => x.label !== canChapters[i]?.label);\n\nconst refWords = words(reference);
 const canWords = words(canonical);
 
 const result = {
