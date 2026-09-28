@@ -149,6 +149,16 @@ if (/fullAvailable[\s\S]{0,500}readerSourceStatus\s*===\s*"SOURCE_READY"/.test(p
     failures.push("play-v17.html: FULL BOOK availability still accepts SOURCE_READY text");
 }
 
+/*
+ * 15-MINUTE SOURCE RESOLUTION REGRESSION
+ *
+ * fullTextUrl is a path/location, never the text itself.
+ * The reader must resolve the asset contents before calibration.
+ */
+if (/fullTextUrl[\\s\\S]{0,500}selectFifteenMinuteText/.test(playFile)) {
+    failures.push("play-v17.html: fullTextUrl/path is being passed directly into selectFifteenMinuteText");
+}
+
 const canonicalChecks = [
     [
         "V13 minimum size",
