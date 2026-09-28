@@ -2042,6 +2042,11 @@ function createKnowledge(
     py
 ) {
 
+    /* Only one READ entry point exists per game session. */
+    if (readObjects.length > 0) {
+        return;
+    }
+
     const element =
         document.createElement(
             "div"
