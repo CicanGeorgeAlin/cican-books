@@ -1228,7 +1228,7 @@ const TRAIL_DISTANCE = 35;
 
 const MERGE_DISTANCE = 20;
 
-/* Full-size CICAN should reliably trigger READ on merge. */
+/* CICAN merge when their visible bodies touch; keeps the original 20px minimum. */
 const FULL_SIZE_TOLERANCE = 0.5;
 
 
@@ -1981,10 +1981,12 @@ function checkForMerges() {
                 );
 
 
-            if (
-                d <=
-                MERGE_DISTANCE
-            ) {
+            const contactDistance = Math.max(
+                MERGE_DISTANCE,
+                (oneA.size + oneB.size) / 2
+            );
+
+            if (d <= contactDistance) {
 
                 mergeOnes(
                     oneA,
