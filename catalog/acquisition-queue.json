@@ -14,7 +14,7 @@
       "alternativeSourceUrl": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Perform scan/OCR extraction and generate a comparison report; do not replace fulltext/pride-and-prejudice.txt yet.",
+      "nextStep": "Run chapter/volume comparison using the 1813 Wikisource transcription and scan provenance; report differences before any canonical replacement.",
       "queueStage": "BOOK_CONTRACT",
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
@@ -142,7 +142,15 @@
           "Differences from existing canonical text are reported before replacement.",
           "Ireland territorial review remains unresolved."
         ],
-        "status": "RECONSTRUCTION_SPEC_READY__TEXT_EXTRACTION_PENDING"
+        "status": "RECONSTRUCTION_SPEC_READY__TEXT_EXTRACTION_PENDING",
+        "transcriptionSource": {
+          "platform": "Wikisource",
+          "workUrl": "https://en.wikisource.org/wiki/Pride_and_Prejudice_(1813)",
+          "status": "PROOFREAD_TRANSCRIPTION_AVAILABLE__VALIDATION_NOT_COMPLETE",
+          "structure": "Volumes I-III with chapter-level transclusions",
+          "evidence": "Wikisource's Volume II index reports the work proper as proofread, while noting not all pages are validated; the chapter pages expose the transcription alongside the scan page structure.",
+          "nextAction": "Use the Wikisource transcription as a comparison layer against the existing canonical text and the original scans; do not treat it alone as publication clearance."
+        }
       }
     },
     {
