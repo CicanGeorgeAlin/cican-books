@@ -54,12 +54,17 @@ async function fetchPage(title) {
     const timeout = setTimeout(() => controller.abort(), 30000);
     try {
       response = await fetch(api, {
-      headers: {
-        "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison; contactable)",
-        "Accept": "application/json"
-      },
-      signal: controller.signal
+        headers: {
+          "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison; contactable)",
+          "Accept": "application/json"
+        },
+        signal: controller.signal
       });
+    } catch (error) {
+      clearTimeout(timeout);
+      if (attempt === 6) throw error;
+      await new Promise(resolve => setTimeout(resolve, attempt * 2000));
+      continue;
     } finally {
       clearTimeout(timeout);
     }
