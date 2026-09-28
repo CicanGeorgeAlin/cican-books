@@ -14,7 +14,7 @@
       "alternativeSourceUrl": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Run chapter/volume comparison using the 1813 Wikisource transcription and scan provenance; report differences before any canonical replacement.",
+      "nextStep": "Complete the 61-chapter comparison; preserve the current asset until the differences are classified.",
       "queueStage": "BOOK_CONTRACT",
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
@@ -151,6 +151,15 @@
           "evidence": "Wikisource's Volume II index reports the work proper as proofread, while noting not all pages are validated; the chapter pages expose the transcription alongside the scan page structure.",
           "nextAction": "Use the Wikisource transcription as a comparison layer against the existing canonical text and the original scans; do not treat it alone as publication clearance."
         }
+      },
+      "firstEditionComparison": {
+        "status": "DIFFERENCES_CONFIRMED__CANONICAL_NOT_REPLACED",
+        "checkedChapter": "Volume I, Chapter I",
+        "currentCanonical": "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+        "firstEditionScanTranscription": "It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife.",
+        "observation": "The existing canonical asset contains punctuation that differs from the validated 1813 scan transcription at the opening sentence. Therefore it must not be labeled as an exact first-edition transcription.",
+        "sourceEvidence": "https://en.wikisource.org/wiki/Page%3APride_and_Prejudice.djvu/17",
+        "nextAction": "Perform a complete chapter-level comparison before deciding whether to rebuild the canonical full-text asset."
       }
     },
     {
