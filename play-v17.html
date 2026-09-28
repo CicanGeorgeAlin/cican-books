@@ -1394,10 +1394,19 @@ async function startCicanBook() {
     */
 
     try {
-        const loader = await import("./engine/book-loader.js?v=17.2");
+        const loader = await import("./engine/book-loader.js?v=17.3");
         const BOOK_READ = await loader.loadBook(selectedBookId);
 
-        if (!BOOK_READ || !BOOK_READ.title || !BOOK_READ.text) {
+        const hasReaderSource =
+            BOOK_READ &&
+            (
+                String(BOOK_READ.text || "").trim() ||
+                String(BOOK_READ.fifteenMinuteText || "").trim() ||
+                String(BOOK_READ.fullText || "").trim() ||
+                String(BOOK_READ.fullTextUrl || "").trim()
+            );
+
+        if (!BOOK_READ || !BOOK_READ.title || !hasReaderSource) {
             throw new Error("Selected CICAN book did not provide playable content: " + selectedBookId);
         }
 
@@ -3091,14 +3100,30 @@ function normalizeSourceText(sourceText) {
 
 function selectFifteenMinuteText(
     sourceText,
-    targetWords
+    targetWords,
+    startMarker = ""
 ) {
 
-    const normalizedText =
+    let normalizedText =
         normalizeSourceText(sourceText);
 
     if (!normalizedText) {
         return "";
+    }
+
+    const marker =
+        String(startMarker || "").trim();
+
+    if (marker) {
+        const markerIndex =
+            normalizedText.indexOf(marker);
+
+        if (markerIndex >= 0) {
+            normalizedText =
+                normalizedText
+                    .slice(markerIndex)
+                    .trim();
+        }
     }
 
     const words =
@@ -3145,8 +3170,9 @@ async function loadSourceTextForReader(
 
     /*
         SOURCE CONTRACT:
-        book.text is the calibrated 15-minute selection only.
-        It is NEVER eligible as a FULL BOOK source.
+        book.fifteenMinuteText is the calibrated 15-minute source selection.
+        book.text is legacy-compatible source selection only when present.
+        Neither is eligible as a FULL BOOK source.
     */
 
     if (
@@ -3289,7 +3315,8 @@ async function openReader(modeOverride) {
         currentBook.fifteenMinuteText =
             selectFifteenMinuteText(
                 currentBook.fullText,
-                currentBook.targetWords
+                currentBook.targetWords,
+                currentBook.fifteenMinuteStartMarker
             );
     }
 
@@ -3325,7 +3352,8 @@ async function openReader(modeOverride) {
                 currentBook.fifteenMinuteText =
                     selectFifteenMinuteText(
                         sourceText,
-                        currentBook.targetWords
+                        currentBook.targetWords,
+                        currentBook.fifteenMinuteStartMarker
                     );
             }
 
