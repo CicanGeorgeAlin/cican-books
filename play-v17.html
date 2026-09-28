@@ -2906,7 +2906,14 @@ function formatTime(
 function updateReaderModeUI() {
     const fullAvailable = !!(
         currentBook &&
-        (currentBook.fullText || currentBook.fullTextUrl)
+        (
+            currentBook.fullText ||
+            currentBook.fullTextUrl ||
+            (
+                currentBook.readerSourceStatus === "SOURCE_READY" &&
+                currentBook.text
+            )
+        )
     );
 
     const fifteenAvailable = !!(
@@ -3117,6 +3124,16 @@ async function loadSourceTextForReader(
     }
 
     if (
+        book.readerSourceStatus === "SOURCE_READY" &&
+        book.text &&
+        String(book.text).trim()
+    ) {
+        return normalizeSourceText(
+            book.text
+        );
+    }
+
+    if (
         !book.fullTextUrl
     ) {
         return "";
@@ -3281,7 +3298,14 @@ async function openReader(modeOverride) {
     }
 
 
-    if (isFullBook && !currentBook.fullText) {
+    if (
+        isFullBook &&
+        !currentBook.fullText &&
+        !(
+            currentBook.readerSourceStatus === "SOURCE_READY" &&
+            currentBook.text
+        )
+    ) {
         /*
             Prefer a dedicated full-text asset when one exists.
             Otherwise use the book's canonical text already loaded
@@ -3384,7 +3408,14 @@ async function openReader(modeOverride) {
 
     readerText.textContent =
         isFullBook
-            ? currentBook.fullText
+            ? (
+                currentBook.fullText ||
+                (
+                    currentBook.readerSourceStatus === "SOURCE_READY"
+                        ? currentBook.text
+                        : ""
+                )
+            )
             : currentBook.fifteenMinuteText;
 
     readerModeNote.textContent =
