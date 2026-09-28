@@ -2744,10 +2744,32 @@ const prologueButton =
     );
 
 
+const DEFAULT_PROLOGUE_SCENES = [
+    {
+        text: "THE BOOK",
+        button: "CONTINUE"
+    },
+    {
+        text: "Move through the experience. Then enter the text itself.",
+        button: "CONTINUE"
+    },
+    {
+        text: "The game is the doorway. The book is the destination.",
+        button: "CONTINUE"
+    },
+    {
+        text: "READ",
+        button: "OPEN BOOK"
+    }
+];
+
+
 const prologueScenes =
-    BOOK_READ
+    BOOK_READ &&
+    Array.isArray(BOOK_READ.prologueScenes) &&
+    BOOK_READ.prologueScenes.length
         ? BOOK_READ.prologueScenes
-        : [];
+        : DEFAULT_PROLOGUE_SCENES;
 
 
 let prologueIndex = 0;
@@ -2774,11 +2796,20 @@ function showPrologueScene() {
     const scene =
         prologueScenes[
             prologueIndex
+        ] ||
+        prologueScenes[
+            prologueScenes.length - 1
         ];
+
+    if (!scene) {
+        closePrologue();
+        openReader("15");
+        return;
+    }
 
 
     prologueText.textContent =
-        scene.text;
+        String(scene.text || "");
 
     prologueStep.textContent =
         (
@@ -2788,7 +2819,8 @@ function showPrologueScene() {
         prologueScenes.length;
 
     prologueButton.textContent =
-        scene.button;
+        scene.button ||
+        "CONTINUE";
 }
 
 
