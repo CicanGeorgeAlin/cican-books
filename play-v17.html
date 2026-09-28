@@ -1394,7 +1394,7 @@ async function startCicanBook() {
     */
 
     try {
-        const loader = await import("./engine/book-loader.js");
+        const loader = await import("./engine/book-loader.js?v=17.2");
         const BOOK_READ = await loader.loadBook(selectedBookId);
 
         if (!BOOK_READ || !BOOK_READ.title || !BOOK_READ.text) {
@@ -2945,8 +2945,7 @@ function updateReaderModeUI() {
         currentBook &&
         (
             currentBook.fifteenMinuteText ||
-            currentBook.fullText ||
-            currentBook.fullTextUrl
+            currentBook.fullText
         )
     );
 
@@ -3156,9 +3155,15 @@ async function loadSourceTextForReader(
         return "";
     }
 
+    const sourceUrl =
+        new URL(
+            book.fullTextUrl,
+            document.baseURI
+        ).href;
+
     const response =
         await fetch(
-            book.fullTextUrl,
+            sourceUrl,
             {
                 cache: "no-store"
             }
@@ -3251,9 +3256,30 @@ async function openReader(modeOverride) {
 
         IMPORTANT:
         fullTextUrl is a LOCATION, not the source text itself.
-        Never pass the URL/path string into selectFifteenMinuteText().
-        Resolve the actual source contents first.
+        Never display the path as reader content.
     */
+    if (!isFullBook) {
+        const fifteenValue = String(
+            currentBook.fifteenMinuteText || ""
+        ).trim();
+        const fullPath = String(
+            currentBook.fullTextUrl || ""
+        ).trim();
+
+        /*
+            Guard against stale/cached book modules that may have
+            populated fifteenMinuteText with the asset path itself.
+            That value is metadata, never reader text.
+        */
+        if (
+            fifteenValue &&
+            fullPath &&
+            fifteenValue === fullPath
+        ) {
+            currentBook.fifteenMinuteText = "";
+        }
+    }
+
     if (
         !isFullBook &&
         !currentBook.fifteenMinuteText &&
