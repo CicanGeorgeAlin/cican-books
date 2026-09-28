@@ -29,7 +29,7 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from "node:fs";
           const html = fs.readFileSync("play-v17.html", "utf8");
-          const scripts = [...html.matchAll(/<script[^>]*>([\\s\\S]*?)<\\/script>/gi)];
+          const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)];
           if (scripts.length !== 2) throw new Error("Expected exactly two script blocks");
           for (const [index, match] of scripts.entries()) {
             try {
