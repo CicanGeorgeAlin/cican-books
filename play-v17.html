@@ -1156,6 +1156,10 @@ async function startCicanBook() {
         const loader = await import("./engine/book-loader.js");
         const BOOK_READ = await loader.loadBook(selectedBookId);
 
+        if (!BOOK_READ || !BOOK_READ.title || !BOOK_READ.text) {
+            throw new Error("Selected CICAN book did not provide playable content: " + selectedBookId);
+        }
+
         window.BOOK_READ = BOOK_READ;
         window.CICAN_ACTIVE_BOOK = BOOK_READ;
         window.CICAN_ACTIVE_BOOK_ID = selectedBookId;
