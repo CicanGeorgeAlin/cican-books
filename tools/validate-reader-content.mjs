@@ -61,6 +61,14 @@ if (!/async function prepareFifteenMinuteSource\s*\(\s*book\s*\)/.test(loaderFil
     failures.push("engine/book-loader.js: missing deterministic 15-minute source preparation");
 }
 
+if (!/function selectFifteenMinuteText\s*\(\s*sourceText,\s*targetWords,\s*startMarker/.test(loaderFile)) {
+    failures.push("engine/book-loader.js: 15-minute selector does not support book-specific source start markers");
+}
+
+if (!/const markerIndex = normalized\.indexOf\(marker\)/.test(loaderFile)) {
+    failures.push("engine/book-loader.js: source start marker is not applied before 15-minute calibration");
+}
+
 if (/selectFifteenMinuteText\s*\(\s*book\.fullTextUrl/.test(loaderFile)) {
     failures.push("engine/book-loader.js: fullTextUrl/path is being treated as 15-minute text");
 }
@@ -241,6 +249,36 @@ const canonicalChecks = [
 for (const [name, passed] of canonicalChecks) {
     if (!passed) {
         failures.push("play-v17.html: missing canonical game contract — " + name);
+    }
+    const startMarkerMatch =
+        source.match(/\bfifteenMinuteStartMarker\s*:\s*"((?:\\.|[^"])*)"/);
+
+    if (!pending && !startMarkerMatch) {
+        failures.push(id + ": SOURCE_READY book is missing fifteenMinuteStartMarker");
+    }
+
+    if (!pending && startMarkerMatch) {
+        let startMarker = startMarkerMatch[1];
+        try {
+            startMarker = JSON.parse('"' + startMarker.replace(/"/g, '\\"') + '"');
+        } catch {
+            // Keep the raw escaped marker if decoding is unnecessary.
+        }
+
+        if (hasFullAsset && !source.includes(startMarker)) {
+            failures.push(id + ": embedded complete source does not contain fifteenMinuteStartMarker");
+        }
+
+        if (hasFullUrl && !hasExternalFullUrl) {
+            const relative = fullUrlMatch[1];
+            const assetPath = path.normalize(relative);
+            if (fs.existsSync(assetPath)) {
+                const assetText = fs.readFileSync(assetPath, "utf8");
+                if (!assetText.includes(startMarker)) {
+                    failures.push(id + ": complete source asset does not contain fifteenMinuteStartMarker");
+                }
+            }
+        }
     }
 }
 
