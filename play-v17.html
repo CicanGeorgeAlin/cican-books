@@ -1154,24 +1154,6 @@ async function startCicanBook() {
     }
 }
 
-
-    if (!BOOK_READ) {
-        throw new Error(
-            "BOOK_READ was not provided by the selected book file."
-        );
-    }
-
-    window.CICAN_ACTIVE_BOOK =
-        BOOK_READ;
-
-    window.CICAN_ACTIVE_BOOK_ID =
-        selectedBookId;
-
-    initializeCicanBook(
-        BOOK_READ,
-        selectedBookId
-    );
-}
 </script>
 
 
