@@ -6,6 +6,7 @@ window.BOOK_READ = {
     difficulty: "SACRED_CLASSIC",
     targetMinutes: 15,
     targetWords: 2807,
+    fifteenMinuteStartMarker: "Chapter I. The Twin-Verses",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     gameMode: "dhammapada",
