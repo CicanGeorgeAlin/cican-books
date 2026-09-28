@@ -7,6 +7,7 @@ window.BOOK_READ = {
     difficulty: "SACRED_CLASSIC",
     targetMinutes: 15,
     targetWords: 2917,
+    readerSourceStatus: "SOURCE_READY",
     gameMode: "tao",
     gameTitle: "THE WAY OF WATER",
     gameDNA: [
