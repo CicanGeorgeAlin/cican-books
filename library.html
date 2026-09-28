@@ -88,15 +88,17 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 </main>
 <script type="module">
 import { getPublishedCatalog, searchCatalog } from "./catalog/index.js";
+import { CATALOG as ALL_CATALOG } from "./catalog/index.js";
 const CATALOG = getPublishedCatalog();
+const DISCOVERY_CATALOG = getPublishedCatalog().length ? getPublishedCatalog() : ALL_CATALOG;
 
 const list = document.getElementById("books");
 const enter = document.getElementById("enter");
 const search = document.getElementById("bookSearch");
-let selected = CATALOG[0]?.id || null;
+let selected = DISCOVERY_CATALOG[0]?.id || null;
 
 function render(query = "") {
-  const results = searchCatalog(query, { publishedOnly: true });
+  const results = searchCatalog(query, { publishedOnly: getPublishedCatalog().length > 0 });
   list.innerHTML = "";
   results.forEach((book) => {
     const button = document.createElement("button");
@@ -105,7 +107,7 @@ function render(query = "") {
     button.dataset.book = book.id;
     button.setAttribute("role", "option");
     button.setAttribute("aria-selected", book.id === selected ? "true" : "false");
-    const number = String(CATALOG.findIndex(item => item.id === book.id) + 1).padStart(2, "0");
+    const number = String(DISCOVERY_CATALOG.findIndex(item => item.id === book.id) + 1).padStart(2, "0");
     const translator = book.translator ? " · " + book.translator : "";
     button.innerHTML =
       '<span class="number">' + number + '</span>' +
