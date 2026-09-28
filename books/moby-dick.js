@@ -8,7 +8,7 @@ window.BOOK_READ = {
     readerSourceStatus: "SOURCE_PENDING",
   sourceEdition: "Project Gutenberg eBook #15, 1851 first American edition",
   sourceTranslator: "",
-    sourceNote: "COMPLETE SOURCE TEXT NOT YET INCLUDED. The 15-minute selection remains available; FULL BOOK stays unavailable until the complete source is stored and verified in the repository.",
+    sourceNote: "Complete source asset is not currently stored and verified in the repository. FULL BOOK remains unavailable until acquisition is complete."
 sourceUrl: "https://www.gutenberg.org/ebooks/15",
 prologueScenes: [
     { text: "Enter a world of the sea, wandering, work, danger, and obsession. Before the white whale appears, Ishmael is already searching for a life beyond the ordinary.", button: "CONTINUE" },
