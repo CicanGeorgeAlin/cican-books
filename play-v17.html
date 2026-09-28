@@ -2995,6 +2995,144 @@ function stopReaderAnimation() {
    OPEN READER
 ================================================= */
 
+function normalizeSourceText(sourceText) {
+
+    let normalizedText =
+        String(sourceText || "")
+            .replace(/\r\n/g, "\n");
+
+    const startMarker =
+        normalizedText.indexOf(
+            "*** START OF THE PROJECT GUTENBERG EBOOK"
+        );
+
+    const endMarker =
+        normalizedText.indexOf(
+            "*** END OF THE PROJECT GUTENBERG EBOOK"
+        );
+
+    if (
+        startMarker >= 0 &&
+        endMarker > startMarker
+    ) {
+        normalizedText =
+            normalizedText
+                .slice(
+                    normalizedText.indexOf("\n", startMarker) + 1,
+                    endMarker
+                )
+                .trim();
+    }
+
+    return normalizedText.trim();
+}
+
+
+function selectFifteenMinuteText(
+    sourceText,
+    targetWords
+) {
+
+    const normalizedText =
+        normalizeSourceText(sourceText);
+
+    if (!normalizedText) {
+        return "";
+    }
+
+    const words =
+        [...normalizedText.matchAll(/\S+/g)];
+
+    const limit =
+        Math.max(
+            1,
+            Number(targetWords) || 2700
+        );
+
+    if (
+        words.length <= limit
+    ) {
+        return normalizedText;
+    }
+
+    const lastWord =
+        words[limit - 1];
+
+    return normalizedText
+        .slice(
+            0,
+            lastWord.index +
+            lastWord[0].length
+        )
+        .trim();
+}
+
+
+async function loadSourceTextForReader(
+    book,
+    openToken
+) {
+
+    if (
+        book.fullText &&
+        String(book.fullText).trim()
+    ) {
+        return normalizeSourceText(
+            book.fullText
+        );
+    }
+
+    if (
+        !book.fullTextUrl
+    ) {
+        return "";
+    }
+
+    const response =
+        await fetch(
+            book.fullTextUrl,
+            {
+                cache: "no-store"
+            }
+        );
+
+    if (
+        !response.ok
+    ) {
+        throw new Error(
+            "Full text request failed"
+        );
+    }
+
+    const sourceText =
+        await response.text();
+
+    if (
+        sourceText.trim().length < 1000
+    ) {
+        throw new Error(
+            "Full text is unexpectedly short"
+        );
+    }
+
+    if (
+        openToken !== readerOpenToken
+    ) {
+        return "";
+    }
+
+    const normalizedText =
+        normalizeSourceText(
+            sourceText
+        );
+
+    book.fullText =
+        normalizedText;
+
+    return normalizedText;
+}
+
+
 async function openReader(modeOverride) {
 
     stopReaderAnimation();
@@ -3038,6 +3176,76 @@ async function openReader(modeOverride) {
     const requestedMode = readingMode;
     const requestedBook = currentBook;
     const isFullBook = requestedMode === "full";
+
+    /*
+        15 MIN is source text only.
+        Never fall back to a CICAN-written summary.
+    */
+    if (
+        !isFullBook &&
+        !currentBook.fifteenMinuteText
+    ) {
+
+        fullTextLoading = true;
+        readerModeNote.textContent =
+            "LOADING SOURCE TEXT";
+
+        try {
+
+            const sourceText =
+                await loadSourceTextForReader(
+                    currentBook,
+                    openToken
+                );
+
+            if (
+                openToken !== readerOpenToken ||
+                readingMode !== requestedMode ||
+                currentBook !== requestedBook
+            ) {
+                fullTextLoading = false;
+                return;
+            }
+
+            if (
+                sourceText
+            ) {
+                currentBook.fifteenMinuteText =
+                    selectFifteenMinuteText(
+                        sourceText,
+                        currentBook.targetWords
+                    );
+            }
+
+            if (
+                !currentBook.fifteenMinuteText
+            ) {
+                throw new Error(
+                    "15-minute source text unavailable"
+                );
+            }
+
+        } catch (_) {
+
+            if (
+                openToken !== readerOpenToken ||
+                readingMode !== requestedMode ||
+                currentBook !== requestedBook
+            ) {
+                fullTextLoading = false;
+                return;
+            }
+
+            fullTextLoading = false;
+            readerModeNote.textContent =
+                "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
+            updateReaderModeUI();
+            return;
+        }
+
+        fullTextLoading = false;
+    }
+
 
     if (isFullBook && !currentBook.fullText) {
         /*
@@ -3109,22 +3317,54 @@ async function openReader(modeOverride) {
         }
     }
 
-    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl || (currentBook.text && String(currentBook.text).trim().length >= 1000)));
+    const fullAvailable = !!(
+        currentBook &&
+        (
+            currentBook.fullText ||
+            currentBook.fullTextUrl
+        )
+    );
+
+    const fifteenAvailable = !!(
+        currentBook &&
+        currentBook.fifteenMinuteText
+    );
+
+    if (
+        !isFullBook &&
+        !fifteenAvailable
+    ) {
+        readerModeNote.textContent =
+            "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
+        return;
+    }
+
+    if (
+        isFullBook &&
+        !fullAvailable
+    ) {
+        readerModeNote.textContent =
+            "FULL BOOK NOT YET LOADED FOR THIS EDITION";
+        return;
+    }
 
     readerText.textContent =
-        isFullBook && fullAvailable
+        isFullBook
             ? currentBook.fullText
-            : (currentBook.fifteenMinuteText || currentBook.text || "");
+            : currentBook.fifteenMinuteText;
 
     readerModeNote.textContent =
         isFullBook
-            ? (fullAvailable ? "FULL SOURCE TEXT" : "FULL BOOK NOT YET LOADED FOR THIS EDITION")
-            : "15-MINUTE ENCOUNTER";
+            ? "FULL SOURCE TEXT"
+            : "15-MINUTE SOURCE TEXT";
 
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = !fullAvailable;
-    document.getElementById("readerTimer").textContent = isFullBook && fullAvailable ? "FULL" : formatTime(readerSeconds);
+    document.getElementById("readerTimer").textContent =
+        isFullBook && fullAvailable
+            ? "FULL"
+            : formatTime(readerSeconds);
 
 
     readerScrollPosition = loadReaderPosition();
