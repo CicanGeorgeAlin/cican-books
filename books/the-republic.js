@@ -12,7 +12,7 @@ window.BOOK_READ = {
     gameDNA: ["justice","reason","argument","city","soul","truth","order"],
     sourceEdition: "Project Gutenberg eBook #1497, The Republic",
     sourceTranslator: "Benjamin Jowett",
-    sourceNote: "COMPLETE SOURCE TEXT NOT YET INCLUDED. The 15-minute selection remains available; FULL BOOK stays unavailable until the complete source is stored and verified in the repository.",
+    sourceNote: "Complete source asset is not currently stored and verified in the repository. FULL BOOK remains unavailable until acquisition is complete."
 sourceUrl: "https://www.gutenberg.org/ebooks/1497",
 prologueScenes: [
         {text: "THE QUESTION OF JUSTICE", button: "CONTINUE"},
