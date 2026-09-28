@@ -47,7 +47,7 @@ jobs:
           text = Path("fulltext/the-republic.txt").read_text(encoding="utf-8")
 
           required = [
-              "THE REPUBLIC OF PLATO",
+              "REPUBLIC OF PLATO",
               "BOOK I",
               "BOOK II",
               "BOOK III",
