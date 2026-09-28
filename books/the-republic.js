@@ -11,6 +11,10 @@ window.BOOK_READ = {
     gameDNA: ["justice","reason","argument","city","soul","truth","order"],
     sourceEdition: "Project Gutenberg eBook #1497, The Republic",
     sourceTranslator: "Benjamin Jowett",
+    fullTextSourceType: "COMPLETE_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Repository full-text asset; complete source text for Project Gutenberg eBook #1497 edition.",
+
     sourceNote: "CICAN 15-minute reading edition: a coherent selected opening from the cited edition. The complete source remains available through the source edition.",
     sourceUrl: "https://www.gutenberg.org/ebooks/1497",
     fullTextUrl: "fulltext/the-republic.txt",
