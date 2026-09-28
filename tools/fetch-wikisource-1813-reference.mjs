@@ -29,16 +29,22 @@ function stripHtml(html) {
     .trim();
 }
 
-async function fetchChapter(volume, chapter) {
-  const url = BASE + "/Volume_" + volume + "/Chapter_" + chapter;
-  const api = "https://en.wikisource.org/w/api.php?action=parse&page=" +
-    encodeURIComponent("Pride_and_Prejudice_(1813)/Volume_" + volume + "/Chapter_" + chapter) +
-    "&prop=text&format=json&formatversion=2";
+async function fetchBatch(titles) {
+  const params = new URLSearchParams({
+    action: "query",
+    prop: "revisions",
+    rvprop: "content",
+    rvslots: "main",
+    format: "json",
+    formatversion: "2",
+    titles: titles.join("|")
+  });
+  const api = "https://en.wikisource.org/w/api.php?" + params.toString();
   let response;
   for (let attempt = 1; attempt <= 6; attempt++) {
     response = await fetch(api, {
       headers: {
-        "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison)",
+        "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison; contactable)",
         "Accept": "application/json"
       }
     });
@@ -46,22 +52,33 @@ async function fetchChapter(volume, chapter) {
     if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 6) {
       throw new Error("HTTP " + response.status + ": " + api);
     }
-    await new Promise(resolve => setTimeout(resolve, response.status === 429 ? attempt * 5000 : attempt * 1500));
+    await new Promise(resolve => setTimeout(resolve, response.status === 429 ? attempt * 10000 : attempt * 2000));
   }
   const data = await response.json();
-  if (!data.parse?.text) {
-    throw new Error("Wikisource API returned no parsed text: " + api);
+  const pages = data.query?.pages ?? [];
+  const byTitle = new Map();
+  for (const page of pages) {
+    const content = page.revisions?.[0]?.slots?.main?.content;
+    if (!content) throw new Error("Wikisource API returned no revision text for: " + page.title);
+    byTitle.set(page.title, stripHtml(content));
   }
-  return stripHtml(data.parse.text);
+  return titles.map(title => {
+    const text = byTitle.get(title);
+    if (!text) throw new Error("Missing requested Wikisource page: " + title);
+    return text;
+  });
 }
 
 const sections = [];
 for (const volume of volumes) {
+  const titles = [];
   for (let chapter = 1; chapter <= volume.chapters; chapter++) {
-    console.log("Fetching Volume " + volume.number + ", Chapter " + chapter + "...");
-    sections.push(await fetchChapter(volume.number, chapter));
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    titles.push("Pride_and_Prejudice_(1813)/Volume_" + volume.number + "/Chapter_" + chapter);
   }
+  console.log("Fetching Volume " + volume.number + " (" + titles.length + " chapters) in one batched API request...");
+  const batch = await fetchBatch(titles);
+  sections.push(...batch);
+  await new Promise(resolve => setTimeout(resolve, 5000));
 }
 
 const output = sections.join("\n\n");
