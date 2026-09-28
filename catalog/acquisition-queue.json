@@ -161,7 +161,36 @@
         "sourceEvidence": "https://en.wikisource.org/wiki/Page%3APride_and_Prejudice.djvu/17",
         "nextAction": "Perform a complete chapter-level comparison before deciding whether to rebuild the canonical full-text asset.",
         "tool": "tools/compare-first-edition.mjs",
-        "toolStatus": "READY__LOCAL_REFERENCE_REQUIRED"
+        "toolStatus": "READY__LOCAL_REFERENCE_REQUIRED",
+        "chapterCoverage": {
+          "status": "STRUCTURE_VERIFIED__TEXT_COMPARISON_PENDING",
+          "totalChapters": 61,
+          "volumes": [
+            {
+              "volume": "I",
+              "chapters": 23,
+              "url": "https://en.wikisource.org/wiki/Pride_and_Prejudice_(1813)/Volume_1"
+            },
+            {
+              "volume": "II",
+              "chapters": 19,
+              "url": "https://en.wikisource.org/wiki/Pride_and_Prejudice_(1813)/Volume_2"
+            },
+            {
+              "volume": "III",
+              "chapters": 19,
+              "url": "https://en.wikisource.org/wiki/Pride_and_Prejudice_(1813)/Volume_3"
+            }
+          ],
+          "referenceStatus": "Wikisource 1813 transcription is proofread for the work proper, with validation varying by page; original scan provenance remains the controlling source for disputed passages.",
+          "comparisonOrder": [
+            "Volume I",
+            "Volume II",
+            "Volume III"
+          ],
+          "canonicalAsset": "fulltext/pride-and-prejudice.txt",
+          "nextAction": "Compare all 61 chapters against a locally acquired 1813 reference transcription and classify differences before canonical replacement."
+        }
       }
     },
     {
