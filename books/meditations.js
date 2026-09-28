@@ -19,6 +19,10 @@ window.BOOK_READ = {
 
     sourceEdition: "Project Gutenberg eBook #2680, Meric Casaubon translation",
     sourceTranslator: "Meric Casaubon",
+    fullTextSourceType: "COMPLETE_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Repository full-text asset; complete source text for Project Gutenberg eBook #2680 edition.",
+
     sourceNote: "Canonical full-text asset is maintained separately for FULL BOOK; the 15-minute text is a calibrated selection.",
     sourceUrl: "https://www.gutenberg.org/ebooks/2680",
     fullTextUrl: "fulltext/meditations.txt",
