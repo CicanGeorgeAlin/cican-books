@@ -9,6 +9,16 @@ const volumes = [
   { number: 3, chapters: 19 }
 ];
 
+function toRoman(number) {
+  const values = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
+  let value = number;
+  let output = "";
+  for (const [unit, symbol] of values) {
+    while (value >= unit) { output += symbol; value -= unit; }
+  }
+  return output;
+}
+
 function stripHtml(html) {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
@@ -79,7 +89,9 @@ for (const volume of volumes) {
   }
   console.log("Fetching Volume " + volume.number + " (" + titles.length + " chapters) in one batched API request...");
   const batch = await fetchBatch(titles);
-  sections.push(...batch);
+  batch.forEach((text, index) => {
+    sections.push("CHAPTER " + toRoman(index + 1) + ".\n\n" + text);
+  });
   await new Promise(resolve => setTimeout(resolve, 5000));
 }
 
