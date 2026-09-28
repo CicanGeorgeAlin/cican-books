@@ -59,10 +59,10 @@
       "sourceUrl": "https://www.gutenberg.org/ebooks/15",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Acquire and normalize verified Gutenberg source; rights review remains mandatory",
-      "queueStage": "TEXT_ACQUISITION",
+      "nextStep": "Re-normalize from Chapter 1 after removing title-page/contents front matter; rights review remains mandatory",
+      "queueStage": "TEXT_CLEANED_PENDING_QA",
       "priority": 2,
-      "automationRequest": "ACQUIRE_NORMALIZE_V1",
+      "automationRequest": "ACQUIRE_NORMALIZE_V2",
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/15/pg15.txt",
       "canonicalOutput": "fulltext/moby-dick.txt",
       "normalizationRules": {
@@ -70,7 +70,9 @@
         "stopMarker": "*** END OF THE PROJECT GUTENBERG EBOOK MOBY-DICK; OR, THE WHALE ***",
         "preserveLiteraryText": true,
         "removeProjectGutenbergTransport": true,
-        "manualReviewEditorialMaterial": true
+        "manualReviewEditorialMaterial": true,
+        "contentStartMarker": "CHAPTER 1. Loomings",
+        "bodyStopMarker": null
       }
     },
     {
