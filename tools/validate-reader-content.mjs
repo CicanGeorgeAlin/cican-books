@@ -55,6 +55,20 @@ for (const id of books) {
 
 
 const playFile = fs.readFileSync("play-v17.html", "utf8");
+const loaderFile = fs.readFileSync("engine/book-loader.js", "utf8");
+
+if (!/async function prepareFifteenMinuteSource\s*\(\s*book\s*\)/.test(loaderFile)) {
+    failures.push("engine/book-loader.js: missing deterministic 15-minute source preparation");
+}
+
+if (/selectFifteenMinuteText\s*\(\s*book\.fullTextUrl/.test(loaderFile)) {
+    failures.push("engine/book-loader.js: fullTextUrl/path is being treated as 15-minute text");
+}
+
+if (!/new URL\(book\.fullTextUrl, document\.baseURI\)/.test(loaderFile)) {
+    failures.push("engine/book-loader.js: local fullTextUrl is not resolved against document.baseURI");
+}
+
 const notePos = playFile.indexOf("savedProgress > 0.01");
 const declarationPos = playFile.indexOf("const savedProgress");
 if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
