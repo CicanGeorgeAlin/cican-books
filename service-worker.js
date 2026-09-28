@@ -8,6 +8,8 @@ const SHELL = [
   "./play-v17.html",
   "./manifest.webmanifest",
   "./cican-preview.png",
+  "./icons/icon-192.svg",
+  "./icons/icon-512.svg",
   "./catalog/index.js",
   "./engine/book-loader.js"
 ];
