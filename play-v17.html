@@ -2775,6 +2775,19 @@ async function openReader(modeOverride) {
     requestAnimationFrame(
         function() {
 
+            const availableScroll =
+                Math.max(
+                    0,
+                    readerText.scrollHeight -
+                    readerText.clientHeight
+                );
+
+            readerScrollPosition =
+                Math.min(
+                    Math.max(0, readerScrollPosition),
+                    availableScroll
+                );
+
             readerText.scrollTop =
                 readerScrollPosition;
 
