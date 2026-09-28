@@ -3268,10 +3268,7 @@ async function openReader(modeOverride) {
         */
         const embeddedSource =
             currentBook.fullText ||
-            (
-                currentBook.readerSourceStatus === "SOURCE_READY" &&
-                currentBook.text
-            );
+            currentBook.fullTextUrl;
 
         if (embeddedSource) {
             currentBook.fifteenMinuteText =
@@ -3350,11 +3347,7 @@ async function openReader(modeOverride) {
 
     if (
         isFullBook &&
-        !currentBook.fullText &&
-        !(
-            currentBook.readerSourceStatus === "SOURCE_READY" &&
-            currentBook.text
-        )
+        !currentBook.fullText
     ) {
         /*
             Prefer a dedicated full-text asset when one exists.
@@ -3362,13 +3355,9 @@ async function openReader(modeOverride) {
             in the book record.
         */
         if (!currentBook.fullTextUrl) {
-            if (currentBook.text && String(currentBook.text).trim()) {
-                currentBook.fullText = String(currentBook.text);
-            } else {
-                readerModeNote.textContent = "FULL BOOK NOT YET LOADED FOR THIS EDITION";
-                updateReaderModeUI();
-                return;
-            }
+            readerModeNote.textContent = "FULL BOOK SOURCE NOT AVAILABLE FOR THIS EDITION";
+            updateReaderModeUI();
+            return;
         } else {
             fullTextLoading = true;
             modeFull.disabled = true;
@@ -3463,12 +3452,7 @@ async function openReader(modeOverride) {
     readerText.textContent =
         isFullBook
             ? (
-                currentBook.fullText ||
-                (
-                    currentBook.readerSourceStatus === "SOURCE_READY"
-                        ? currentBook.text
-                        : ""
-                )
+                currentBook.fullText
             )
             : currentBook.fifteenMinuteText;
 
