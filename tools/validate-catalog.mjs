@@ -61,13 +61,16 @@ for (const book of catalog) {
     } else if (/readerSourceStatus\s*:\s*"SOURCE_PENDING"/.test(bookSource)) {
       errors.push(book.id + ": fullBookReady=true but readerSourceStatus is SOURCE_PENDING");
     } else {
+      const embeddedFullText = /fullText\s*:/.test(bookSource);
       const fullTextMatch = bookSource.match(/fullTextUrl\s*:\s*"([^"]+)"/);
-      if (!fullTextMatch) {
-        errors.push(book.id + ": fullBookReady=true but no local fullTextUrl is declared");
-      } else if (/^https?:\/\//i.test(fullTextMatch[1])) {
-        errors.push(book.id + ": fullBookReady=true but FULL BOOK source is remote");
-      } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
-        errors.push(book.id + ": fullBookReady=true but local full-text asset is missing: " + fullTextMatch[1]);
+      if (!embeddedFullText && !fullTextMatch) {
+        errors.push(book.id + ": fullBookReady=true but no complete full-text asset is declared");
+      } else if (fullTextMatch) {
+        if (/^https?:\/\//i.test(fullTextMatch[1])) {
+          errors.push(book.id + ": fullBookReady=true but FULL BOOK source is remote");
+        } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
+          errors.push(book.id + ": fullBookReady=true but local full-text asset is missing: " + fullTextMatch[1]);
+        }
       }
     }
   }
