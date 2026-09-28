@@ -2911,7 +2911,11 @@ function updateReaderModeUI() {
 
     const fifteenAvailable = !!(
         currentBook &&
-        currentBook.fifteenMinuteText
+        (
+            currentBook.fifteenMinuteText ||
+            currentBook.fullText ||
+            currentBook.fullTextUrl
+        )
     );
 
     mode15.classList.toggle("active", readingMode === "15");
