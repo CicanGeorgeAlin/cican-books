@@ -6,6 +6,8 @@ window.BOOK_READ = {
     difficulty: "DENSE_CLASSIC",
     targetMinutes: 15,
     targetWords: 3000,
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
     gameMode: "classic",
     gameTitle: "THE LIFE YOU CHOOSE",
     gameDNA: ["simplicity","nature","attention","independence","time","work","freedom"],
