@@ -18,7 +18,7 @@ window.BOOK_READ = {
     fullTextSourceVerified: true,
     fullTextSourceVerification: "Repository full-text asset; complete source text for Project Gutenberg eBook #1998 edition.",
 
-    sourceNote: "CICAN 15-minute reading edition: a coherent selected opening from the cited edition. The complete source remains available through the source edition.",
+    sourceNote: "The 15-minute reader is calibrated directly from the verified complete source, beginning with Zarathustra's Prologue. FULL BOOK uses the same complete source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/1998",
     fullTextUrl: "fulltext/thus-spake-zarathustra.txt",
     prologueScenes: [
