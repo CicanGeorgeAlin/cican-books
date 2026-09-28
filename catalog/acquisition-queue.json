@@ -14,7 +14,7 @@
       "alternativeSourceUrl": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Compare Gutenberg #1342 against the existing normalized text; if content is equivalent and provenance is acceptable, rebuild canonical full text from #1342 rather than #42671.",
+      "nextStep": "Do not replace the canonical asset yet. Select an edition only after inspecting its complete provenance and Ireland-relevant rights chain.",
       "queueStage": "BOOK_CONTRACT",
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
@@ -78,13 +78,16 @@
       },
       "sourceComparison2026": {
         "gutenberg42671": {
-          "editor": "R. W. Chapman",
-          "status": "EDITORIAL_LAYER_REVIEW_REQUIRED"
+          "status": "EDITORIAL_LAYER_REVIEW_REQUIRED",
+          "reason": "Gutenberg identifies R. W. Chapman as editor."
         },
         "gutenberg1342": {
-          "editor": null,
-          "credits": "Chuck Greif and Online Distributed Proofreading Team; produced from Internet Archive images",
-          "status": "CLEANER_SOURCE_CANDIDATE__RIGHTS_STILL_REVIEW_REQUIRED"
+          "status": "NOT_CLEAN",
+          "reason": "The edition includes a George Saintsbury preface and Hugh Thomson illustrations; the HTML also carries a 1894 George Allen notice."
+        },
+        "otherGutenbergResults": {
+          "status": "NOT_YET_SELECTED",
+          "reason": "Search results include other records/related items; no alternate source is being promoted without inspecting the actual edition."
         },
         "standardEbooks": {
           "status": "ALTERNATIVE_EDITION_REQUIRES_SEPARATE_REVIEW"
