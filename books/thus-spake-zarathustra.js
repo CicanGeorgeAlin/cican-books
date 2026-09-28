@@ -6,6 +6,8 @@ window.BOOK_READ = {
     difficulty: "VERY_DENSE",
     targetMinutes: 15,
     targetWords: 3000,
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
     gameMode: "classic",
     gameTitle: "THE WAY TO YOURSELF",
     gameDNA: ["creation","overcoming","solitude","spirit","earth","power","becoming"],
