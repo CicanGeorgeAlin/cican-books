@@ -3698,6 +3698,53 @@ window.addEventListener(
 
 
 /* =================================================
+   READER VIEWPORT RESILIENCE
+================================================= */
+
+let readerResizeFrame = null;
+
+window.addEventListener("resize", function() {
+    if (!reader.classList.contains("open") || !currentBook) return;
+
+    const previousMaxScroll = Math.max(
+        0,
+        readerText.scrollHeight - readerText.clientHeight
+    );
+
+    const previousPosition = Math.max(
+        0,
+        Math.min(readerText.scrollTop, previousMaxScroll)
+    );
+
+    const progress = previousMaxScroll > 0
+        ? previousPosition / previousMaxScroll
+        : 0;
+
+    if (readerResizeFrame !== null) {
+        cancelAnimationFrame(readerResizeFrame);
+    }
+
+    readerResizeFrame = requestAnimationFrame(function() {
+        readerResizeFrame = null;
+
+        const nextMaxScroll = Math.max(
+            0,
+            readerText.scrollHeight - readerText.clientHeight
+        );
+
+        readerScrollPosition = Math.min(
+            Math.max(0, nextMaxScroll * progress),
+            nextMaxScroll
+        );
+
+        readerText.scrollTop = readerScrollPosition;
+        updateReaderUI();
+        saveReaderPosition(performance.now());
+    });
+});
+
+
+/* =================================================
    ESCAPE
 ================================================= */
 
