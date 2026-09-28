@@ -16,6 +16,7 @@ window.BOOK_READ = {
         15,
 
     targetWords: 2600,
+    fifteenMinuteStartMarker: "3 May.",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
 fullTextSourceType: "COMPLETE_SOURCE_ASSET",
