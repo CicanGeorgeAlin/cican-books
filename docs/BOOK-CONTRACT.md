@@ -11,7 +11,6 @@ Every book configuration must conform to the same conceptual contract.
 - difficulty
 - targetMinutes
 - targetWords
-- text
 - sourceEdition
 - sourceTranslator (nullable)
 - sourceNote
@@ -26,6 +25,7 @@ Every book configuration must conform to the same conceptual contract.
 - gameDNA
 - fullTextUrl
 - fullText
+- fifteenMinuteStartMarker
 - cover
 - publicationYear
 - language
@@ -44,8 +44,10 @@ A COMPLETE BOOK source is separate from the 15-minute selection:
 - `fullText` = verified complete source asset.
 - `fullTextUrl` = verified complete source URL.
 - `fullTextSourceType` = `COMPLETE_SOURCE_ASSET` or `COMPLETE_SOURCE_URL`.
-- `text` = legacy-compatible 15-minute source selection only.
-- `text` must NEVER be treated as the complete book.
+- `fifteenMinuteStartMarker` = source-text marker used to begin the calibrated 15-minute selection inside the actual work, skipping edition front matter when necessary.
+- `fifteenMinuteText` = runtime-calibrated source selection derived from the verified complete source.
+- `text` = legacy-compatible 15-minute source selection only when present.
+- `text` must contain source text, not a summary, and must NEVER be treated as the complete book.
 
 ### CICAN 15 MIN
 A coherent, explicitly labeled selected encounter.
