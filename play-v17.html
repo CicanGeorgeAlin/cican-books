@@ -1540,6 +1540,7 @@ let readerLastTime = 0;
 let readerScrollPosition = 0;
 let readingMode = "15";
 let fullTextLoading = false;
+let readerOpenToken = 0;
 
 const TARGET_READING_SECONDS =
     Math.max(
@@ -2673,6 +2674,8 @@ async function openReader(modeOverride) {
 
     stopReaderAnimation();
 
+    const openToken = ++readerOpenToken;
+
     if (modeOverride === "15" || modeOverride === "full") {
         readingMode = modeOverride;
     }
@@ -2707,7 +2710,8 @@ async function openReader(modeOverride) {
         No typing effect.
     */
 
-    const isFullBook = readingMode === "full";
+    const requestedMode = readingMode;
+    const isFullBook = requestedMode === "full";
 
     if (isFullBook && !currentBook.fullText) {
         if (!currentBook.fullTextUrl) {
@@ -3204,6 +3208,8 @@ readerPause.addEventListener(
 ================================================= */
 
 function closeReader() {
+
+    readerOpenToken += 1;
 
     saveReaderPosition(
         performance.now()
