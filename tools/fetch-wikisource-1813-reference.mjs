@@ -34,12 +34,24 @@ async function fetchChapter(volume, chapter) {
   const api = "https://en.wikisource.org/w/api.php?action=parse&page=" +
     encodeURIComponent("Pride_and_Prejudice_(1813)/Volume_" + volume + "/Chapter_" + chapter) +
     "&prop=text&format=json&formatversion=2";
-  const response = await fetch(api, {
-    headers: { "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison)" }
-  });
-  if (!response.ok) throw new Error("HTTP " + response.status + ": " + api);
+  let response;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    response = await fetch(api, {
+      headers: {
+        "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison)",
+        "Accept": "application/json"
+      }
+    });
+    if (response.ok) break;
+    if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 4) {
+      throw new Error("HTTP " + response.status + ": " + api);
+    }
+    await new Promise(resolve => setTimeout(resolve, attempt * 1500));
+  }
   const data = await response.json();
-  if (!data.parse?.text) throw new Error("Wikisource API returned no parsed text: " + api);
+  if (!data.parse?.text) {
+    throw new Error("Wikisource API returned no parsed text: " + api);
+  }
   return stripHtml(data.parse.text);
 }
 
