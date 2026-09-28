@@ -14,7 +14,7 @@
       "alternativeSourceUrl": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Use the original 1813 three-volume scan as the primary provenance candidate; do not use Gutenberg #1342 or #42671 as the canonical source unless needed for comparison.",
+      "nextStep": "Perform scan/OCR extraction and generate a comparison report; do not replace fulltext/pride-and-prejudice.txt yet.",
       "queueStage": "BOOK_CONTRACT",
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
@@ -117,6 +117,32 @@
           ],
           "nextAction": "Extract OCR from the three scans and compare against the current canonical text before replacing it."
         }
+      },
+      "firstEditionReconstruction": {
+        "editionDate": "1813-01-28",
+        "publisher": "T. Egerton, Whitehall",
+        "volumeOrder": [
+          "volume-1",
+          "volume-2",
+          "volume-3"
+        ],
+        "preservationRules": [
+          "Preserve original chapter order.",
+          "Preserve paragraph boundaries where recoverable from scans.",
+          "Preserve original spelling and punctuation for the canonical first-edition transcription.",
+          "Exclude title pages, advertisements, library stamps, scan metadata and other non-literary transport material from reader text.",
+          "Record uncertain OCR passages for manual verification against the scan."
+        ],
+        "validationGates": [
+          "All three volumes accounted for.",
+          "Chapter sequence complete.",
+          "No OCR transport contamination.",
+          "Opening text matches the first-edition scan.",
+          "Ending text matches the first-edition scan.",
+          "Differences from existing canonical text are reported before replacement.",
+          "Ireland territorial review remains unresolved."
+        ],
+        "status": "RECONSTRUCTION_SPEC_READY__TEXT_EXTRACTION_PENDING"
       }
     },
     {
