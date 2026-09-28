@@ -2799,7 +2799,21 @@ async function openReader(modeOverride) {
                 const sourceText = await response.text();
                 if (sourceText.trim().length < 1000) throw new Error("Full text is unexpectedly short");
 
-                const normalizedText = sourceText.replace(/\\r\\n/g, "\\n");
+                let normalizedText = sourceText.replace(/\\r\\n/g, "\\n");
+
+                /*
+                    Project Gutenberg full-text files contain a license
+                    wrapper around the actual book. For FULL BOOK, keep
+                    the complete book itself while excluding that wrapper.
+                */
+                const startMarker = normalizedText.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK");
+                const endMarker = normalizedText.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK");
+
+                if (startMarker >= 0 && endMarker > startMarker) {
+                    normalizedText = normalizedText
+                        .slice(normalizedText.indexOf("\\n", startMarker) + 1, endMarker)
+                        .trim();
+                }
 
                 if (
                     openToken !== readerOpenToken ||
