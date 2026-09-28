@@ -2904,13 +2904,39 @@ function formatTime(
 ================================================= */
 
 function updateReaderModeUI() {
-    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl || currentBook.text));
+    const fullAvailable = !!(
+        currentBook &&
+        (currentBook.fullText || currentBook.fullTextUrl)
+    );
+
+    const fifteenAvailable = !!(
+        currentBook &&
+        currentBook.fifteenMinuteText
+    );
+
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
-    modeFull.disabled = fullTextLoading || !fullAvailable;
-    readerModeNote.textContent = readingMode === "full"
-        ? (fullAvailable ? "FULL SOURCE TEXT" : "FULL BOOK NOT YET LOADED FOR THIS EDITION")
-        : "15-MINUTE ENCOUNTER";
+
+    modeFull.disabled =
+        fullTextLoading ||
+        !fullAvailable;
+
+    mode15.disabled =
+        fullTextLoading ||
+        !fifteenAvailable;
+
+    readerModeNote.textContent =
+        readingMode === "full"
+            ? (
+                fullAvailable
+                    ? "FULL SOURCE TEXT"
+                    : "FULL BOOK NOT YET LOADED FOR THIS EDITION"
+            )
+            : (
+                fifteenAvailable
+                    ? "15-MINUTE SOURCE TEXT"
+                    : "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION"
+            );
 }
 
 function saveReaderMode() {
@@ -3356,7 +3382,13 @@ async function openReader(modeOverride) {
     readerModeNote.textContent =
         isFullBook
             ? "FULL SOURCE TEXT"
-            : "15-MINUTE SOURCE TEXT";
+            : (
+                savedProgress > 0.01
+                    ? "CONTINUING FROM " +
+                      Math.floor(savedProgress * 100) +
+                      "%"
+                    : "15-MINUTE SOURCE TEXT"
+            );
 
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
@@ -3369,6 +3401,20 @@ async function openReader(modeOverride) {
 
     readerScrollPosition = loadReaderPosition();
 
+    const savedProgress =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                readerScrollPosition /
+                Math.max(
+                    1,
+                    readerText.scrollHeight -
+                    readerText.clientHeight
+                )
+            )
+        );
+
     readerPause.style.display = isFullBook ? "none" : "";
     readerPause.textContent = "PAUSE";
 
@@ -3380,6 +3426,8 @@ async function openReader(modeOverride) {
     reader.classList.add(
         "open"
     );
+
+    restoreHUDPosition();
 
 
     /*
@@ -4117,6 +4165,39 @@ readerHUD.addEventListener(
 );
 
 
+function saveHUDPosition() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return;
+    if (!readerHUD.style.left || !readerHUD.style.top) return;
+    try {
+        localStorage.setItem(
+            "cican_reader_hud:" + window.CICAN_ACTIVE_BOOK_ID,
+            JSON.stringify({
+                left: readerHUD.style.left,
+                top: readerHUD.style.top
+            })
+        );
+    } catch (_) {}
+}
+
+
+function restoreHUDPosition() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return;
+    try {
+        const saved = localStorage.getItem(
+            "cican_reader_hud:" + window.CICAN_ACTIVE_BOOK_ID
+        );
+        if (!saved) return;
+        const position = JSON.parse(saved);
+        if (position && position.left && position.top) {
+            readerHUD.style.left = position.left;
+            readerHUD.style.top = position.top;
+            readerHUD.style.right = "auto";
+            readerHUD.style.bottom = "auto";
+        }
+    } catch (_) {}
+}
+
+
 function endHUDDrag(e) {
 
     if (!hudDragging) {
@@ -4147,6 +4228,8 @@ function endHUDDrag(e) {
     readerHUD.classList.remove(
         "dragging"
     );
+
+    saveHUDPosition();
 
 
     try {
