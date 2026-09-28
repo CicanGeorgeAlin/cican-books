@@ -6,6 +6,8 @@ window.BOOK_READ = {
     difficulty: "SACRED_CLASSIC",
     targetMinutes: 15,
     targetWords: 2807,
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
     gameMode: "dhammapada",
     gameTitle: "THE PATH OF THE MIND",
     gameDNA: [
