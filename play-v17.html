@@ -2641,7 +2641,7 @@ function formatTime(
 ================================================= */
 
 function updateReaderModeUI() {
-    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl));
+    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl || (currentBook.text && String(currentBook.text).trim().length >= 1000)));
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = fullTextLoading || !fullAvailable;
@@ -2771,60 +2771,62 @@ async function openReader(modeOverride) {
     const isFullBook = requestedMode === "full";
 
     if (isFullBook && !currentBook.fullText) {
+        /*
+            Prefer a dedicated full-text asset when one exists.
+            Otherwise use the book's canonical text already loaded
+            in the book record.
+        */
         if (!currentBook.fullTextUrl) {
-            readerModeNote.textContent = "FULL BOOK NOT YET LOADED FOR THIS EDITION";
-            updateReaderModeUI();
-            return;
-        }
-        fullTextLoading = true;
-        modeFull.disabled = true;
-        readerModeNote.textContent = "LOADING FULL BOOK";
-        try {
-            const response = await fetch(currentBook.fullTextUrl, { cache: "no-store" });
-            if (!response.ok) throw new Error("Full text request failed");
-            const sourceText = await response.text();
-            if (sourceText.trim().length < 1000) throw new Error("Full text is unexpectedly short");
-
-            const normalizedText = sourceText.replace(/\\r\\n/g, "\\n");
-
-            if (
-                openToken !== readerOpenToken ||
-                readingMode !== requestedMode ||
-                currentBook !== requestedBook
-            ) {
-                requestedBook.fullText = normalizedText;
-                fullTextLoading = false;
+            if (currentBook.text && String(currentBook.text).trim().length >= 1000) {
+                currentBook.fullText = String(currentBook.text);
+            } else {
+                readerModeNote.textContent = "FULL BOOK NOT YET LOADED FOR THIS EDITION";
+                updateReaderModeUI();
                 return;
             }
+        } else {
+            fullTextLoading = true;
+            modeFull.disabled = true;
+            readerModeNote.textContent = "LOADING FULL BOOK";
+            try {
+                const response = await fetch(currentBook.fullTextUrl, { cache: "no-store" });
+                if (!response.ok) throw new Error("Full text request failed");
+                const sourceText = await response.text();
+                if (sourceText.trim().length < 1000) throw new Error("Full text is unexpectedly short");
 
-            currentBook.fullText = normalizedText;
-        } catch (_) {
-            if (
-                openToken !== readerOpenToken ||
-                readingMode !== requestedMode ||
-                currentBook !== requestedBook
-            ) {
+                const normalizedText = sourceText.replace(/\\r\\n/g, "\\n");
+
+                if (
+                    openToken !== readerOpenToken ||
+                    readingMode !== requestedMode ||
+                    currentBook !== requestedBook
+                ) {
+                    requestedBook.fullText = normalizedText;
+                    fullTextLoading = false;
+                    return;
+                }
+
+                currentBook.fullText = normalizedText;
+            } catch (_) {
+                if (
+                    openToken !== readerOpenToken ||
+                    readingMode !== requestedMode ||
+                    currentBook !== requestedBook
+                ) {
+                    fullTextLoading = false;
+                    return;
+                }
+
                 fullTextLoading = false;
+                updateReaderModeUI();
+                readerModeNote.textContent = "FULL BOOK COULD NOT BE LOADED";
                 return;
             }
-
             fullTextLoading = false;
-            updateReaderModeUI();
-            readerModeNote.textContent = "FULL BOOK COULD NOT BE LOADED";
-            return;
         }
-        fullTextLoading = false;
     }
 
-    if (
-        openToken !== readerOpenToken ||
-        readingMode !== requestedMode ||
-        currentBook !== requestedBook
-    ) {
-        return;
-    }
-
-    const fullAvailable = !!currentBook.fullText;
+    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl || (currentBook.text && String(currentBook.text).trim().length >= 1000)));
 
     readerText.textContent =
         isFullBook && fullAvailable
