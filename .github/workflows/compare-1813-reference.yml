@@ -1,0 +1,29 @@
+name: Compare 1813 Reference
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch Wikisource 1813 reference
+        run: node tools/fetch-wikisource-1813-reference.mjs tmp/pride-and-prejudice-1813-wikisource.txt
+
+      - name: Compare reference with canonical text
+        run: node tools/compare-first-edition.mjs tmp/pride-and-prejudice-1813-wikisource.txt fulltext/pride-and-prejudice.txt tmp/pride-and-prejudice-1813-comparison.json
+
+      - name: Upload diagnostic report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pride-and-prejudice-1813-comparison
+          path: |
+            tmp/pride-and-prejudice-1813-wikisource.txt
+            tmp/pride-and-prejudice-1813-comparison.json
+          retention-days: 7
