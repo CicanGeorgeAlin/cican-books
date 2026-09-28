@@ -69,15 +69,18 @@ if (!/new URL\(book\.fullTextUrl, document\.baseURI\)/.test(loaderFile)) {
     failures.push("engine/book-loader.js: local fullTextUrl is not resolved against document.baseURI");
 }
 
-if (!/import\\("\\.\\/engine\\/book-loader\\.js\\?v=17\\.2"\\)/.test(playFile)) {
+if (!playFile.includes('import("./engine/book-loader.js?v=17.2")')) {
     failures.push("play-v17.html: book loader import is not cache-busted after source-loader changes");
 }
 
-if (/fifteenAvailable[\\s\\S]{0,180}currentBook\\.fullTextUrl/.test(playFile)) {
+if (
+    playFile.includes("currentBook.fullTextUrl") &&
+    /const fifteenAvailable[\\s\\S]{0,220}currentBook\\.fullTextUrl/.test(playFile)
+) {
     failures.push("play-v17.html: 15-minute availability still treats fullTextUrl path as reader text");
 }
 
-if (!/fifteenValue[\\s\\S]{0,500}fifteenValue === fullPath/.test(playFile)) {
+if (!playFile.includes("fifteenValue === fullPath")) {
     failures.push("play-v17.html: stale fullTextUrl-as-text guard is missing");
 }
 
