@@ -3412,11 +3412,7 @@ async function openReader(modeOverride) {
         currentBook &&
         (
             currentBook.fullText ||
-            currentBook.fullTextUrl ||
-            (
-                currentBook.readerSourceStatus === "SOURCE_READY" &&
-                currentBook.text
-            )
+            currentBook.fullTextUrl
         )
     );
 
