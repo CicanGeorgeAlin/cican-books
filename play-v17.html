@@ -1149,7 +1149,7 @@ async function startCicanBook() {
     /*
         Clear any previous global book before
         loading the requested book.
-        The central catalog remains the publication gate.
+        The central catalog remains the discovery source; publication status is kept separate from experience loading.
     */
 
     try {
@@ -1962,7 +1962,7 @@ function mergeOnes(
 
 
     if (createsKnowledge && currentBook) {
-        /* Full-size + full-size = READ. */
+        /* Full-size merge = READ. */
         createKnowledge(mergeX, mergeY);
     }
 }
