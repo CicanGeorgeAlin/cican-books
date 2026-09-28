@@ -1,12 +1,15 @@
-const CACHE_NAME = "cican-shell-v1";
+const CACHE_NAME = "cican-shell-v2";
 
 const SHELL = [
   "./",
   "./index.html",
   "./library.html",
   "./understand.html",
+  "./play-v17.html",
   "./manifest.webmanifest",
-  "./cican-preview.png"
+  "./cican-preview.png",
+  "./catalog/index.js",
+  "./engine/book-loader.js"
 ];
 
 self.addEventListener("install", event => {
@@ -21,7 +24,7 @@ self.addEventListener("activate", event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
+          .filter(key => key.startsWith("cican-shell-") && key !== CACHE_NAME)
           .map(key => caches.delete(key))
       )
     )
@@ -38,21 +41,27 @@ self.addEventListener("fetch", event => {
 
   if (url.origin !== self.location.origin) return;
 
-  // Navigation: prefer network, fall back to the cached shell.
+  // Navigations: prefer the live page, then fall back to the cached app shell.
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch(request).catch(() => caches.match("./index.html"))
+      fetch(request).catch(() => caches.match(request).then(
+        cached => cached || caches.match("./index.html")
+      ))
     );
     return;
   }
 
-  // App shell: network first, then cache.
+  // Same-origin assets: network first, then cache.
+  // Successful book scripts and full-text assets are cached only after
+  // the user has legitimately requested them from the live app.
   event.respondWith(
     fetch(request)
       .then(response => {
         if (response.ok) {
           const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+          event.waitUntil(
+            caches.open(CACHE_NAME).then(cache => cache.put(request, copy))
+          );
         }
         return response;
       })
