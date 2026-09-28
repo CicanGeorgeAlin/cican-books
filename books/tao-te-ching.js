@@ -7,7 +7,11 @@ window.BOOK_READ = {
     difficulty: "SACRED_CLASSIC",
     targetMinutes: 15,
     targetWords: 2917,
-    readerSourceStatus: "SOURCE_PENDING",
+    readerSourceStatus: "SOURCE_READY",
+    fullTextUrl: "fulltext/tao-te-ching.txt",
+    fullTextSourceType: "COMPLETE_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Project Gutenberg eBook #216, James Legge translation; normalized complete text stored locally. Verified chapters 1-81 are present.",
 gameMode: "tao",
     gameTitle: "THE WAY OF WATER",
     gameDNA: [
@@ -21,7 +25,7 @@ gameMode: "tao",
     ],
     sourceEdition: "The Texts of Taoism, The Sacred Books of the East, Volume XXXIX",
     sourceTranslator: "James Legge",
-    sourceNote: "COMPLETE SOURCE TEXT NOT YET INCLUDED. The 15-minute selection remains available; FULL BOOK stays unavailable until the complete source is stored and verified in the repository.",
+    sourceNote: "Complete James Legge translation acquired from Project Gutenberg eBook #216 and normalized into the repository; 81 chapters verified.",
 sourceUrl: "https://www.gutenberg.org/ebooks/216",
 prologueScenes: [
         {
