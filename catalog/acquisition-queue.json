@@ -44,7 +44,7 @@
       "automation": "tools/acquire-gutenberg.mjs",
       "canonicalOutput": "fulltext/pride-and-prejudice.txt",
       "acquisitionGate": "DOWNLOAD_AND_NORMALIZE_ONLY__RIGHTS_REVIEW_REQUIRED",
-      "automationRequest": "ACQUIRE_NORMALIZE_V6",
+      "automationRequest": "QA_V1",
       "acquiredWordCount": 121811,
       "acquisitionVerifiedAt": "2026-09-27"
     },
