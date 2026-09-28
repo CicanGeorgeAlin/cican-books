@@ -55,7 +55,7 @@ for (const book of catalog) {
     errors.push(book.id + ": missing book source " + book.bookSource);
   }
 
-  if (bookSource && (book.status === statuses.CONTENT_REVIEW || book.status === statuses.RIGHTS_REVIEW || book.status === statuses.READY_TO_PUBLISH || book.status === statuses.PUBLISHED)) {
+  if (bookSource && book.sourceRepo && (book.status === statuses.CONTENT_REVIEW || book.status === statuses.RIGHTS_REVIEW || book.status === statuses.READY_TO_PUBLISH || book.status === statuses.PUBLISHED)) {
     for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
       if (!new RegExp(field + "\\s*:").test(bookSource)) errors.push(book.id + ": review-stage book missing " + field);
     }
