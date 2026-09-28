@@ -1086,30 +1086,11 @@ MULTI-BOOK LOADER
 ==================================================
 */
 
-const BOOK_SOURCES = {
-    "nineteen-eighty-four": "books/nineteen-eighty-four.js",
-    "the-great-gatsby": "books/the-great-gatsby.js",
-    "meditations": "books/meditations.js",
-    "frankenstein": "books/frankenstein.js",
-    "dracula": "books/dracula.js",
-    "dhammapada": "books/dhammapada.js",
-    "tao-te-ching": "books/tao-te-ching.js",
-    "the-republic": "books/the-republic.js",
-    "walden": "books/walden.js",
-    "thus-spake-zarathustra": "books/thus-spake-zarathustra.js",
-    "pride-and-prejudice": "books/pride-and-prejudice.js",
-    "moby-dick": "books/moby-dick.js"
-};
-
 const requestedBookId =
     new URLSearchParams(window.location.search).get("book");
 
 const selectedBookId =
-    requestedBookId &&
-    Object.prototype.hasOwnProperty.call(
-        BOOK_SOURCES,
-        requestedBookId
-    )
+    requestedBookId
         ? requestedBookId
         : null;
 
@@ -1127,37 +1108,6 @@ window.CICAN_ACTIVE_BOOK_ID = null;
 document.getElementById("subtitle").textContent = "";
 document.getElementById("prologueTitle").textContent = "";
 document.getElementById("readerTitle").textContent = "";
-
-function loadBookScript(src) {
-    return new Promise(function(resolve, reject) {
-
-        const script =
-            document.createElement("script");
-
-        const separator =
-            src.includes("?") ? "&" : "?";
-
-        script.src =
-            src +
-            separator +
-            "cican_book=" +
-            Date.now();
-
-        script.onload = function() {
-            resolve();
-        };
-
-        script.onerror = function() {
-            reject(
-                new Error(
-                    "Could not load book: " + src
-                )
-            );
-        };
-
-        document.head.appendChild(script);
-    });
-}
 
 async function startCicanBook() {
 
@@ -1184,28 +1134,26 @@ async function startCicanBook() {
     */
 
     try {
-        const catalogModule = await import("./catalog/index.js");
-        const record = catalogModule.findCatalogBook(selectedBookId);
-        if (!record || (record.status && record.status !== catalogModule.CATALOG_STATUS.PUBLISHED)) {
-            throw new Error("Book is not published: " + selectedBookId);
-        }
+        const loader = await import("./engine/book-loader.js");
+        const BOOK_READ = await loader.loadBook(selectedBookId);
+
+        window.BOOK_READ = BOOK_READ;
+        window.CICAN_ACTIVE_BOOK = BOOK_READ;
+        window.CICAN_ACTIVE_BOOK_ID = selectedBookId;
+
+        initializeCicanBook(
+            BOOK_READ,
+            selectedBookId
+        );
     } catch (error) {
         console.warn(error.message || error);
         window.BOOK_READ = null;
         window.CICAN_ACTIVE_BOOK = null;
         window.CICAN_ACTIVE_BOOK_ID = null;
         initializeCicanBook(null, null);
-        return;
     }
+}
 
-    window.BOOK_READ = null;
-
-    await loadBookScript(
-        BOOK_SOURCES[selectedBookId]
-    );
-
-    const BOOK_READ =
-        window.BOOK_READ;
 
     if (!BOOK_READ) {
         throw new Error(
