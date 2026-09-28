@@ -16,6 +16,9 @@ window.BOOK_READ = {
         15,
 
     targetWords: 2600,
+    fullTextSourceType: "COMPLETE_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Repository full-text asset; complete source text for Project Gutenberg eBook #345 edition.",
 
     sourceEdition: "Project Gutenberg eBook #345, 1897 text",
     sourceTranslator: "",
