@@ -63,18 +63,53 @@ if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
 
 
 /*
- * Every playable book must provide a complete-book source path.
- * SOURCE_PENDING is allowed only when the edition is explicitly not
- * available yet; it must never silently fall back to a chapter excerpt.
+ * COMPLETE BOOK CONTRACT
+ *
+ * text = calibrated 15-minute source selection only.
+ * fullText = verified complete source asset.
+ * fullTextUrl = verified complete source URL.
+ *
+ * text is NEVER accepted as a complete-book source.
  */
 for (const id of books) {
     const file = path.join("books", id + ".js");
     const source = fs.readFileSync(file, "utf8");
-    const pending = /\breaderSourceStatus\s*:\s*"SOURCE_PENDING"/.test(source);
-    const hasFullPath = /\bfullTextUrl\s*:/.test(source) || /\bfullText\s*:/.test(source);
-    if (!pending && !hasFullPath) {
+
+    const pending =
+        /\breaderSourceStatus\s*:\s*"SOURCE_PENDING"/.test(source);
+
+    const hasFullAsset =
+        /\bfullText\s*:/.test(source);
+
+    const hasFullUrl =
+        /\bfullTextUrl\s*:/.test(source);
+
+    const hasExplicitCompleteType =
+        /\bfullTextSourceType\s*:\s*"COMPLETE_SOURCE_(?:ASSET|URL)"/.test(source);
+
+    if (!pending && !hasFullAsset && !hasFullUrl) {
         failures.push(id + ": missing complete-book source path");
     }
+
+    if (!pending && (hasFullAsset || hasFullUrl) && !hasExplicitCompleteType) {
+        failures.push(id + ": complete-book path is not explicitly declared");
+    }
+
+    if (
+        /\breaderSourceStatus\s*:\s*"SOURCE_READY"/.test(source) &&
+        !hasFullAsset &&
+        !hasFullUrl
+    ) {
+        failures.push(id + ": SOURCE_READY is invalid without a complete source path");
+    }
+}
+
+if (/readerSourceStatus\s*===\s*"SOURCE_READY"[\s\S]{0,250}currentBook\.text/.test(playFile)) {
+    failures.push("play-v17.html: SOURCE_READY text fallback still exists");
+}
+
+if (/fullAvailable[\s\S]{0,500}readerSourceStatus\s*===\s*"SOURCE_READY"/.test(playFile)) {
+    failures.push("play-v17.html: FULL BOOK availability still accepts SOURCE_READY text");
 }
 
 const canonicalChecks = [
@@ -137,5 +172,5 @@ if (failures.length) {
 }
 
 console.log(
-    "Reader content QA passed: every book has a source-backed 15-minute path or an explicit pending status."
+    "Reader content QA passed: 15-minute text and COMPLETE SOURCE paths are structurally separated."
 );
