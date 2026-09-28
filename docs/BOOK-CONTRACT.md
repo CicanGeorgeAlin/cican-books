@@ -39,6 +39,14 @@ Every book configuration must conform to the same conceptual contract.
 ### SOURCE
 Canonical text and edition information.
 
+A COMPLETE BOOK source is separate from the 15-minute selection:
+
+- `fullText` = verified complete source asset.
+- `fullTextUrl` = verified complete source URL.
+- `fullTextSourceType` = `COMPLETE_SOURCE_ASSET` or `COMPLETE_SOURCE_URL`.
+- `text` = legacy-compatible 15-minute source selection only.
+- `text` must NEVER be treated as the complete book.
+
 ### CICAN 15 MIN
 A coherent, explicitly labeled selected encounter.
 
