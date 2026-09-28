@@ -1933,8 +1933,20 @@ function mergeOnes(
         CICAN can merge with a smaller CICAN and still
         complete the full-size form.
     */
+    /*
+        READ is a deliberate final gate:
+        BOTH CICANs must already be full size.
+        A full CICAN merging with a smaller CICAN
+        does not unlock READ.
+    */
+    const oneAIsFullSize =
+        oneA.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
+
+    const oneBIsFullSize =
+        oneB.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
+
     const createsKnowledge =
-        mergedSize >= MAX_SIZE - FULL_SIZE_TOLERANCE;
+        oneAIsFullSize && oneBIsFullSize;
 
 
     oneA.element.remove();
@@ -2641,7 +2653,7 @@ function formatTime(
 ================================================= */
 
 function updateReaderModeUI() {
-    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl || (currentBook.text && String(currentBook.text).trim().length >= 1000)));
+    const fullAvailable = !!(currentBook && (currentBook.fullText || currentBook.fullTextUrl || currentBook.text));
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = fullTextLoading || !fullAvailable;
@@ -2777,7 +2789,7 @@ async function openReader(modeOverride) {
             in the book record.
         */
         if (!currentBook.fullTextUrl) {
-            if (currentBook.text && String(currentBook.text).trim().length >= 1000) {
+            if (currentBook.text && String(currentBook.text).trim()) {
                 currentBook.fullText = String(currentBook.text);
             } else {
                 readerModeNote.textContent = "FULL BOOK NOT YET LOADED FOR THIS EDITION";
