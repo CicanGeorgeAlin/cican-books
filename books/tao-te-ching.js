@@ -7,6 +7,7 @@ window.BOOK_READ = {
     difficulty: "SACRED_CLASSIC",
     targetMinutes: 15,
     targetWords: 2917,
+    fifteenMinuteStartMarker: "Ch. 1.",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     fullTextUrl: "fulltext/tao-te-ching.txt",
