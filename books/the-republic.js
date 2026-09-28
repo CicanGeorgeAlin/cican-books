@@ -6,6 +6,7 @@ window.BOOK_READ = {
     difficulty: "DENSE_CLASSIC",
     targetMinutes: 15,
     targetWords: 3000,
+    fifteenMinuteStartMarker: "I went down yesterday",
     readerSourceStatus: "SOURCE_READY",
     fullTextUrl: "fulltext/the-republic.txt",
     fullTextSourceType: "COMPLETE_SOURCE_ASSET",
