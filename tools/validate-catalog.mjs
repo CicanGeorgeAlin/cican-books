@@ -55,6 +55,23 @@ for (const book of catalog) {
     errors.push(book.id + ": missing book source " + book.bookSource);
   }
 
+  if (bookSource && (book.status === statuses.CONTENT_REVIEW || book.status === statuses.RIGHTS_REVIEW || book.status === statuses.READY_TO_PUBLISH || book.status === statuses.PUBLISHED)) {
+    for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
+      if (!new RegExp(field + "\\s*:").test(bookSource)) errors.push(book.id + ": review-stage book missing " + field);
+    }
+    if (!/targetWords\\s*:\\s*\\d+/.test(bookSource)) errors.push(book.id + ": review-stage book missing numeric targetWords");
+    if (!/fullTextUrl\\s*:/.test(bookSource)) {
+      errors.push(book.id + ": review-stage book has no fullTextUrl");
+    } else {
+      const fullTextMatch = bookSource.match(/fullTextUrl\\s*:\\s*["'`]([^"'\`]+)["'`]/);
+      if (fullTextMatch && !/^https?:\\/\\//i.test(fullTextMatch[1]) && !fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
+        errors.push(book.id + ": review-stage fullTextUrl asset is missing: " + fullTextMatch[1]);
+      }
+    }
+    const declaredWords = Number((bookSource.match(/targetWords\\s*:\\s*(\\d+)/) || [])[1] || 0);
+    if (declaredWords < 500) errors.push(book.id + ": targetWords is below 500");
+  }
+
   if (book.status === statuses.PUBLISHED || book.status === TECHNICALLY_READY) {
     for (const field of readyChecks) {
       if (!book[field]) errors.push(book.id + ": readiness gate missing " + field);
