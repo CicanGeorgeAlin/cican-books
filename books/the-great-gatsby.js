@@ -18,6 +18,8 @@ window.BOOK_READ = {
     targetWords:
         2630,
 
+    fullTextUrl: "https://www.gutenberg.org/cache/epub/64317/pg64317.txt",
+
     prologueScenes: [
 
         {
