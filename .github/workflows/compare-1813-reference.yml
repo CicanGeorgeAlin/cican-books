@@ -1,5 +1,5 @@
 name: Compare 1813 Reference
-# Audit execution trigger: 1813 reconstruction comparison; syntax-corrected title normalization
+# Audit execution trigger: 1813 reconstruction comparison; corrected batch mapping
 
 on:
   workflow_dispatch:
