@@ -1846,9 +1846,32 @@ function findClosestOne(
 
 function splitOne(one) {
 
+    /*
+        Keep the freshly split CICAN outside
+        the visible-body merge distance.
+        This prevents an immediate re-merge
+        after splitting a full-size CICAN.
+    */
+    const separation =
+        (one.size + MIN_SIZE) / 2 + 8;
+
+    const direction =
+        one.x < window.innerWidth / 2
+            ? 1
+            : -1;
+
+    const newX =
+        Math.max(
+            MIN_SIZE / 2,
+            Math.min(
+                window.innerWidth - MIN_SIZE / 2,
+                one.x + direction * separation
+            )
+        );
+
     const newOne =
         createOne(
-            one.x + 45,
+            newX,
             one.y,
             MIN_SIZE,
             false
