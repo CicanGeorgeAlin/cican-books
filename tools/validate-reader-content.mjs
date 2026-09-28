@@ -64,20 +64,42 @@ if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
 
 const canonicalChecks = [
     [
-        "V13 split placement",
-        /one\.x \+ 45/.test(playFile)
-    ],
-    [
-        "V13 fixed merge distance",
-        /if \(d <= MERGE_DISTANCE\)/.test(playFile)
+        "V13 minimum size",
+        /const MIN_SIZE = 34/.test(playFile)
     ],
     [
         "V13 exact maximum size",
         /const MAX_SIZE = 180/.test(playFile)
     ],
     [
+        "V13 double-tap timing",
+        /const DOUBLE_TAP_TIME = 350/.test(playFile)
+    ],
+    [
+        "V13 trail distance",
+        /const TRAIL_DISTANCE = 35/.test(playFile)
+    ],
+    [
+        "V13 fixed merge distance",
+        /const MERGE_DISTANCE = 20/.test(playFile) &&
+        /if \(d <= MERGE_DISTANCE\)/.test(playFile)
+    ],
+    [
+        "V13 split placement",
+        /one\.x \+ 45/.test(playFile)
+    ],
+    [
+        "V13 growth increment",
+        /one\.size \+= 0\.5/.test(playFile)
+    ],
+    [
         "canonical full+full READ gate",
         /oneAIsFullSize && oneBIsFullSize/.test(playFile)
+    ],
+    [
+        "canonical movement interpolation",
+        /one\.x \+=\s*\(\s*one\.targetX\s*-\s*one\.x\s*\)\s*\* 0\.10/.test(playFile) &&
+        /one\.y \+=\s*\(\s*one\.targetY\s*-\s*one\.y\s*\)\s*\* 0\.10/.test(playFile)
     ],
     [
         "book effects isolated from main loop",
