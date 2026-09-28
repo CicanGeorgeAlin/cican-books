@@ -150,6 +150,36 @@
           "structure": "Volumes I-III with chapter-level transclusions",
           "evidence": "Wikisource's Volume II index reports the work proper as proofread, while noting not all pages are validated; the chapter pages expose the transcription alongside the scan page structure.",
           "nextAction": "Use the Wikisource transcription as a comparison layer against the existing canonical text and the original scans; do not treat it alone as publication clearance."
+        },
+        "scanProvenance": {
+          "status": "VERIFIED_FROM_PRIMARY_SCAN_RECORDS",
+          "edition": "First edition, London, T. Egerton, 28 January 1813",
+          "volumes": [
+            {
+              "volume": 1,
+              "pages": 320,
+              "source": "Internet Archive / Uttarpara Jaykrishna Public Library",
+              "publicDomainMark": true
+            },
+            {
+              "volume": 2,
+              "pages": 252,
+              "source": "Internet Archive / English Faculty Library, University of Oxford",
+              "publicDomainMark": true
+            },
+            {
+              "volume": 3,
+              "pages": 334,
+              "source": "Internet Archive / Uttarpara Jaykrishna Public Library",
+              "publicDomainMark": true
+            }
+          ],
+          "commonsRecords": [
+            "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_1).pdf",
+            "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_2).pdf",
+            "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_3).pdf"
+          ],
+          "note": "The scan records identify the edition, publisher, date, volume, page count and source institutions. These records are the provenance anchors for subsequent transcription/OCR comparison."
         }
       },
       "firstEditionComparison": {
