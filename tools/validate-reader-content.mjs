@@ -61,6 +61,36 @@ if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
     failures.push("play-v17.html: reader uses savedProgress before declaration");
 }
 
+
+const canonicalChecks = [
+    [
+        "V13 split placement",
+        /one\.x \+ 45/.test(playFile)
+    ],
+    [
+        "V13 fixed merge distance",
+        /if \(d <= MERGE_DISTANCE\)/.test(playFile)
+    ],
+    [
+        "V13 exact maximum size",
+        /const MAX_SIZE = 180/.test(playFile)
+    ],
+    [
+        "canonical full+full READ gate",
+        /oneAIsFullSize && oneBIsFullSize/.test(playFile)
+    ],
+    [
+        "book effects isolated from main loop",
+        /BOOK-SPECIFIC EXPERIENCE IS VISUAL ONLY/.test(playFile)
+    ]
+];
+
+for (const [name, passed] of canonicalChecks) {
+    if (!passed) {
+        failures.push("play-v17.html: missing canonical game contract — " + name);
+    }
+}
+
 if (failures.length) {
     console.error("Reader content QA failed:");
     for (const failure of failures) {
