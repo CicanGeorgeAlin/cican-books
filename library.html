@@ -80,8 +80,7 @@ h1{font-size:clamp(28px,7vw,48px);font-weight:900;letter-spacing:-.055em;text-al
 <label class="search" for="bookSearch">SEARCH THE LIBRARY</label>
 <input id="bookSearch" class="book-search" type="search" placeholder="Search title, author, category..." autocomplete="off" aria-label="Search the library">
 <div class="books" id="books" role="listbox" aria-label="Choose a book" aria-live="polite"></div>
-<button class="enter" id="enter" type="button">ENTER</button>
-<div class="hint">SELECT A BOOK · THEN ENTER</div>
+<div class="hint">SELECT A BOOK TO PLAY</div>
 </section>
 <footer class="footer">CICAN</footer>
 </div>
@@ -93,7 +92,6 @@ const CATALOG = getPublishedCatalog();
 const DISCOVERY_CATALOG = getPublishedCatalog().length ? getPublishedCatalog() : ALL_CATALOG;
 
 const list = document.getElementById("books");
-const enter = document.getElementById("enter");
 const search = document.getElementById("bookSearch");
 let selected = DISCOVERY_CATALOG[0]?.id || null;
 
@@ -115,19 +113,13 @@ function render(query = "") {
       '<span class="meta">' + book.category + ' · ' + book.author + translator + '</span></span>' +
       '<span class="time">' + book.targetMinutes + ' MIN</span>';
     button.addEventListener("click", () => {
-      selected = book.id;
-      render(search.value);
+      window.location.href = "play-v17.html?book=" + encodeURIComponent(book.id);
     });
     list.appendChild(button);
   });
 }
 
 search.addEventListener("input", () => render(search.value));
-enter.addEventListener("click", () => {
-  if (!selected) return;
-  window.location.href = "play-v17.html?book=" + encodeURIComponent(selected);
-});
-
 render();
 </script>
 <script>
