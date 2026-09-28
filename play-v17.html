@@ -3248,28 +3248,23 @@ async function openReader(modeOverride) {
     /*
         15 MIN is source text only.
         Never fall back to a CICAN-written summary.
+
+        IMPORTANT:
+        fullTextUrl is a LOCATION, not the source text itself.
+        Never pass the URL/path string into selectFifteenMinuteText().
+        Resolve the actual source contents first.
     */
     if (
         !isFullBook &&
-        !currentBook.fifteenMinuteText
+        !currentBook.fifteenMinuteText &&
+        currentBook.fullText &&
+        String(currentBook.fullText).trim()
     ) {
-
-        /*
-            Embedded source books must stay on the direct reader path.
-            This avoids making the reader depend on a second asynchronous
-            source fetch when the canonical source is already in memory.
-        */
-        const embeddedSource =
-            currentBook.fullText ||
-            currentBook.fullTextUrl;
-
-        if (embeddedSource) {
-            currentBook.fifteenMinuteText =
-                selectFifteenMinuteText(
-                    embeddedSource,
-                    currentBook.targetWords
-                );
-        }
+        currentBook.fifteenMinuteText =
+            selectFifteenMinuteText(
+                currentBook.fullText,
+                currentBook.targetWords
+            );
     }
 
     if (
