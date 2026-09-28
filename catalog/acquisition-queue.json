@@ -14,7 +14,7 @@
       "alternativeSourceUrl": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Replace or separately clear the Chapman editorial layer before any Republic of Ireland publication decision; reader/mobile QA remains separate.",
+      "nextStep": "Compare Gutenberg #1342 against the existing normalized text; if content is equivalent and provenance is acceptable, rebuild canonical full text from #1342 rather than #42671.",
       "queueStage": "BOOK_CONTRACT",
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
@@ -75,6 +75,20 @@
           "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice"
         ],
         "checkedAt": "2026-09-28"
+      },
+      "sourceComparison2026": {
+        "gutenberg42671": {
+          "editor": "R. W. Chapman",
+          "status": "EDITORIAL_LAYER_REVIEW_REQUIRED"
+        },
+        "gutenberg1342": {
+          "editor": null,
+          "credits": "Chuck Greif and Online Distributed Proofreading Team; produced from Internet Archive images",
+          "status": "CLEANER_SOURCE_CANDIDATE__RIGHTS_STILL_REVIEW_REQUIRED"
+        },
+        "standardEbooks": {
+          "status": "ALTERNATIVE_EDITION_REQUIRES_SEPARATE_REVIEW"
+        }
       }
     },
     {
