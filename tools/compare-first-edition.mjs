@@ -99,6 +99,16 @@ const result = {
   policy: "Comparison is diagnostic only; it never replaces the canonical asset or grants publication rights."
 };
 
+const differingChapters = chapterResults.filter(x => x.status === "DIFFERENCES_DETECTED");
+const missingChapters = chapterResults.filter(x => x.status === "MISSING_CHAPTER");
+const summary = {
+  structure: structureMismatch ? "MISMATCH" : "MATCH",
+  differingChapters: differingChapters.length,
+  missingChapters: missingChapters.length,
+  totalComparedChapters: chapterResults.filter(x => x.status !== "MISSING_CHAPTER").length,
+  textIdentityStatus: structureMismatch ? "UNRESOLVED_STRUCTURE" : (differingChapters.length ? "DIFFERENCES_REQUIRE_CLASSIFICATION" : "MATCH_AT_NORMALIZED_WORD_LEVEL")
+};
+
 const destination = path.resolve(outputFile);
 await fs.mkdir(path.dirname(destination), { recursive: true });
 await fs.writeFile(destination, JSON.stringify(result, null, 2) + "\n", "utf8");
