@@ -6,6 +6,7 @@ window.BOOK_READ = {
     difficulty: "DENSE_CLASSIC",
     targetMinutes: 15,
     targetWords: 3000,
+    fifteenMinuteStartMarker: "When I wrote the following pages",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     gameMode: "classic",
