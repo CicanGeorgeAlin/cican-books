@@ -72,11 +72,13 @@
   ],
   "status": "COMPARISON_WORKFLOW_READY__CANONICAL_UNCHANGED",
   "referenceComparisonWorkflow": {
-    "status": "READY_MANUAL_RUN",
+    "status": "READY_MANUAL_RUN__REPORT_ONLY_ARTIFACT",
     "workflow": ".github/workflows/compare-1813-reference.yml",
     "reference": "Wikisource 1813 chapter transcription derived from first-edition scan pages",
     "chapters": 61,
     "policy": "Reference text is diagnostic only; it is not treated as primary scan evidence and is not committed as canonical content.",
-    "licensingNote": "Wikisource transcription is used as a comparison artifact; primary edition authority remains the scan image."
+    "licensingNote": "Wikisource transcription is used as a comparison artifact; primary edition authority remains the scan image.",
+    "artifact": "tmp/pride-and-prejudice-1813-comparison.json",
+    "referenceRetention": "Temporary runner file; not uploaded or committed."
   }
 }
