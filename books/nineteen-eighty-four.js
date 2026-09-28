@@ -18,6 +18,9 @@ window.BOOK_READ = {
     targetWords:
         2700,
 
+    readerSourceStatus:
+        "SOURCE_PENDING",
+
     prologueScenes: [
 
         {
