@@ -14,7 +14,7 @@ window.BOOK_READ = {
     fullTextSourceVerification: "Repository full-text asset; complete source text for the configured Project Gutenberg edition.",
     sourceEdition: "Project Gutenberg eBook #42671, 1813 text; R. W. Chapman edited source",
     sourceTranslator: "",
-    sourceNote: "Canonical full-text asset is maintained separately for FULL BOOK; the 15-minute text is a calibrated canonical selection from the verified full text.",
+    sourceNote: "The 15-minute reader is calibrated directly from the verified complete source, beginning with Chapter I. FULL BOOK uses the same complete source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/42671",
     fullTextUrl: "fulltext/pride-and-prejudice.txt",
     prologueScenes: [
