@@ -17,14 +17,8 @@ window.BOOK_READ = {
 
     targetWords:
         2600,
-    fullTextSourceType: "COMPLETE_SOURCE_URL",
-    fullTextSourceVerified: true,
-    fullTextSourceVerification: "Project Gutenberg eBook #84; complete source URL for the configured edition.",
-
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/84/pg84.txt",
-
-
-    prologueScenes: [
+    readerSourceStatus: "SOURCE_PENDING",
+prologueScenes: [
 
         {
             text:
