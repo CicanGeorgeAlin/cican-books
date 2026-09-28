@@ -77,7 +77,7 @@ if (!/new URL\(book\.fullTextUrl, document\.baseURI\)/.test(loaderFile)) {
     failures.push("engine/book-loader.js: local fullTextUrl is not resolved against document.baseURI");
 }
 
-if (!playFile.includes('import("./engine/book-loader.js?v=17.2")')) {
+if (!playFile.includes('import("./engine/book-loader.js?v=17.3")')) {
     failures.push("play-v17.html: book loader import is not cache-busted after source-loader changes");
 }
 
