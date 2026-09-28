@@ -69,12 +69,19 @@ async function fetchPage(title) {
 }
 
 async function fetchBatch(titles) {
-  const results = [];
-  for (const title of titles) {
-    console.log("Fetching rendered Wikisource page: " + title);
-    results.push(await fetchPage(title));
-    await new Promise(resolve => setTimeout(resolve, 750));
+  const results = new Array(titles.length);
+  const concurrency = 5;
+  let cursor = 0;
+
+  async function worker() {
+    while (true) {
+      const index = cursor++;
+      if (index >= titles.length) return;
+      results[index] = await fetchPage(titles[index]);
+    }
   }
+
+  await Promise.all(Array.from({ length: Math.min(concurrency, titles.length) }, worker));
   return results;
 }
 
