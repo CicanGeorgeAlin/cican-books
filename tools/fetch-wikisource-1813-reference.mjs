@@ -31,20 +31,16 @@ function stripHtml(html) {
 
 async function fetchChapter(volume, chapter) {
   const url = BASE + "/Volume_" + volume + "/Chapter_" + chapter;
-  const response = await fetch(url, {
+  const api = "https://en.wikisource.org/w/api.php?action=parse&page=" +
+    encodeURIComponent("Pride_and_Prejudice_(1813)/Volume_" + volume + "/Chapter_" + chapter) +
+    "&prop=text&format=json&formatversion=2";
+  const response = await fetch(api, {
     headers: { "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison)" }
   });
-  if (!response.ok) throw new Error("HTTP " + response.status + ": " + url);
-  const html = await response.text();
-  const marker = html.indexOf('class="mw-parser-output"');
-  if (marker < 0) throw new Error("Wikisource parser output not found: " + url);
-  const start = html.indexOf(">", marker) + 1;
-  const endCandidates = [
-    html.indexOf('class="printfooter"', start),
-    html.indexOf('id="catlinks"', start)
-  ].filter(index => index >= 0);
-  const end = endCandidates.length ? Math.min(...endCandidates) : html.length;
-  return stripHtml(html.slice(start, end));
+  if (!response.ok) throw new Error("HTTP " + response.status + ": " + api);
+  const data = await response.json();
+  if (!data.parse?.text) throw new Error("Wikisource API returned no parsed text: " + api);
+  return stripHtml(data.parse.text);
 }
 
 const sections = [];
