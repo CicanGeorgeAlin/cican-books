@@ -118,6 +118,7 @@ const result = {
   referenceChapterCount: refChapters.length,
   canonicalChapterCount: canChapters.length,
   chapterResults,
+  summary,
   policy: "Comparison is diagnostic only; it never replaces the canonical asset or grants publication rights."
 };
 
