@@ -28,6 +28,15 @@ for (const id of books) {
     const explicitlyPending =
         /\breaderSourceStatus\s*:\s*"SOURCE_PENDING"/.test(source);
 
+    const hasPrologue =
+        /\bprologueScenes\s*:\s*\[/.test(source);
+
+    if (!hasPrologue) {
+        failures.push(
+            id + ": missing prologueScenes"
+        );
+    }
+
     if (!hasEmbeddedSource && !explicitlyPending) {
         failures.push(
             id + ": no source-backed 15-minute path and no explicit pending status"
