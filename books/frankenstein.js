@@ -18,6 +18,8 @@ window.BOOK_READ = {
     targetWords:
         2600,
 
+    fullTextUrl: "https://www.gutenberg.org/cache/epub/84/pg84.txt",
+
 
     prologueScenes: [
 
