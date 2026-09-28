@@ -155,7 +155,7 @@ if (/fullAvailable[\s\S]{0,500}readerSourceStatus\s*===\s*"SOURCE_READY"/.test(p
  * fullTextUrl is a path/location, never the text itself.
  * The reader must resolve the asset contents before calibration.
  */
-if (/selectFifteenMinuteText\\(\\s*currentBook\\.fullTextUrl/.test(playFile)) {
+if (/selectFifteenMinuteText\(\s*currentBook\.fullTextUrl/.test(playFile)) {
     failures.push("play-v17.html: fullTextUrl/path is being passed directly into selectFifteenMinuteText");
 }
 
