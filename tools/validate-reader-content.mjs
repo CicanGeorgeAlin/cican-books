@@ -151,6 +151,7 @@ for (const id of books) {
         const assetPath = path.normalize(relative);
         const exists = fs.existsSync(assetPath);
         const size = exists ? fs.statSync(assetPath).size : 0;
+        const assetText = exists ? fs.readFileSync(assetPath, "utf8").trim() : "";
 
         if (!exists || size < 10000) {
             failures.push(id + ": local complete-book asset is missing or too small (" + relative + ")");
@@ -158,6 +159,10 @@ for (const id of books) {
 
         if (!/\bfullTextSourceType\s*:\s*"COMPLETE_SOURCE_ASSET"/.test(source)) {
             failures.push(id + ": local fullTextUrl must declare COMPLETE_SOURCE_ASSET");
+        }
+
+        if (assetText === relative) {
+            failures.push(id + ": complete-book asset contains only its path, not source text");
         }
     }
 
