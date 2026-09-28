@@ -59,10 +59,10 @@
       "sourceUrl": "https://www.gutenberg.org/ebooks/15",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Re-normalize from Chapter 1 after removing title-page/contents front matter; rights review remains mandatory",
-      "queueStage": "TEXT_ACQUISITION",
+      "nextStep": "Review book contract, then reader/mobile QA; rights review remains mandatory",
+      "queueStage": "BOOK_CONTRACT",
       "priority": 2,
-      "automationRequest": "ACQUIRE_NORMALIZE_V3",
+      "automationRequest": "BOOK_CONTRACT_V1",
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/15/pg15.txt",
       "canonicalOutput": "fulltext/moby-dick.txt",
       "normalizationRules": {
