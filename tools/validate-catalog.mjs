@@ -55,6 +55,23 @@ for (const book of catalog) {
     errors.push(book.id + ": missing book source " + book.bookSource);
   }
 
+  if (book.fullBookReady === true) {
+    if (!bookSource) {
+      errors.push(book.id + ": fullBookReady=true but book source cannot be read");
+    } else if (/readerSourceStatus\s*:\s*"SOURCE_PENDING"/.test(bookSource)) {
+      errors.push(book.id + ": fullBookReady=true but readerSourceStatus is SOURCE_PENDING");
+    } else {
+      const fullTextMatch = bookSource.match(/fullTextUrl\s*:\s*"([^"]+)"/);
+      if (!fullTextMatch) {
+        errors.push(book.id + ": fullBookReady=true but no local fullTextUrl is declared");
+      } else if (/^https?:\/\//i.test(fullTextMatch[1])) {
+        errors.push(book.id + ": fullBookReady=true but FULL BOOK source is remote");
+      } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
+        errors.push(book.id + ": fullBookReady=true but local full-text asset is missing: " + fullTextMatch[1]);
+      }
+    }
+  }
+
   if (bookSource && book.sourceRepo && (book.status === statuses.CONTENT_REVIEW || book.status === statuses.READY_TO_PUBLISH || book.status === statuses.PUBLISHED)) {
     for (const field of ["sourceEdition", "sourceNote", "sourceUrl"]) {
       if (!new RegExp(field + "\\s*:").test(bookSource)) errors.push(book.id + ": review-stage book missing " + field);
