@@ -3450,6 +3450,22 @@ async function openReader(modeOverride) {
             )
             : currentBook.fifteenMinuteText;
 
+    readerScrollPosition = loadReaderPosition();
+
+    const savedProgress =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                readerScrollPosition /
+                Math.max(
+                    1,
+                    readerText.scrollHeight -
+                    readerText.clientHeight
+                )
+            )
+        );
+
     readerModeNote.textContent =
         isFullBook
             ? "FULL SOURCE TEXT"
@@ -3468,23 +3484,6 @@ async function openReader(modeOverride) {
         isFullBook && fullAvailable
             ? "FULL"
             : formatTime(readerSeconds);
-
-
-    readerScrollPosition = loadReaderPosition();
-
-    const savedProgress =
-        Math.max(
-            0,
-            Math.min(
-                1,
-                readerScrollPosition /
-                Math.max(
-                    1,
-                    readerText.scrollHeight -
-                    readerText.clientHeight
-                )
-            )
-        );
 
     readerPause.style.display = isFullBook ? "none" : "";
     readerPause.textContent = "PAUSE";
