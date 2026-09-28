@@ -159,7 +159,9 @@
         "firstEditionScanTranscription": "It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife.",
         "observation": "The existing canonical asset contains punctuation that differs from the validated 1813 scan transcription at the opening sentence. Therefore it must not be labeled as an exact first-edition transcription.",
         "sourceEvidence": "https://en.wikisource.org/wiki/Page%3APride_and_Prejudice.djvu/17",
-        "nextAction": "Perform a complete chapter-level comparison before deciding whether to rebuild the canonical full-text asset."
+        "nextAction": "Perform a complete chapter-level comparison before deciding whether to rebuild the canonical full-text asset.",
+        "tool": "tools/compare-first-edition.mjs",
+        "toolStatus": "READY__LOCAL_REFERENCE_REQUIRED"
       }
     },
     {
