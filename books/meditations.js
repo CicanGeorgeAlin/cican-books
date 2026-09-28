@@ -27,7 +27,7 @@ sourceEdition: "Project Gutenberg eBook #2680, Meric Casaubon translation",
     fullTextSourceVerified: true,
     fullTextSourceVerification: "Repository full-text asset; complete source text for Project Gutenberg eBook #2680 edition.",
 
-    sourceNote: "Canonical full-text asset is maintained separately for FULL BOOK; the 15-minute text is a calibrated selection.",
+    sourceNote: "The 15-minute reader is calibrated directly from the verified complete source, beginning at the First Book. FULL BOOK uses the same complete source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/2680",
     fullTextUrl: "fulltext/meditations.txt",
 
