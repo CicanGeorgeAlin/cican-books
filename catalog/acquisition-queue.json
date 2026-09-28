@@ -180,6 +180,27 @@
             "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_3).pdf"
           ],
           "note": "The scan records identify the edition, publisher, date, volume, page count and source institutions. These records are the provenance anchors for subsequent transcription/OCR comparison."
+        },
+        "extractionProtocol": {
+          "status": "DEFINED__SCAN_FIRST",
+          "primaryEvidence": "Original 1813 scan image",
+          "secondaryEvidence": "Scan-embedded OCR/search text and Wikisource transcription",
+          "rule": "OCR/transcription is an extraction aid, never the final authority where it conflicts with the scan image.",
+          "normalization": [
+            "Normalize line endings.",
+            "Join line-wrap hyphenation only when the scan clearly shows a word continuing across lines.",
+            "Preserve printed spelling.",
+            "Preserve printed punctuation unless a scan review establishes OCR/transcription error.",
+            "Preserve paragraph boundaries.",
+            "Exclude title pages, advertisements, library markings and scan transport material."
+          ],
+          "validation": [
+            "Volume boundaries verified.",
+            "Chapter sequence verified.",
+            "Representative scan pages checked before full extraction.",
+            "Every disputed OCR passage must be resolved against the scan image.",
+            "Comparison output must be retained before canonical replacement."
+          ]
         }
       },
       "firstEditionComparison": {
