@@ -6,7 +6,7 @@ Date: 2026-09-28
 
 Mainline known-good audit commit:
 
-51e690510508fb93ecec93b010ed2ed059e4edb0
+b8ccfcb0b883e4c7ff36762ea777ea1c1d074ae5
 
 Recovery branch:
 
