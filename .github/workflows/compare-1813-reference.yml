@@ -1,5 +1,5 @@
 name: Compare 1813 Reference
-# Audit execution trigger: 1813 reconstruction comparison; chapter-marked reference
+# Audit execution trigger: 1813 reconstruction comparison; rendered reference fetch
 
 on:
   workflow_dispatch:
