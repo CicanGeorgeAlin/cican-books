@@ -4,7 +4,7 @@
  * Book content remains in books/*.js and is loaded only when a reader opens a title.
  */
 
-export const CATALOG_VERSION = 4;
+export const CATALOG_VERSION = 5;
 
 export const CATALOG_STATUS = Object.freeze({
   PUBLISHED: "PUBLISHED",
@@ -25,6 +25,7 @@ export const CATALOG = Object.freeze([
   { id:"dracula", title:"DRACULA", author:"Bram Stoker", category:"Classic Fiction", translator:"", targetMinutes:15, status:"RIGHTS_REVIEW", sourceRepo:"Project Gutenberg", sourceEbookId:"345", sourceUrl:"https://www.gutenberg.org/ebooks/345", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/dracula.js" },
   { id:"the-great-gatsby", title:"THE GREAT GATSBY", author:"F. Scott Fitzgerald", category:"Classic Fiction", translator:"", targetMinutes:15, status:"CONTENT_REVIEW", bookSource:"books/the-great-gatsby.js" },
   { id:"nineteen-eighty-four", title:"NINETEEN EIGHTY-FOUR", author:"George Orwell", category:"Classic Fiction", translator:"", targetMinutes:15, status:"CONTENT_REVIEW", bookSource:"books/nineteen-eighty-four.js" },
+  { id:"moby-dick", title:"MOBY DICK; OR, THE WHALE", author:"Herman Melville", category:"Classic Fiction", translator:"", targetMinutes:15, targetWords:2590, status:"CONTENT_REVIEW", sourceRepo:"Project Gutenberg", sourceEbookId:"15", sourceUrl:"https://www.gutenberg.org/ebooks/15", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/moby-dick.js" },
   { id:"pride-and-prejudice", title:"PRIDE AND PREJUDICE", author:"Jane Austen", category:"Classic Fiction", translator:"", targetMinutes:15, targetWords:2676, status:"RIGHTS_REVIEW", sourceRepo:"Project Gutenberg", sourceEbookId:"42671", sourceUrl:"https://www.gutenberg.org/ebooks/42671", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/pride-and-prejudice.js" }
 ]);
 
