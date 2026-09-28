@@ -1922,9 +1922,15 @@ function mergeOnes(
         );
 
 
-    const oneAIsFullSize = oneA.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
-    const oneBIsFullSize = oneB.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
-    const createsKnowledge = oneAIsFullSize && oneBIsFullSize;
+    /*
+        READ unlocks when the resulting merged CICAN
+        reaches full size. This matches the actual
+        split -> grow -> merge progression: a full
+        CICAN can merge with a smaller CICAN and still
+        complete the full-size form.
+    */
+    const createsKnowledge =
+        mergedSize >= MAX_SIZE - FULL_SIZE_TOLERANCE;
 
 
     oneA.element.remove();
