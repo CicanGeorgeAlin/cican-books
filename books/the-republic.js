@@ -6,19 +6,15 @@ window.BOOK_READ = {
     difficulty: "DENSE_CLASSIC",
     targetMinutes: 15,
     targetWords: 3000,
+    readerSourceStatus: "SOURCE_PENDING",
     gameMode: "classic",
     gameTitle: "THE QUESTION OF JUSTICE",
     gameDNA: ["justice","reason","argument","city","soul","truth","order"],
     sourceEdition: "Project Gutenberg eBook #1497, The Republic",
     sourceTranslator: "Benjamin Jowett",
-    fullTextSourceType: "COMPLETE_SOURCE_ASSET",
-    fullTextSourceVerified: true,
-    fullTextSourceVerification: "Repository full-text asset; complete source text for Project Gutenberg eBook #1497 edition.",
-
-    sourceNote: "CICAN 15-minute reading edition: a coherent selected opening from the cited edition. The complete source remains available through the source edition.",
-    sourceUrl: "https://www.gutenberg.org/ebooks/1497",
-    fullTextUrl: "fulltext/the-republic.txt",
-    prologueScenes: [
+    sourceNote: "COMPLETE SOURCE TEXT NOT YET INCLUDED. The 15-minute selection remains available; FULL BOOK stays unavailable until the complete source is stored and verified in the repository.",
+sourceUrl: "https://www.gutenberg.org/ebooks/1497",
+prologueScenes: [
         {text: "THE QUESTION OF JUSTICE", button: "CONTINUE"},
         {text: "A fifteen-minute encounter with The Republic. CICAN leads into the source text itself rather than replacing it with a summary.", button: "CONTINUE"},
         {text: "Read slowly enough to notice the argument, images, questions, and ideas moving through the text.", button: "CONTINUE"},
