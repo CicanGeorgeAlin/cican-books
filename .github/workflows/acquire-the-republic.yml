@@ -1,0 +1,78 @@
+name: Acquire The Republic Complete Text
+
+on:
+  push:
+    paths:
+      - ".github/workflows/acquire-the-republic.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download and normalize complete source
+        shell: python
+        run: |
+          import urllib.request
+          from pathlib import Path
+
+          url = "https://www.gutenberg.org/cache/epub/55201/pg55201.txt"
+          raw = urllib.request.urlopen(url, timeout=60).read().decode("utf-8")
+
+          start = raw.find("*** START OF THE PROJECT GUTENBERG EBOOK")
+          end = raw.find("*** END OF THE PROJECT GUTENBERG EBOOK")
+
+          if start < 0 or end <= start:
+              raise SystemExit("Could not locate Project Gutenberg source boundaries.")
+
+          text = raw[raw.find("\n", start) + 1:end].replace("\r\n", "\n").strip()
+
+          if len(text) < 500000:
+              raise SystemExit(f"Complete source unexpectedly short: {len(text)} chars")
+
+          out = Path("fulltext/the-republic.txt")
+          out.write_text(text + "\n", encoding="utf-8")
+
+          print(f"Saved {out}: {len(text)} chars")
+          print(f"Words: {len(text.split())}")
+
+      - name: Verify complete source
+        shell: python
+        run: |
+          from pathlib import Path
+          text = Path("fulltext/the-republic.txt").read_text(encoding="utf-8")
+
+          required = [
+              "THE REPUBLIC OF PLATO",
+              "BOOK I",
+              "BOOK II",
+              "BOOK III",
+              "BOOK IV",
+              "BOOK V",
+              "BOOK VI",
+              "BOOK VII",
+              "BOOK VIII",
+              "BOOK IX",
+              "BOOK X",
+          ]
+
+          missing = [x for x in required if x not in text]
+          if missing:
+              raise SystemExit("Missing required sections: " + ", ".join(missing))
+
+          if "fulltext/the-republic.txt" in text:
+              raise SystemExit("Path string was accidentally written as source text.")
+
+          print("Complete The Republic source verified.")
+
+      - name: Publish asset
+        run: |
+          git config user.name "cican"
+          git config user.email "george.cican@gmail.com"
+          git add fulltext/the-republic.txt
+          git commit -m "Acquire complete The Republic source" || exit 0
+          git push
