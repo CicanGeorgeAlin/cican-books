@@ -84,13 +84,16 @@ for (const book of catalog) {
       /readerSourceStatus\s*:\s*"SOURCE_PENDING"/.test(bookSource);
 
     if (!pendingSource) {
+      const embeddedFullText = /fullText\s*:/.test(bookSource);
       const fullTextMatch = bookSource.match(/fullTextUrl\s*:\s*"([^"]+)"/);
-      if (!fullTextMatch) {
-        errors.push(book.id + ": ready review-stage book has no local fullTextUrl");
-      } else if (/^https?:\/\//i.test(fullTextMatch[1])) {
-        errors.push(book.id + ": review-stage FULL BOOK source must be stored locally, not remotely");
-      } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
-        errors.push(book.id + ": review-stage fullTextUrl asset is missing: " + fullTextMatch[1]);
+      if (!embeddedFullText && !fullTextMatch) {
+        errors.push(book.id + ": ready review-stage book has no complete local full-text asset");
+      } else if (fullTextMatch) {
+        if (/^https?:\/\//i.test(fullTextMatch[1])) {
+          errors.push(book.id + ": review-stage FULL BOOK source must be stored locally, not remotely");
+        } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
+          errors.push(book.id + ": review-stage fullTextUrl asset is missing: " + fullTextMatch[1]);
+        }
       }
     }
     const declaredWords = Number((bookSource.match(/targetWords\s*:\s*(\d+)/) || [])[1] || 0);
