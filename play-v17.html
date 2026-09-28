@@ -2914,7 +2914,11 @@ function updateReaderModeUI() {
         (
             currentBook.fifteenMinuteText ||
             currentBook.fullText ||
-            currentBook.fullTextUrl
+            currentBook.fullTextUrl ||
+            (
+                currentBook.readerSourceStatus === "SOURCE_READY" &&
+                currentBook.text
+            )
         )
     );
 
