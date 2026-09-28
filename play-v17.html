@@ -2928,15 +2928,16 @@ function formatTime(
 ================================================= */
 
 function updateReaderModeUI() {
+    /*
+        FULL BOOK availability is strict:
+        only a complete source asset or complete source URL
+        may enable FULL BOOK.
+    */
     const fullAvailable = !!(
         currentBook &&
         (
             currentBook.fullText ||
-            currentBook.fullTextUrl ||
-            (
-                currentBook.readerSourceStatus === "SOURCE_READY" &&
-                currentBook.text
-            )
+            currentBook.fullTextUrl
         )
     );
 
@@ -2945,11 +2946,7 @@ function updateReaderModeUI() {
         (
             currentBook.fifteenMinuteText ||
             currentBook.fullText ||
-            currentBook.fullTextUrl ||
-            (
-                currentBook.readerSourceStatus === "SOURCE_READY" &&
-                currentBook.text
-            )
+            currentBook.fullTextUrl
         )
     );
 
@@ -3147,15 +3144,11 @@ async function loadSourceTextForReader(
         );
     }
 
-    if (
-        book.readerSourceStatus === "SOURCE_READY" &&
-        book.text &&
-        String(book.text).trim()
-    ) {
-        return normalizeSourceText(
-            book.text
-        );
-    }
+    /*
+        SOURCE CONTRACT:
+        book.text is the calibrated 15-minute selection only.
+        It is NEVER eligible as a FULL BOOK source.
+    */
 
     if (
         !book.fullTextUrl
@@ -3395,6 +3388,7 @@ async function openReader(modeOverride) {
                 }
 
                 currentBook.fullText = normalizedText;
+                currentBook.fullTextResolved = true;
             } catch (_) {
                 if (
                     openToken !== readerOpenToken ||
