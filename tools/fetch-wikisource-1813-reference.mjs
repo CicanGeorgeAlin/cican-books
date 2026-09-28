@@ -50,12 +50,19 @@ async function fetchPage(title) {
   const api = "https://en.wikisource.org/w/api.php?" + params.toString();
   let response;
   for (let attempt = 1; attempt <= 6; attempt++) {
-    response = await fetch(api, {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+    try {
+      response = await fetch(api, {
       headers: {
         "User-Agent": "CICAN-Play-The-Book/1.0 (research comparison; contactable)",
         "Accept": "application/json"
-      }
-    });
+      },
+      signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
     if (response.ok) break;
     if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 6) {
       throw new Error("HTTP " + response.status + ": " + api);
@@ -70,7 +77,7 @@ async function fetchPage(title) {
 
 async function fetchBatch(titles) {
   const results = new Array(titles.length);
-  const concurrency = 5;
+  const concurrency = 2;
   let cursor = 0;
 
   async function worker() {
