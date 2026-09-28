@@ -891,6 +891,25 @@ body {
    MOBILE
 ================================================= */
 
+@media(prefers-reduced-motion: reduce) {
+
+    .trail,
+    .dhamma-thought,
+    .tao-flow {
+        animation: none;
+        transition: none;
+    }
+
+    .readerHUD,
+    .reader-button,
+    #readerClose,
+    #reset,
+    #prologueButton {
+        transition: none;
+    }
+}
+
+
 @media(max-width:480px) {
 
     #reader {
