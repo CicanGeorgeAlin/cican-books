@@ -4635,27 +4635,41 @@ selectedOne =
     );
 
 
-if (DHAMMAPADA_MODE) {
+/*
+    Book-specific visuals are optional layers.
+    Failure here must never disable the canonical game.
+*/
+try {
 
-    createDhammapadaThoughts();
+    if (DHAMMAPADA_MODE) {
 
-    dhammaLastX =
-        selectedOne.x;
+        createDhammapadaThoughts();
 
-    dhammaLastY =
-        selectedOne.y;
-}
+        dhammaLastX =
+            selectedOne.x;
 
+        dhammaLastY =
+            selectedOne.y;
+    }
 
-if (TAO_MODE) {
+    if (TAO_MODE) {
 
-    createTaoFlows();
+        createTaoFlows();
 
-    taoLastX =
-        selectedOne.x;
+        taoLastX =
+            selectedOne.x;
 
-    taoLastY =
-        selectedOne.y;
+        taoLastY =
+            selectedOne.y;
+    }
+
+} catch (bookExperienceError) {
+
+    console.error(
+        "CICAN book-specific setup error:",
+        bookExperienceError
+    );
+
 }
 
 
@@ -4757,15 +4771,29 @@ function animate() {
     checkForMerges();
 
 
-    if (DHAMMAPADA_MODE) {
+    /*
+        BOOK-SPECIFIC EXPERIENCE IS VISUAL ONLY.
+        It is deliberately isolated from the canonical
+        CICAN game engine. A book effect may never stop
+        movement, growth, split, merge, or READ.
+    */
+    try {
 
-        updateDhammapadaExperience();
-    }
+        if (DHAMMAPADA_MODE) {
+            updateDhammapadaExperience();
+        }
 
+        if (TAO_MODE) {
+            updateTaoExperience();
+        }
 
-    if (TAO_MODE) {
+    } catch (bookExperienceError) {
 
-        updateTaoExperience();
+        console.error(
+            "CICAN book-specific experience error:",
+            bookExperienceError
+        );
+
     }
 
 
