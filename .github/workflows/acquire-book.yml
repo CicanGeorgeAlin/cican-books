@@ -32,8 +32,10 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
-          const id = process.env.BOOK_ID || 'pride-and-prejudice';
           const q = JSON.parse(fs.readFileSync('catalog/acquisition-queue.json','utf8'));
+          const requestedId = process.env.BOOK_ID || '';
+          const queued = q.candidates.find(x => x.automationRequest && String(x.automationRequest).startsWith('ACQUIRE_'));
+          const id = requestedId || queued?.id || 'pride-and-prejudice';
           const book = q.candidates.find(x => x.id === id);
           if (!book) throw new Error('Book not found in acquisition queue: ' + id);
           if (book.sourceStatus !== 'SOURCE_VERIFIED') throw new Error('Source is not verified: ' + id);
