@@ -59,9 +59,19 @@
       "sourceUrl": "https://www.gutenberg.org/ebooks/15",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Use Gutenberg eBook #15, identified by Gutenberg as the highest-quality of its three Moby-Dick editions; acquire and normalize full text.",
-      "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 2
+      "nextStep": "Acquire and normalize verified Gutenberg source; rights review remains mandatory",
+      "queueStage": "TEXT_ACQUISITION",
+      "priority": 2,
+      "automationRequest": "ACQUIRE_NORMALIZE_V1",
+      "sourceTextUrl": "https://www.gutenberg.org/cache/epub/15/pg15.txt",
+      "canonicalOutput": "fulltext/moby-dick.txt",
+      "normalizationRules": {
+        "startMarker": "*** START OF THE PROJECT GUTENBERG EBOOK MOBY-DICK; OR, THE WHALE ***",
+        "stopMarker": "*** END OF THE PROJECT GUTENBERG EBOOK MOBY-DICK; OR, THE WHALE ***",
+        "preserveLiteraryText": true,
+        "removeProjectGutenbergTransport": true,
+        "manualReviewEditorialMaterial": true
+      }
     },
     {
       "id": "alice-adventures-in-wonderland",
