@@ -55,21 +55,40 @@ for (let i = 0; i < chapterCount; i++) {
 
   const refWords = words(ref.text);
   const canWords = words(can.text);
-  const max = Math.max(refWords.length, canWords.length);
-  let differingWordPositions = 0;
+  const rows = refWords.length + 1;
+  const cols = canWords.length + 1;
+  const previous = new Uint32Array(cols);
+  const current = new Uint32Array(cols);
+  let best = 0;
+
+  for (let a = 1; a < rows; a++) {
+    current[0] = 0;
+    for (let b = 1; b < cols; b++) {
+      current[b] = refWords[a - 1] === canWords[b - 1]
+        ? previous[b - 1] + 1
+        : Math.max(previous[b], current[b - 1]);
+      if (current[b] > best) best = current[b];
+    }
+    previous.set(current);
+  }
+
+  const editDistance = refWords.length + canWords.length - (2 * best);
+  const identical = editDistance === 0;
   let firstDifference = null;
 
-  for (let j = 0; j < max; j++) {
-    if (refWords[j] !== canWords[j]) {
-      differingWordPositions++;
-      if (!firstDifference) {
-        firstDifference = {
-          wordIndexWithinChapter: j,
-          reference: refWords[j] ?? null,
-          canonical: canWords[j] ?? null
-        };
-      }
+  if (!identical) {
+    let a = 0;
+    let b = 0;
+    while (a < refWords.length && b < canWords.length && refWords[a] === canWords[b]) {
+      a++;
+      b++;
     }
+    firstDifference = {
+      referenceWordIndex: a,
+      canonicalWordIndex: b,
+      reference: refWords[a] ?? null,
+      canonical: canWords[b] ?? null
+    };
   }
 
   chapterResults.push({
@@ -78,9 +97,10 @@ for (let i = 0; i < chapterCount; i++) {
     canonicalLabel: can.label,
     referenceWords: refWords.length,
     canonicalWords: canWords.length,
-    differingWordPositions,
+    lcsWordCount: best,
+    editDistance,
     firstDifference,
-    status: differingWordPositions ? "DIFFERENCES_DETECTED" : "MATCH"
+    status: identical ? "MATCH" : "DIFFERENCES_DETECTED"
   });
 }
 
@@ -108,7 +128,8 @@ const summary = {
   differingChapters: differingChapters.length,
   missingChapters: missingChapters.length,
   totalComparedChapters: chapterResults.filter(x => x.status !== "MISSING_CHAPTER").length,
-  textIdentityStatus: structureMismatch ? "UNRESOLVED_STRUCTURE" : (differingChapters.length ? "DIFFERENCES_REQUIRE_CLASSIFICATION" : "MATCH_AT_NORMALIZED_WORD_LEVEL")
+  textIdentityStatus: structureMismatch ? "UNRESOLVED_STRUCTURE" : (differingChapters.length ? "DIFFERENCES_REQUIRE_CLASSIFICATION" : "MATCH_AT_NORMALIZED_WORD_LEVEL"),
+  comparisonMethod: "LCS_WORD_SEQUENCE_EDIT_DISTANCE"
 };
 
 const destination = path.resolve(outputFile);
