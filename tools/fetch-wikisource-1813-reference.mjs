@@ -63,6 +63,8 @@ async function fetchBatch(titles) {
     const cleaned = stripHtml(content);
     byTitle.set(page.title, cleaned);
     byTitle.set(page.title.replace(/ /g, "_"), cleaned);
+  }
+  return titles.map(title => {
     const text = byTitle.get(title);
     if (!text) throw new Error("Missing requested Wikisource page: " + title);
     return text;
