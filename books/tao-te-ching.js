@@ -8,6 +8,9 @@ window.BOOK_READ = {
     targetMinutes: 15,
     targetWords: 2917,
     readerSourceStatus: "SOURCE_READY",
+    fullTextSourceType: "COMPLETE_SOURCE_URL",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Project Gutenberg eBook #216; complete Tao Teh King; 81 chapters; James Legge translation",
     gameMode: "tao",
     gameTitle: "THE WAY OF WATER",
     gameDNA: [
@@ -21,7 +24,7 @@ window.BOOK_READ = {
     ],
     sourceEdition: "The Texts of Taoism, The Sacred Books of the East, Volume XXXIX",
     sourceTranslator: "James Legge",
-    sourceNote: "Selected complete chapters from all parts of the Tao Te Ching for the CICAN 15-minute experience. Source text is the James Legge translation.",
+    sourceNote: "15-minute selection only. FULL BOOK uses the complete James Legge source from Project Gutenberg eBook #216.",
     sourceUrl: "https://www.gutenberg.org/ebooks/216",
     fullTextUrl: "https://www.gutenberg.org/cache/epub/216/pg216.txt",
     prologueScenes: [
