@@ -70,8 +70,8 @@ if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
 for (const id of books) {
     const file = path.join("books", id + ".js");
     const source = fs.readFileSync(file, "utf8");
-    const pending = /\\breaderSourceStatus\\s*:\\s*"SOURCE_PENDING"/.test(source);
-    const hasFullPath = /\\bfullTextUrl\\s*:/.test(source) || /\\bfullText\\s*:/.test(source);
+    const pending = /\breaderSourceStatus\s*:\s*"SOURCE_PENDING"/.test(source);
+    const hasFullPath = /\bfullTextUrl\s*:/.test(source) || /\bfullText\s*:/.test(source);
     if (!pending && !hasFullPath) {
         failures.push(id + ": missing complete-book source path");
     }
