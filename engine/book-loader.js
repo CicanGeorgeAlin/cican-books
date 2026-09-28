@@ -47,9 +47,17 @@ function normalizeReaderSource(sourceText) {
   return text.trim();
 }
 
-function selectFifteenMinuteText(sourceText, targetWords) {
-  const normalized = normalizeReaderSource(sourceText);
+function selectFifteenMinuteText(sourceText, targetWords, startMarker = "") {
+  let normalized = normalizeReaderSource(sourceText);
   if (!normalized) return "";
+
+  const marker = String(startMarker || "").trim();
+  if (marker) {
+    const markerIndex = normalized.indexOf(marker);
+    if (markerIndex >= 0) {
+      normalized = normalized.slice(markerIndex).trim();
+    }
+  }
 
   const limit = Math.max(1, Number(targetWords) || 2700);
   const words = [...normalized.matchAll(/\S+/g)];
@@ -65,7 +73,11 @@ async function prepareFifteenMinuteSource(book) {
 
   if (book.fullText && String(book.fullText).trim()) {
     book.fifteenMinuteText =
-      selectFifteenMinuteText(book.fullText, book.targetWords);
+      selectFifteenMinuteText(
+        book.fullText,
+        book.targetWords,
+        book.fifteenMinuteStartMarker
+      );
     return book;
   }
 
@@ -93,7 +105,11 @@ async function prepareFifteenMinuteSource(book) {
   }
 
   book.fifteenMinuteText =
-    selectFifteenMinuteText(normalized, book.targetWords);
+    selectFifteenMinuteText(
+    normalized,
+    book.targetWords,
+    book.fifteenMinuteStartMarker
+  );
 
   return book;
 }
@@ -159,6 +175,16 @@ export function validateBook(book) {
   const missing = required.filter(
     key => book == null || book[key] === undefined || book[key] === null || book[key] === ""
   );
+
+  const hasReaderSource =
+    (book && String(book.text || "").trim()) ||
+    (book && String(book.fifteenMinuteText || "").trim()) ||
+    (book && String(book.fullText || "").trim()) ||
+    (book && String(book.fullTextUrl || "").trim());
+
+  if (!hasReaderSource) {
+    missing.push("reader source");
+  }
 
   if (missing.length) {
     throw new Error(
