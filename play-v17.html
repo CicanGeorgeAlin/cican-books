@@ -1228,6 +1228,9 @@ const TRAIL_DISTANCE = 35;
 
 const MERGE_DISTANCE = 20;
 
+/* Full-size CICAN should reliably trigger READ on merge. */
+const FULL_SIZE_TOLERANCE = 0.5;
+
 
 /* =================================================
    PLAYABLE CICAN
@@ -1896,9 +1899,9 @@ function mergeOnes(
         );
 
 
-    const createsKnowledge =
-        oneA.size >= MAX_SIZE &&
-        oneB.size >= MAX_SIZE;
+    const oneAIsFullSize = oneA.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
+    const oneBIsFullSize = oneB.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
+    const createsKnowledge = oneAIsFullSize && oneBIsFullSize;
 
 
     oneA.element.remove();
@@ -1929,15 +1932,9 @@ function mergeOnes(
     growing = false;
 
 
-    if (
-        createsKnowledge &&
-        currentBook
-    ) {
-
-        createKnowledge(
-            mergeX,
-            mergeY
-        );
+    if (createsKnowledge && currentBook) {
+        /* Full-size + full-size = READ. */
+        createKnowledge(mergeX, mergeY);
     }
 }
 
