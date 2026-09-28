@@ -47,6 +47,38 @@
       "nextStep": "Verify exact source edition and acquire full text.",
       "queueStage": "SOURCE_VERIFICATION",
       "priority": 5
+    },
+    {
+      "id": "tao-te-ching",
+      "title": "Tao Te Ching",
+      "author": "Laozi",
+      "language": "en",
+      "originalPublicationYear": -400,
+      "sourceRepo": "Project Gutenberg",
+      "sourceEbookId": "216",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/216",
+      "sourceStatus": "SOURCE_VERIFIED",
+      "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
+      "nextStep": "Acquire and normalize complete James Legge translation into the repository; then complete reader QA.",
+      "queueStage": "READY_FOR_ACQUISITION",
+      "priority": 1,
+      "automationRequest": "ACQUIRE_TAO_TE_CHING",
+      "sourceTextUrl": "https://www.gutenberg.org/cache/epub/216/pg216.txt",
+      "canonicalOutput": "fulltext/tao-te-ching.txt",
+      "normalizationRules": {
+        "startMarker": "*** START OF THE PROJECT GUTENBERG EBOOK THE TAO TEH KING, OR THE TAO AND ITS CHARACTERISTICS ***",
+        "stopMarker": "*** END OF THE PROJECT GUTENBERG EBOOK THE TAO TEH KING, OR THE TAO AND ITS CHARACTERISTICS ***",
+        "preserve": [
+          "complete literary text",
+          "chapter order",
+          "paragraph boundaries",
+          "James Legge translation"
+        ],
+        "remove": [
+          "Project Gutenberg transport header/footer"
+        ],
+        "contentStartMarker": "THE TAO TEH KING,"
+      }
     }
   ]
 }
