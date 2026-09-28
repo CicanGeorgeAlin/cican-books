@@ -1927,13 +1927,6 @@ function mergeOnes(
 
 
     /*
-        READ unlocks when the resulting merged CICAN
-        reaches full size. This matches the actual
-        split -> grow -> merge progression: a full
-        CICAN can merge with a smaller CICAN and still
-        complete the full-size form.
-    */
-    /*
         READ is a deliberate final gate:
         BOTH CICANs must already be full size.
         A full CICAN merging with a smaller CICAN
@@ -4121,6 +4114,14 @@ function animate() {
     requestAnimationFrame(
         animate
     );
+
+    /*
+        The book is now fully initialized. Refresh reader
+        controls from the actual active book so FULL BOOK
+        is enabled whenever canonical text or a full-text
+        source exists.
+    */
+    updateReaderModeUI();
 }
 
 
