@@ -14,7 +14,7 @@
       "alternativeSourceUrl": "https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Reader QA and mobile QA; rights review remains mandatory before publication",
+      "nextStep": "Replace or separately clear the Chapman editorial layer before any Republic of Ireland publication decision; reader/mobile QA remains separate.",
       "queueStage": "BOOK_CONTRACT",
       "priority": 1,
       "sourceTextUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.txt",
@@ -46,7 +46,17 @@
       "acquisitionGate": "DOWNLOAD_AND_NORMALIZE_ONLY__RIGHTS_REVIEW_REQUIRED",
       "automationRequest": "QA_V1",
       "acquiredWordCount": 121811,
-      "acquisitionVerifiedAt": "2026-09-27"
+      "acquisitionVerifiedAt": "2026-09-27",
+      "editionRightsReview": {
+        "status": "EDITORIAL_LAYER_REVIEW_REQUIRED",
+        "underlyingWorkAuthor": "Jane Austen",
+        "underlyingWorkAuthorDeathYear": 1817,
+        "sourceEditionEditor": "R. W. Chapman",
+        "sourceEditionEditorDeathYear": 1960,
+        "reason": "The source text is based on an edition edited by R. W. Chapman. The underlying 1813 work and the later editorial contribution must be assessed separately for Republic of Ireland distribution.",
+        "nextSafeAction": "USE_A_CLEARLY_CLEARED_TEXT_EDITION_OR_COMPLETE_EDITORIAL_RIGHTS_REVIEW",
+        "evidenceCheckedAt": "2026-09-28"
+      }
     },
     {
       "id": "moby-dick",
