@@ -6,7 +6,7 @@ Date: 2026-09-28
 
 Mainline known-good audit commit:
 
-b8ccfcb0b883e4c7ff36762ea777ea1c1d074ae5
+a59661906264340a463adc359ac0dd01c3ce3c92
 
 Recovery branch:
 
@@ -43,5 +43,6 @@ cican-stable-before-reader-audit-2026-09-28
 - savedProgress is declared before use.
 - All catalog books have prologueScenes.
 - Every book has a source-backed reader path or explicit SOURCE_PENDING status.
+- Book-specific visual effects are isolated and cannot disable the canonical CICAN game loop.
 
 This file is a recovery reference. Do not replace the stable branch with experimental changes.
