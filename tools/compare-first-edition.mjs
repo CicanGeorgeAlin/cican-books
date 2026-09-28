@@ -109,6 +109,17 @@ const structureMismatch = refChapters.length !== canChapters.length || refChapte
 const refWords = words(reference);
 const canWords = words(canonical);
 
+const differingChapters = chapterResults.filter(x => x.status === "DIFFERENCES_DETECTED");
+const missingChapters = chapterResults.filter(x => x.status === "MISSING_CHAPTER");
+const summary = {
+  structure: structureMismatch ? "MISMATCH" : "MATCH",
+  differingChapters: differingChapters.length,
+  missingChapters: missingChapters.length,
+  totalComparedChapters: chapterResults.filter(x => x.status !== "MISSING_CHAPTER").length,
+  textIdentityStatus: structureMismatch ? "UNRESOLVED_STRUCTURE" : (differingChapters.length ? "DIFFERENCES_REQUIRE_CLASSIFICATION" : "MATCH_AT_NORMALIZED_WORD_LEVEL"),
+  comparisonMethod: "LCS_WORD_SEQUENCE_EDIT_DISTANCE"
+};
+
 const result = {
   generatedAt: new Date().toISOString(),
   referenceFile,
@@ -120,17 +131,6 @@ const result = {
   chapterResults,
   summary,
   policy: "Comparison is diagnostic only; it never replaces the canonical asset or grants publication rights."
-};
-
-const differingChapters = chapterResults.filter(x => x.status === "DIFFERENCES_DETECTED");
-const missingChapters = chapterResults.filter(x => x.status === "MISSING_CHAPTER");
-const summary = {
-  structure: structureMismatch ? "MISMATCH" : "MATCH",
-  differingChapters: differingChapters.length,
-  missingChapters: missingChapters.length,
-  totalComparedChapters: chapterResults.filter(x => x.status !== "MISSING_CHAPTER").length,
-  textIdentityStatus: structureMismatch ? "UNRESOLVED_STRUCTURE" : (differingChapters.length ? "DIFFERENCES_REQUIRE_CLASSIFICATION" : "MATCH_AT_NORMALIZED_WORD_LEVEL"),
-  comparisonMethod: "LCS_WORD_SEQUENCE_EDIT_DISTANCE"
 };
 
 const destination = path.resolve(outputFile);
