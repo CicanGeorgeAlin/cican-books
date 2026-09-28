@@ -2091,32 +2091,9 @@ function findClosestOne(
 
 function splitOne(one) {
 
-    /*
-        Keep the freshly split CICAN outside
-        the visible-body merge distance.
-        This prevents an immediate re-merge
-        after splitting a full-size CICAN.
-    */
-    const separation =
-        (one.size + MIN_SIZE) / 2 + 8;
-
-    const direction =
-        one.x < window.innerWidth / 2
-            ? 1
-            : -1;
-
-    const newX =
-        Math.max(
-            MIN_SIZE / 2,
-            Math.min(
-                window.innerWidth - MIN_SIZE / 2,
-                one.x + direction * separation
-            )
-        );
-
     const newOne =
         createOne(
-            newX,
+            one.x + 45,
             one.y,
             MIN_SIZE,
             false
@@ -2268,12 +2245,7 @@ function checkForMerges() {
                 );
 
 
-            const contactDistance = Math.max(
-                MERGE_DISTANCE,
-                (oneA.size + oneB.size) / 2
-            );
-
-            if (d <= contactDistance) {
+            if (d <= MERGE_DISTANCE) {
 
                 mergeOnes(
                     oneA,
@@ -3269,6 +3241,32 @@ async function openReader(modeOverride) {
         !currentBook.fifteenMinuteText
     ) {
 
+        /*
+            Embedded source books must stay on the direct reader path.
+            This avoids making the reader depend on a second asynchronous
+            source fetch when the canonical source is already in memory.
+        */
+        const embeddedSource =
+            currentBook.fullText ||
+            (
+                currentBook.readerSourceStatus === "SOURCE_READY" &&
+                currentBook.text
+            );
+
+        if (embeddedSource) {
+            currentBook.fifteenMinuteText =
+                selectFifteenMinuteText(
+                    embeddedSource,
+                    currentBook.targetWords
+                );
+        }
+    }
+
+    if (
+        !isFullBook &&
+        !currentBook.fifteenMinuteText
+    ) {
+
         fullTextLoading = true;
         readerModeNote.textContent =
             "LOADING SOURCE TEXT";
@@ -3411,7 +3409,11 @@ async function openReader(modeOverride) {
         currentBook &&
         (
             currentBook.fullText ||
-            currentBook.fullTextUrl
+            currentBook.fullTextUrl ||
+            (
+                currentBook.readerSourceStatus === "SOURCE_READY" &&
+                currentBook.text
+            )
         )
     );
 
