@@ -1,0 +1,42 @@
+name: Reader Content QA
+
+on:
+  push:
+    paths:
+      - "books/**"
+      - "tools/validate-reader-content.mjs"
+      - "play-v17.html"
+      - ".github/workflows/reader-content-qa.yml"
+  pull_request:
+    paths:
+      - "books/**"
+      - "tools/validate-reader-content.mjs"
+      - "play-v17.html"
+      - ".github/workflows/reader-content-qa.yml"
+
+jobs:
+  reader-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate reader source content
+        run: node tools/validate-reader-content.mjs
+
+      - name: Validate reader JavaScript syntax
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          const html = fs.readFileSync("play-v17.html", "utf8");
+          const scripts = [...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)];
+          if (scripts.length !== 2) throw new Error("Expected exactly two script blocks");
+          for (const [index, match] of scripts.entries()) {
+            try {
+              new Function(match[1]);
+            } catch (error) {
+              throw new Error("Script " + (index + 1) + " syntax error: " + error.message);
+            }
+          }
+          console.log("Reader JavaScript syntax passed.");
+          NODE
