@@ -53,6 +53,14 @@ for (const id of books) {
     }
 }
 
+
+const playFile = fs.readFileSync("play-v17.html", "utf8");
+const notePos = playFile.indexOf("savedProgress > 0.01");
+const declarationPos = playFile.indexOf("const savedProgress");
+if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
+    failures.push("play-v17.html: reader uses savedProgress before declaration");
+}
+
 if (failures.length) {
     console.error("Reader content QA failed:");
     for (const failure of failures) {
