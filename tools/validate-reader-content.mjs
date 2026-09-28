@@ -66,9 +66,11 @@ if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
  * COMPLETE BOOK CONTRACT
  *
  * text = calibrated 15-minute source selection only.
- * fullText = verified complete source asset.
- * fullTextUrl = verified complete source URL.
+ * fullText = verified complete source embedded in the book module.
+ * fullTextUrl = local repository path to a verified complete source asset.
  *
+ * External fullTextUrl values are NOT accepted.
+ * Empty/missing local assets are NOT accepted.
  * text is NEVER accepted as a complete-book source.
  */
 for (const id of books) {
@@ -81,8 +83,12 @@ for (const id of books) {
     const hasFullAsset =
         /\bfullText\s*:/.test(source);
 
-    const hasFullUrl =
-        /\bfullTextUrl\s*:/.test(source);
+    const fullUrlMatch =
+        source.match(/\bfullTextUrl\s*:\s*"([^"]+)"/);
+
+    const hasFullUrl = Boolean(fullUrlMatch);
+    const hasExternalFullUrl =
+        hasFullUrl && /^https?:\/\//i.test(fullUrlMatch[1]);
 
     const hasExplicitCompleteType =
         /\bfullTextSourceType\s*:\s*"COMPLETE_SOURCE_(?:ASSET|URL)"/.test(source);
@@ -91,8 +97,39 @@ for (const id of books) {
         failures.push(id + ": missing complete-book source path");
     }
 
+    if (!pending && hasExternalFullUrl) {
+        failures.push(id + ": external FULL BOOK URLs are forbidden; store the complete source in the repository");
+    }
+
     if (!pending && (hasFullAsset || hasFullUrl) && !hasExplicitCompleteType) {
         failures.push(id + ": complete-book path is not explicitly declared");
+    }
+
+    if (
+        !pending &&
+        hasFullAsset &&
+        !/\bfullTextSourceType\s*:\s*"COMPLETE_SOURCE_ASSET"/.test(source)
+    ) {
+        failures.push(id + ": embedded fullText must declare COMPLETE_SOURCE_ASSET");
+    }
+
+    if (
+        !pending &&
+        hasFullUrl &&
+        !hasExternalFullUrl
+    ) {
+        const relative = fullUrlMatch[1];
+        const assetPath = path.normalize(relative);
+        const exists = fs.existsSync(assetPath);
+        const size = exists ? fs.statSync(assetPath).size : 0;
+
+        if (!exists || size < 10000) {
+            failures.push(id + ": local complete-book asset is missing or too small (" + relative + ")");
+        }
+
+        if (!/\bfullTextSourceType\s*:\s*"COMPLETE_SOURCE_ASSET"/.test(source)) {
+            failures.push(id + ": local fullTextUrl must declare COMPLETE_SOURCE_ASSET");
+        }
     }
 
     if (
@@ -172,5 +209,5 @@ if (failures.length) {
 }
 
 console.log(
-    "Reader content QA passed: 15-minute text and COMPLETE SOURCE paths are structurally separated."
+    "Reader content QA passed: every non-pending book has a verified COMPLETE SOURCE ASSET stored in the repository."
 );
