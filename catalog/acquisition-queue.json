@@ -153,13 +153,15 @@
         }
       },
       "firstEditionComparison": {
-        "status": "DIFFERENCES_CONFIRMED__CANONICAL_NOT_REPLACED",
+        "status": "OPENING_DIFFERENCE_RETRACTED__EVIDENCE_CONFLICT_IDENTIFIED",
         "checkedChapter": "Volume I, Chapter I",
         "currentCanonical": "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-        "firstEditionScanTranscription": "It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife.",
-        "observation": "The existing canonical asset contains punctuation that differs from the validated 1813 scan transcription at the opening sentence. Therefore it must not be labeled as an exact first-edition transcription.",
-        "sourceEvidence": "https://en.wikisource.org/wiki/Page%3APride_and_Prejudice.djvu/17",
-        "nextAction": "Perform a complete chapter-level comparison before deciding whether to rebuild the canonical full-text asset.",
+        "firstEditionEvidenceA": "The dedicated 1813 Volume I scan transcription (validated page 8) includes the comma after 'fortune'.",
+        "firstEditionEvidenceB": "A separate Wikisource Page:Pride_and_Prejudice.djvu/17 transcription omits that comma.",
+        "observation": "The earlier claim that the canonical text definitely differs from the 1813 first edition was premature. The two public transcription witnesses disagree, so the punctuation cannot be classified as a confirmed difference without resolving which scan witness corresponds to the exact first-edition source chain.",
+        "sourceEvidenceA": "https://en.wikisource.org/wiki/Page:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_1).pdf/8",
+        "sourceEvidenceB": "https://en.wikisource.org/wiki/Page%3APride_and_Prejudice.djvu/17",
+        "nextAction": "Use the original 1813 scan image as the controlling evidence for disputed punctuation and continue chapter-level comparison only after source-witness identity is established.",
         "tool": "tools/compare-first-edition.mjs",
         "toolStatus": "READY__LOCAL_REFERENCE_REQUIRED",
         "chapterCoverage": {
