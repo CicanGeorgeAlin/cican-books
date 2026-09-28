@@ -60,9 +60,9 @@ async function fetchBatch(titles) {
   for (const page of pages) {
     const content = page.revisions?.[0]?.slots?.main?.content;
     if (!content) throw new Error("Wikisource API returned no revision text for: " + page.title);
-    const cleaned = stripHtml(content);\n    byTitle.set(page.title, cleaned);\n    byTitle.set(page.title.replace(/ /g, "_"), cleaned);
-  }
-  return titles.map(title => {
+    const cleaned = stripHtml(content);
+    byTitle.set(page.title, cleaned);
+    byTitle.set(page.title.replace(/ /g, "_"), cleaned);
     const text = byTitle.get(title);
     if (!text) throw new Error("Missing requested Wikisource page: " + title);
     return text;
