@@ -18,6 +18,16 @@ export function isPublishedBook(bookId) {
   return !!record && (!record.status || record.status === "PUBLISHED");
 }
 
+/*
+ * Experience loading is intentionally separate from publication status.
+ * A catalog entry may be playable during CICAN development/review without
+ * being marked PUBLISHED. This does not change, or imply, rights clearance.
+ */
+export function isExperienceBook(bookId) {
+  const record = getCatalogRecord(bookId);
+  return !!record && !!record.bookSource;
+}
+
 export function getCatalogRecord(bookId) {
   return findCatalogBook(bookId);
 }
@@ -25,8 +35,8 @@ export function getCatalogRecord(bookId) {
 export async function loadBook(bookId) {
   const src = getBookSource(bookId);
 
-  if (!isPublishedBook(bookId)) {
-    throw new Error("Book is not published: " + bookId);
+  if (!isExperienceBook(bookId)) {
+    throw new Error("Book is not available for the CICAN experience: " + bookId);
   }
 
   if (!src) {
