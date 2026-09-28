@@ -8,6 +8,7 @@ window.BOOK_READ = {
     targetMinutes: 15,
     targetWords: 2917,
     readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
     fullTextUrl: "fulltext/tao-te-ching.txt",
     fullTextSourceType: "COMPLETE_SOURCE_ASSET",
     fullTextSourceVerified: true,
