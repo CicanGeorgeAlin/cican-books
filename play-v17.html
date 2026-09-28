@@ -2730,6 +2730,7 @@ async function openReader(modeOverride) {
     */
 
     const requestedMode = readingMode;
+    const requestedBook = currentBook;
     const isFullBook = requestedMode === "full";
 
     if (isFullBook && !currentBook.fullText) {
@@ -2751,9 +2752,10 @@ async function openReader(modeOverride) {
 
             if (
                 openToken !== readerOpenToken ||
-                readingMode !== requestedMode
+                readingMode !== requestedMode ||
+                currentBook !== requestedBook
             ) {
-                currentBook.fullText = normalizedText;
+                requestedBook.fullText = normalizedText;
                 fullTextLoading = false;
                 return;
             }
@@ -2762,7 +2764,8 @@ async function openReader(modeOverride) {
         } catch (_) {
             if (
                 openToken !== readerOpenToken ||
-                readingMode !== requestedMode
+                readingMode !== requestedMode ||
+                currentBook !== requestedBook
             ) {
                 fullTextLoading = false;
                 return;
@@ -2778,7 +2781,8 @@ async function openReader(modeOverride) {
 
     if (
         openToken !== readerOpenToken ||
-        readingMode !== requestedMode
+        readingMode !== requestedMode ||
+        currentBook !== requestedBook
     ) {
         return;
     }
