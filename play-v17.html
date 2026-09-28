@@ -3093,6 +3093,11 @@ function finishReader() {
         );
 
 
+    // Persist the exact completed position so a lifecycle interruption
+    // cannot restore the reader to an earlier point.
+    saveReaderPosition(performance.now());
+
+
     readerSeconds =
         0;
 
@@ -3298,6 +3303,24 @@ readerClose.addEventListener(
         closeReader();
     }
 );
+
+
+/* =================================================
+   READER LIFECYCLE PERSISTENCE
+================================================= */
+
+function persistReaderLifecycleState() {
+    if (!reader.classList.contains("open") || !currentBook) return;
+    saveReaderPosition(performance.now());
+}
+
+window.addEventListener("pagehide", persistReaderLifecycleState);
+window.addEventListener("beforeunload", persistReaderLifecycleState);
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === "hidden") {
+        persistReaderLifecycleState();
+    }
+});
 
 
 /* =================================================
