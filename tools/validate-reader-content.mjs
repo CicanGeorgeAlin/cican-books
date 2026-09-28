@@ -62,6 +62,21 @@ if (notePos >= 0 && declarationPos >= 0 && notePos < declarationPos) {
 }
 
 
+/*
+ * Every playable book must provide a complete-book source path.
+ * SOURCE_PENDING is allowed only when the edition is explicitly not
+ * available yet; it must never silently fall back to a chapter excerpt.
+ */
+for (const id of books) {
+    const file = path.join("books", id + ".js");
+    const source = fs.readFileSync(file, "utf8");
+    const pending = /\\breaderSourceStatus\\s*:\\s*"SOURCE_PENDING"/.test(source);
+    const hasFullPath = /\\bfullTextUrl\\s*:/.test(source) || /\\bfullText\\s*:/.test(source);
+    if (!pending && !hasFullPath) {
+        failures.push(id + ": missing complete-book source path");
+    }
+}
+
 const canonicalChecks = [
     [
         "V13 minimum size",
