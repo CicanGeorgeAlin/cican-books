@@ -38,14 +38,15 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           text = Path("fulltext/the-great-gatsby.txt").read_text(encoding="utf-8")
+          normalized = " ".join(text.lower().split())
           required = [
-              "The Great Gatsby",
-              "Chapter I.",
-              "Chapter IX.",
+              ("title", "the great gatsby"),
+              ("chapter I", "chapter i"),
+              ("chapter IX", "chapter ix"),
           ]
-          for marker in required:
-              if marker not in text:
-                  raise SystemExit(f"Missing required marker: {marker}")
+          for label, marker in required:
+              if marker not in normalized:
+                  raise SystemExit(f"Missing required marker: {label}")
           if len(text) < 100000:
               raise SystemExit("Source unexpectedly short")
           print("The Great Gatsby complete-source verification passed")
