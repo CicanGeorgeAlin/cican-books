@@ -20,7 +20,7 @@ jobs:
           start=s.find("    text:\n")
           end=s.find("\n\n};",start)
           if start<0 or end<0: raise SystemExit("Gatsby text block not found")
-          s=s[:start]+'    text: ""'+s[end+4:]
+          s=s[:start]+'    text: ""'+s[end+2:]
           p.write_text(s,encoding="utf-8")
           q=Path("catalog/index.js")
           c=q.read_text(encoding="utf-8")
