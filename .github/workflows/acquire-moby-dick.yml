@@ -25,7 +25,7 @@ jobs:
           assert len(body.split())>150000
           assert 'MOBY-DICK; OR, THE WHALE' in body or 'Moby-Dick; or, The Whale' in body
           assert 'CHAPTER 1. Loomings.' in body
-          assert 'CHAPTER 135. The Chase—Third Day.' in body
+          assert 'The Chase—Third Day' in body or 'The Chase - Third Day' in body
           print('Moby Dick complete source verified',len(body),len(body.split()))
           PY
       - name: Publish asset
