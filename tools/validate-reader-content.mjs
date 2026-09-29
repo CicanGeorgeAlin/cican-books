@@ -250,20 +250,44 @@ for (const [name, passed] of canonicalChecks) {
     if (!passed) {
         failures.push("play-v17.html: missing canonical game contract — " + name);
     }
+}
+
+/*
+ * SOURCE MARKER CONTRACT
+ *
+ * Every non-pending book must declare a marker that exists in its
+ * verified complete source asset. This is deliberately evaluated per book.
+ */
+for (const id of books) {
+    const file = path.join("books", id + ".js");
+    const source = fs.readFileSync(file, "utf8");
+
+    const pending =
+        /\breaderSourceStatus\s*:\s*"SOURCE_PENDING"/.test(source);
+
+    const hasFullAsset =
+        /\bfullText\s*:/.test(source);
+
+    const fullUrlMatch =
+        source.match(/\bfullTextUrl\s*:\s*"([^"]+)"/);
+
+    const hasFullUrl = Boolean(fullUrlMatch);
+    const hasExternalFullUrl =
+        hasFullUrl && /^https?:\/\//i.test(fullUrlMatch[1]);
+
     const startMarkerMatch =
         source.match(/\bfifteenMinuteStartMarker\s*:\s*"((?:\\.|[^"])*)"/);
 
     if (!pending && !startMarkerMatch) {
         failures.push(id + ": SOURCE_READY book is missing fifteenMinuteStartMarker");
+        continue;
     }
 
     if (!pending && startMarkerMatch) {
         let startMarker = startMarkerMatch[1];
         try {
             startMarker = JSON.parse('"' + startMarker.replace(/"/g, '\\"') + '"');
-        } catch {
-            // Keep the raw escaped marker if decoding is unnecessary.
-        }
+        } catch {}
 
         if (hasFullAsset && !source.includes(startMarker)) {
             failures.push(id + ": embedded complete source does not contain fifteenMinuteStartMarker");
