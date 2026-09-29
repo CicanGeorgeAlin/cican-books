@@ -32,7 +32,10 @@ window.BOOK_READ = {
     sourceEdition: "Project Gutenberg eBook #64317, 1925 text",
 
     sourceUrl: "https://www.gutenberg.org/ebooks/64317",
-prologueScenes: [
+    sourceNote:
+        "Complete source is stored locally in fulltext/the-great-gatsby.txt. The 15 MIN reader is calibrated from the verified source beginning at the supplied marker; FULL BOOK uses the complete source asset.",
+
+    prologueScenes: [
 
         {
             text:
