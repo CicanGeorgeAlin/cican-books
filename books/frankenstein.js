@@ -27,7 +27,41 @@ window.BOOK_READ = {
 prologueScenes: [
 
         {
-            sourceEdition:
+            text:
+            "A scientist creates life, then discovers that creation is easier than responsibility.",
+
+            button:
+            "CONTINUE"
+        },
+
+        {
+            text:
+            "Frankenstein is not simply a story about a monster. It is a story about ambition, isolation, rejection, responsibility, and the consequences of refusing to care for what we create.",
+
+            button:
+            "CONTINUE"
+        },
+
+        {
+            text:
+            "Follow Victor Frankenstein, his creation, and the chain of choices that turns discovery into tragedy.",
+
+            button:
+            "CONTINUE"
+        },
+
+        {
+            text:
+            "You have 15 minutes. Discover the ideas inside Frankenstein.",
+
+            button:
+            "ENTER THE BOOK"
+        }
+
+    ],
+
+
+    sourceEdition:
         "Project Gutenberg eBook #41445, Frankenstein; or, The Modern Prometheus (1818)",
 
     sourceTranslator:
@@ -38,6 +72,5 @@ prologueScenes: [
 
     sourceUrl:
         "https://www.gutenberg.org/ebooks/41445"
-
 
 };
