@@ -41,12 +41,14 @@ jobs:
           normalized = " ".join(text.lower().split())
           required = [
               ("title", "the great gatsby"),
-              ("chapter I", "chapter i"),
-              ("chapter IX", "chapter ix"),
+              ("opening", "in my younger and more vulnerable years"),
+              ("ending", "the end"),
           ]
           for label, marker in required:
               if marker not in normalized:
                   raise SystemExit(f"Missing required marker: {label}")
+          if len(text.split()) < 40000:
+              raise SystemExit("Source unexpectedly short in words")
           if len(text) < 100000:
               raise SystemExit("Source unexpectedly short")
           print("The Great Gatsby complete-source verification passed")
