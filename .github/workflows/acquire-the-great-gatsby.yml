@@ -40,8 +40,8 @@ jobs:
           text = Path("fulltext/the-great-gatsby.txt").read_text(encoding="utf-8")
           required = [
               "The Great Gatsby",
-              "Chapter I",
-              "Chapter IX",
+              "Chapter I.",
+              "Chapter IX.",
           ]
           for marker in required:
               if marker not in text:
