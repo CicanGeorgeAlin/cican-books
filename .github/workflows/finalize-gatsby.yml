@@ -41,7 +41,7 @@ jobs:
           start = text.find("    text:")
           end = text.find("\n\n};", start)
           if start >= 0 and end > start:
-              text = text[:start] + text[end+3:]
+              text = text[:start] + "\n};\n"
           book.write_text(text, encoding="utf-8")
 
           catalog = Path("catalog/index.js")
