@@ -17,10 +17,6 @@ jobs:
           p=Path("books/the-great-gatsby.js")
           s=p.read_text(encoding="utf-8")
           s=s.replace('readerSourceStatus: "SOURCE_PENDING",','readerSourceStatus: "SOURCE_READY",\n\n    fullTextUrl: "fulltext/the-great-gatsby.txt",\n\n    fullTextSourceType: "COMPLETE_SOURCE_ASSET",\n\n    fullTextSourceVerified: true,\n\n    fullBookReady: true,\n\n    fifteenMinuteStartMarker: "In my younger and more vulnerable years",\n\n    sourceEdition: "Project Gutenberg eBook #64317, 1925 text",\n\n    sourceUrl: "https://www.gutenberg.org/ebooks/64317",')
-          start=s.find("    text:\n")
-          end=s.find("\n\n};",start)
-          if start<0 or end<0: raise SystemExit("Gatsby text block not found")
-          s=s[:start]+'    text: ""'+s[end+2:]
           p.write_text(s,encoding="utf-8")
           q=Path("catalog/index.js")
           c=q.read_text(encoding="utf-8")
