@@ -17,7 +17,21 @@ window.BOOK_READ = {
 
     targetWords:
         2630,
-    readerSourceStatus: "SOURCE_PENDING",
+    readerSourceStatus: "SOURCE_READY",
+
+    fullTextUrl: "fulltext/the-great-gatsby.txt",
+
+    fullTextSourceType: "COMPLETE_SOURCE_ASSET",
+
+    fullTextSourceVerified: true,
+
+    fullBookReady: true,
+
+    fifteenMinuteStartMarker: "In my younger and more vulnerable years",
+
+    sourceEdition: "Project Gutenberg eBook #64317, 1925 text",
+
+    sourceUrl: "https://www.gutenberg.org/ebooks/64317",
 prologueScenes: [
 
         {
