@@ -19,7 +19,26 @@ window.BOOK_READ = {
         2700,
 
     readerSourceStatus:
-        "SOURCE_PENDING",
+        "SOURCE_READY",
+
+    fullTextUrl:
+        "fulltext/nineteen-eighty-four.txt",
+
+    fullTextSourceType:
+        "COMPLETE_SOURCE_ASSET",
+
+    fullTextSourceVerified: true,
+
+    fullBookReady: true,
+
+    fifteenMinuteStartMarker:
+        "It was a bright cold day in April",
+
+    sourceEdition:
+        "Project Gutenberg Australia eBook 0100021, Nineteen eighty-four",
+
+    sourceUrl:
+        "https://gutenberg.net.au/ebooks01/0100021.txt",
 
     prologueScenes: [
 
