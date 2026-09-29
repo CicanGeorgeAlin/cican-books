@@ -39,6 +39,8 @@ window.BOOK_READ = {
 
     sourceUrl:
         "https://gutenberg.net.au/ebooks01/0100021.txt",
+    sourceNote:
+        "Complete source is stored locally in fulltext/nineteen-eighty-four.txt. The 15 MIN reader is calibrated from the verified source beginning at the supplied marker; FULL BOOK uses the complete source asset. Territorial copyright status must still be considered for countries outside Ireland.",
 
     prologueScenes: [
 
