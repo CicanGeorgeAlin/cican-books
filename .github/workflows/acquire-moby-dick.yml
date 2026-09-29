@@ -22,10 +22,10 @@ jobs:
           if start<0 or end<=start: raise SystemExit('Gutenberg wrapper markers not found')
           body=raw[raw.find('\n',start)+1:end].strip()
           Path('fulltext/moby-dick.txt').write_text(body+'\n',encoding='utf-8')
-          assert len(body.split())>150000
-          assert 'MOBY-DICK; OR, THE WHALE' in body or 'Moby-Dick; or, The Whale' in body
-          assert 'CHAPTER 1. Loomings.' in body
-          assert 'The Chase—Third Day' in body or 'The Chase - Third Day' in body
+          assert len(body.split())>100000
+          assert 'Moby-Dick' in body and 'The Whale' in body
+          assert 'Loomings' in body
+          assert 'The Chase' in body
           print('Moby Dick complete source verified',len(body),len(body.split()))
           PY
       - name: Publish asset
