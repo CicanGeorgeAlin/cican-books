@@ -1,0 +1,39 @@
+name: Finalize Nineteen Eighty-Four
+on:
+  push:
+    paths:
+      - ".github/workflows/finalize-1984.yml"
+permissions:
+  contents: write
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mark source ready and verify
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("books/nineteen-eighty-four.js")
+          s=p.read_text(encoding="utf-8")
+          s=s.replace('readerSourceStatus:\n        "SOURCE_PENDING",','readerSourceStatus:\n        "SOURCE_READY",\n\n    fullTextUrl:\n        "fulltext/nineteen-eighty-four.txt",\n\n    fullTextSourceType:\n        "COMPLETE_SOURCE_ASSET",\n\n    fullTextSourceVerified: true,\n\n    fullBookReady: true,\n\n    fifteenMinuteStartMarker:\n        "It was a bright cold day in April",\n\n    sourceEdition:\n        "Project Gutenberg Australia eBook 0100021, Nineteen eighty-four",\n\n    sourceUrl:\n        "https://gutenberg.net.au/ebooks01/0100021.txt",')
+          p.write_text(s,encoding="utf-8")
+          q=Path("catalog/index.js")
+          c=q.read_text(encoding="utf-8")
+          old='{ id:"nineteen-eighty-four", title:"NINETEEN EIGHTY-FOUR", author:"George Orwell", category:"Classic Fiction", translator:"", targetMinutes:15, status:"CONTENT_REVIEW", fullBookReady:false, bookSource:"books/nineteen-eighty-four.js" }'
+          new='{ id:"nineteen-eighty-four", title:"NINETEEN EIGHTY-FOUR", author:"George Orwell", category:"Classic Fiction", translator:"", targetMinutes:15, targetWords:2700, status:"CONTENT_REVIEW", fullBookReady:true, sourceRepo:"Project Gutenberg Australia", sourceEbookId:"0100021", sourceUrl:"https://gutenberg.net.au/ebooks01/0100021.txt", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/nineteen-eighty-four.js" }'
+          if old not in c: raise SystemExit("1984 catalog entry not found")
+          q.write_text(c.replace(old,new),encoding="utf-8")
+          src=Path("fulltext/nineteen-eighty-four.txt").read_text(encoding="utf-8")
+          assert len(src.split()) > 90000
+          assert "It was a bright cold day in April" in src
+          assert "PART THREE" in src
+          assert "THE END" in src.upper()
+          PY
+          node --check books/nineteen-eighty-four.js
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/acquire-nineteen-eighty-four.yml .github/workflows/finalize-1984.yml
+          git add books/nineteen-eighty-four.js catalog/index.js
+          git commit -m "Make Nineteen Eighty-Four source-ready"
+          git push
