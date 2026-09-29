@@ -39,7 +39,7 @@ jobs:
           from pathlib import Path
           text = Path("fulltext/the-great-gatsby.txt").read_text(encoding="utf-8")
           required = [
-              "THE GREAT GATSBY",
+              "The Great Gatsby",
               "CHAPTER I",
               "CHAPTER IX",
           ]
