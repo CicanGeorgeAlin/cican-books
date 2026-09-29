@@ -1,0 +1,71 @@
+name: Acquire Moby Dick complete source
+
+on:
+  push:
+    paths:
+      - ".github/workflows/acquire-moby-dick.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download and normalize complete source
+        run: |
+          python - <<'PY'
+          from urllib.request import Request, urlopen
+          from pathlib import Path
+          import re
+
+          url = "https://www.gutenberg.org/cache/epub/2701/pg2701.txt"
+          req = Request(url, headers={"User-Agent": "CICAN-PLAY-THE-BOOK source acquisition"})
+          raw = urlopen(req, timeout=60).read().decode("utf-8")
+
+          start_marker = "*** START OF THE PROJECT GUTENBERG EBOOK MOBY DICK; OR, THE WHALE ***"
+          end_marker = "*** END OF THE PROJECT GUTENBERG EBOOK MOBY DICK; OR, THE WHALE ***"
+
+          start = raw.find(start_marker)
+          end = raw.find(end_marker)
+          if start < 0 or end <= start:
+              raise SystemExit("Gutenberg wrapper markers not found")
+
+          body_start = raw.find("\n", start) + 1
+          body = raw[body_start:end].replace("\r\n", "\n").replace("\r", "\n").strip() + "\n"
+
+          words = len(body.split())
+          checks = {
+              "minimum_word_count": words > 100000,
+              "title": "MOBY-DICK;" in body and "THE WHALE." in body,
+              "loomings": "CHAPTER 1. Loomings." in body,
+              "epilogue": "Epilogue" in body,
+              "final_chase": "CHAPTER 135. The Chase.—Third Day." in body,
+              "ishmael": "Call me Ishmael" in body,
+          }
+          if not all(checks.values()):
+              raise SystemExit("Moby Dick verification failed: " + repr(checks))
+
+          edge = (body[:2500] + "\n" + body[-2500:]).lower()
+          if "project gutenberg" in edge or "you may copy it" in edge:
+              raise SystemExit("Gutenberg transport wrapper leaked into stored source")
+
+          Path("fulltext/moby-dick.txt").write_text(body, encoding="utf-8")
+          print({"words": words, "characters": len(body), "checks": checks})
+          PY
+
+      - name: Commit verified source asset
+        run: |
+          git config user.name "CICAN acquisition bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fulltext/moby-dick.txt
+          if git diff --cached --quiet; then
+            echo "Moby Dick source asset is already current."
+          else
+            git commit -m "Acquire verified Moby Dick complete source"
+            git push
+          fi
