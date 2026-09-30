@@ -3720,22 +3720,84 @@ modeFull.addEventListener("pointerdown", async function(e) {
 /*
     READER TOUCH CONTROL
 
-    A finger drag must take control away from the
-    automatic reader immediately. The browser remains
-    responsible for the actual vertical scroll gesture.
+    A simple tap must NOT interrupt automatic reading.
+    Only an actual drag takes control of the text.
+    One state owns the transition:
+
+        AUTO -> MANUAL -> AUTO
+
+    This prevents a tap/pointer event from racing with
+    the automatic reader or creating a second animation loop.
 */
+let readerPointerDownX = 0;
+let readerPointerDownY = 0;
+let readerPointerMoved = false;
+let readerManualInteraction = false;
+
+function clearReaderManualResumeTimer() {
+    if (readerManualResumeTimer !== null) {
+        clearTimeout(readerManualResumeTimer);
+        readerManualResumeTimer = null;
+    }
+}
+
+function scheduleReaderAutoResume() {
+    clearReaderManualResumeTimer();
+
+    readerManualResumeTimer = setTimeout(function() {
+        readerManualResumeTimer = null;
+
+        if (
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused ||
+            !readerManualInteraction
+        ) {
+            return;
+        }
+
+        readerManualInteraction = false;
+        startReaderAnimation(0, readerOpenToken);
+    }, READER_MANUAL_RESUME_MS);
+}
+
 readerText.addEventListener(
     "pointerdown",
     function(e) {
         if (e.pointerType === "mouse" && e.button !== 0) return;
 
-        stopReaderAnimation();
+        readerPointerDownX = e.clientX;
+        readerPointerDownY = e.clientY;
+        readerPointerMoved = false;
 
-        if (readerManualResumeTimer !== null) {
-            clearTimeout(readerManualResumeTimer);
-            readerManualResumeTimer = null;
+        clearReaderManualResumeTimer();
+    },
+    { passive: true }
+);
+
+readerText.addEventListener(
+    "pointermove",
+    function(e) {
+        if (
+            readerPointerMoved ||
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            return;
         }
 
+        const dx = e.clientX - readerPointerDownX;
+        const dy = e.clientY - readerPointerDownY;
+
+        if (Math.hypot(dx, dy) < 6) {
+            return;
+        }
+
+        readerPointerMoved = true;
+        readerManualInteraction = true;
+
+        stopReaderAnimation();
         readerStatus.textContent = "MANUAL SCROLL";
     },
     { passive: true }
@@ -3744,31 +3806,23 @@ readerText.addEventListener(
 readerText.addEventListener(
     "pointerup",
     function() {
+        if (!readerManualInteraction) {
+            readerPointerMoved = false;
+            return;
+        }
+
+        readerPointerMoved = false;
+
         if (
             !reader.classList.contains("open") ||
             readerComplete ||
             readerPaused
         ) {
+            readerManualInteraction = false;
             return;
         }
 
-        if (readerManualResumeTimer !== null) {
-            clearTimeout(readerManualResumeTimer);
-        }
-
-        readerManualResumeTimer = setTimeout(function() {
-            readerManualResumeTimer = null;
-
-            if (
-                !reader.classList.contains("open") ||
-                readerComplete ||
-                readerPaused
-            ) {
-                return;
-            }
-
-            startReaderAnimation(0, readerOpenToken);
-        }, READER_MANUAL_RESUME_MS);
+        scheduleReaderAutoResume();
     },
     { passive: true }
 );
@@ -3776,18 +3830,19 @@ readerText.addEventListener(
 readerText.addEventListener(
     "pointercancel",
     function() {
+        readerPointerMoved = false;
+
         if (
+            !readerManualInteraction ||
             !reader.classList.contains("open") ||
             readerComplete ||
             readerPaused
         ) {
+            readerManualInteraction = false;
             return;
         }
 
-        readerLastTime = performance.now();
-        readerStatus.textContent = "AUTO-READING";
-        readerAnimation =
-            requestAnimationFrame(fluidAutoReader);
+        scheduleReaderAutoResume();
     },
     { passive: true }
 );
@@ -3876,17 +3931,14 @@ readerPause.addEventListener(
             !readerPaused
         ) {
 
-            readerPaused =
-                true;
+            readerPaused = true;
 
+            clearReaderManualResumeTimer();
+            readerManualInteraction = false;
+            stopReaderAnimation();
 
-            readerPause.textContent =
-                "RESUME";
-
-
-            readerStatus.textContent =
-                "PAUSED";
-
+            readerPause.textContent = "RESUME";
+            readerStatus.textContent = "PAUSED";
 
             return;
         }
@@ -3894,22 +3946,16 @@ readerPause.addEventListener(
 
         /*
             RESUME
+
+            Resume through the same single start path used by
+            opening the reader and ending a manual drag.
         */
 
-        readerPaused =
-            false;
+        readerPaused = false;
 
+        readerPause.textContent = "PAUSE";
 
-        readerLastTime =
-            performance.now();
-
-
-        readerPause.textContent =
-            "PAUSE";
-
-
-        readerStatus.textContent =
-            "AUTO-READING";
+        startReaderAnimation(0, readerOpenToken);
     }
 );
 
@@ -3924,10 +3970,8 @@ function closeReader() {
 
     stopReaderAnimation();
 
-    if (readerManualResumeTimer !== null) {
-        clearTimeout(readerManualResumeTimer);
-        readerManualResumeTimer = null;
-    }
+    clearReaderManualResumeTimer();
+    readerManualInteraction = false;
 
     saveReaderPosition(
         performance.now()
