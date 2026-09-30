@@ -166,7 +166,6 @@ export function validateBook(book) {
     "category",
     "targetMinutes",
     "targetWords",
-    "text",
     "sourceEdition",
     "sourceNote",
     "sourceUrl"
