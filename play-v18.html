@@ -4367,7 +4367,7 @@ function restoreFullscreenButtonPosition() {
 
     try {
         const saved = localStorage.getItem(
-            "cican_reader_fullscreen_button:" +
+            "cican_reader_fullscreen_button:aligned-v1:" +
             window.CICAN_ACTIVE_BOOK_ID
         );
 
@@ -4697,6 +4697,8 @@ async function toggleReaderFullscreen() {
 }
 
 document.addEventListener("fullscreenchange", updateReaderFullscreenUI);
+
+window.addEventListener("pageshow", updateReaderFullscreenUI);
 
 if (document.webkitFullscreenElement !== undefined) {
     document.addEventListener("webkitfullscreenchange", updateReaderFullscreenUI);
