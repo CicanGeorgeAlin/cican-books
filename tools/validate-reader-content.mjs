@@ -243,8 +243,8 @@ const canonicalChecks = [
         /one\.y \+=\s*\(\s*one\.targetY\s*-\s*one\.y\s*\)\s*\* 0\.10/.test(playFile)
     ],
     [
-        "book effects isolated from main loop",
-        /BOOK-SPECIFIC EXPERIENCE IS VISUAL ONLY/.test(playFile)
+        "single canonical CICAN visual language",
+        !/BOOK-SPECIFIC EXPERIENCE|DHAMMAPADA_MODE|TAO_MODE|bookIdentityAtmosphere|applyBookIdentity/.test(playFile)
     ]
 ];
 
