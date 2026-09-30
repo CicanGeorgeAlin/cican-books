@@ -564,12 +564,83 @@ body {
     background: #000;
 }
 
+/* Native fullscreen is the authoritative text-only state. */
+#reader:fullscreen #readerLabel,
+#reader:fullscreen #readerClose,
+#reader:fullscreen #readerTitle,
+#reader:fullscreen .reader-modebar,
+#reader:fullscreen #readerModeNote,
+#reader:fullscreen #readerProgress,
+#reader:fullscreen #readerHUD,
+#reader:fullscreen .reader-controls,
+#reader:fullscreen #readerStatus,
+#reader:fullscreen #readerFullscreen {
+    display: none !important;
+}
+
+#reader:fullscreen .reader-panel {
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+}
+
+#reader:fullscreen #readerText {
+    width: 100%;
+    max-width: 72ch;
+    margin: 0 auto;
+    padding:
+        18px
+        6px
+        max(24px, env(safe-area-inset-bottom));
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.82;
+}
+
+
+
 #reader:-webkit-full-screen {
 
     width: 100vw;
     height: 100vh;
     background: #000;
 }
+
+#reader:-webkit-full-screen #readerLabel,
+#reader:-webkit-full-screen #readerClose,
+#reader:-webkit-full-screen #readerTitle,
+#reader:-webkit-full-screen .reader-modebar,
+#reader:-webkit-full-screen #readerModeNote,
+#reader:-webkit-full-screen #readerProgress,
+#reader:-webkit-full-screen #readerHUD,
+#reader:-webkit-full-screen .reader-controls,
+#reader:-webkit-full-screen #readerStatus,
+#reader:-webkit-full-screen #readerFullscreen {
+    display: none !important;
+}
+
+#reader:-webkit-full-screen .reader-panel {
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+}
+
+#reader:-webkit-full-screen #readerText {
+    width: 100%;
+    max-width: 72ch;
+    margin: 0 auto;
+    padding:
+        18px
+        6px
+        max(24px, env(safe-area-inset-bottom));
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.82;
+}
+
+
 
 .reader-panel {
 
