@@ -844,7 +844,8 @@ body {
 
     -webkit-user-select: text;
 
-    touch-action: pan-y;
+    touch-action: pan-y !important;
+    overscroll-behavior-y: contain;
 
     white-space: pre-wrap;
 
@@ -3682,6 +3683,84 @@ modeFull.addEventListener("pointerdown", async function(e) {
     saveReaderMode();
     await openReader("full");
 });
+
+/*
+    READER TOUCH CONTROL
+
+    A finger drag must take control away from the
+    automatic reader immediately. The browser remains
+    responsible for the actual vertical scroll gesture.
+*/
+readerText.addEventListener(
+    "pointerdown",
+    function(e) {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+
+        stopReaderAnimation();
+
+        if (readerManualResumeTimer !== null) {
+            clearTimeout(readerManualResumeTimer);
+            readerManualResumeTimer = null;
+        }
+
+        readerStatus.textContent = "MANUAL SCROLL";
+    },
+    { passive: true }
+);
+
+readerText.addEventListener(
+    "pointerup",
+    function() {
+        if (
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            return;
+        }
+
+        if (readerManualResumeTimer !== null) {
+            clearTimeout(readerManualResumeTimer);
+        }
+
+        readerManualResumeTimer = setTimeout(function() {
+            readerManualResumeTimer = null;
+
+            if (
+                !reader.classList.contains("open") ||
+                readerComplete ||
+                readerPaused
+            ) {
+                return;
+            }
+
+            readerLastTime = performance.now();
+            readerStatus.textContent = "AUTO-READING";
+            readerAnimation =
+                requestAnimationFrame(fluidAutoReader);
+        }, READER_MANUAL_RESUME_MS);
+    },
+    { passive: true }
+);
+
+readerText.addEventListener(
+    "pointercancel",
+    function() {
+        if (
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            return;
+        }
+
+        readerLastTime = performance.now();
+        readerStatus.textContent = "AUTO-READING";
+        readerAnimation =
+            requestAnimationFrame(fluidAutoReader);
+    },
+    { passive: true }
+);
 
 readerText.addEventListener("scroll", function() {
     if (readerProgrammaticScroll) return;
