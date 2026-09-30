@@ -64,13 +64,4 @@ fullTextSourceType: "COMPLETE_SOURCE_ASSET",
         }
 
     ],
-
-
-  identity: {
-    mode: "classic",
-    atmosphereA: "rgba(150,170,210,0.09)",
-    atmosphereB: "rgba(255,255,255,0.02)",
-    glow: "rgba(160,180,230,0.15)",
-    texture: "moon"
-  },
 };
