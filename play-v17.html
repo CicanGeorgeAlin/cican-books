@@ -1508,6 +1508,8 @@ const TARGET_READING_SECONDS =
 
 const FULL_READING_WPM = 150;
 
+let fullReaderSeconds = TARGET_READING_SECONDS;
+
 function calculateFullReadingSeconds(text) {
     const words = String(text || "").trim().match(/\S+/g);
     const count = words ? words.length : 0;
@@ -3584,7 +3586,7 @@ function finishReader() {
     document.getElementById(
         "readerTimer"
     ).textContent =
-        "00:00";
+        "00:00:00";
 
 
     document.getElementById(
