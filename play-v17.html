@@ -2688,9 +2688,7 @@ function updateReaderUI() {
     document.getElementById(
         "readerTimer"
     ).textContent =
-        readingMode === "full"
-            ? "FULL"
-            : formatTime(readerSeconds);
+        formatTime(readerSeconds);
 
 
     document.getElementById(
