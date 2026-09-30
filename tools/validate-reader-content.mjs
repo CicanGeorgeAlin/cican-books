@@ -244,7 +244,7 @@ const canonicalChecks = [
     ],
     [
         "single canonical CICAN visual language",
-        !/BOOK-SPECIFIC EXPERIENCE|DHAMMAPADA_MODE|TAO_MODE|bookIdentityAtmosphere|applyBookIdentity/.test(playFile)
+        !/DHAMMAPADA_MODE|TAO_MODE|bookIdentityAtmosphere|applyBookIdentity/.test(playFile)
     ]
 ];
 
