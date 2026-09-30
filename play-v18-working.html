@@ -4409,7 +4409,7 @@ function saveFullscreenButtonPosition() {
 
     try {
         localStorage.setItem(
-            "cican_reader_fullscreen_button:aligned-v1:" +
+            "cican_reader_fullscreen_button:bottom-v2:" +
             window.CICAN_ACTIVE_BOOK_ID,
             JSON.stringify({
                 left: readerFullscreen.style.left,
@@ -4422,9 +4422,28 @@ function saveFullscreenButtonPosition() {
 function restoreFullscreenButtonPosition() {
     if (!window.CICAN_ACTIVE_BOOK_ID) return;
 
+    /*
+        V18.11 bottom-control reset:
+        older V18 position keys could restore the button to
+        the previous top-row location. Ignore those legacy
+        coordinates so the new default is genuinely bottom-left.
+        A new v2 position is still preserved when the user drags.
+    */
+    readerFullscreen.style.left = "";
+    readerFullscreen.style.top = "";
+    readerFullscreen.style.right = "";
+    readerFullscreen.style.bottom = "";
+
+    if (window.matchMedia("(max-width: 480px)").matches) {
+        readerFullscreen.style.left = "10px";
+        readerFullscreen.style.right = "auto";
+        readerFullscreen.style.top = "auto";
+        readerFullscreen.style.bottom = "10px";
+    }
+
     try {
         const saved = localStorage.getItem(
-            "cican_reader_fullscreen_button:aligned-v1:" +
+            "cican_reader_fullscreen_button:bottom-v2:" +
             window.CICAN_ACTIVE_BOOK_ID
         );
 
@@ -5106,7 +5125,7 @@ function saveHUDPosition() {
     if (!readerHUD.style.left || !readerHUD.style.top) return;
     try {
         localStorage.setItem(
-            "cican_reader_hud:aligned-v1:" + window.CICAN_ACTIVE_BOOK_ID,
+            "cican_reader_hud:bottom-v2:" + window.CICAN_ACTIVE_BOOK_ID,
             JSON.stringify({
                 left: readerHUD.style.left,
                 top: readerHUD.style.top
@@ -5118,9 +5137,28 @@ function saveHUDPosition() {
 
 function restoreHUDPosition() {
     if (!window.CICAN_ACTIVE_BOOK_ID) return;
+
+    /*
+        V18.11 bottom-control reset:
+        older timer coordinates could override the new bottom-right
+        default. Ignore those legacy coordinates. New v2 positions
+        remain draggable and persistent.
+    */
+    readerHUD.style.left = "";
+    readerHUD.style.top = "";
+    readerHUD.style.right = "";
+    readerHUD.style.bottom = "";
+
+    if (window.matchMedia("(max-width: 480px)").matches) {
+        readerHUD.style.left = "auto";
+        readerHUD.style.right = "10px";
+        readerHUD.style.top = "auto";
+        readerHUD.style.bottom = "10px";
+    }
+
     try {
         const saved = localStorage.getItem(
-            "cican_reader_hud:" + window.CICAN_ACTIVE_BOOK_ID
+            "cican_reader_hud:bottom-v2:" + window.CICAN_ACTIVE_BOOK_ID
         );
         if (!saved) return;
         const position = JSON.parse(saved);
