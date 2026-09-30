@@ -27,4 +27,11 @@ window.BOOK_READ = {
         {text: "Read slowly enough to notice the argument, images, questions, and ideas moving through the text.", button: "CONTINUE"},
         {text: "READ", button: "CONTINUE"}
     ],
+  identity: {
+    mode: "classic",
+    atmosphereA: "rgba(255,215,170,0.08)",
+    atmosphereB: "rgba(255,255,255,0.025)",
+    glow: "rgba(255,215,170,0.13)",
+    texture: "sun"
+  },
 };
