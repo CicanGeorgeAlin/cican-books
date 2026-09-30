@@ -631,9 +631,9 @@ body {
 
     letter-spacing: -0.015em;
 
-    margin-bottom: 6px;
+    margin-bottom: 10px;
 
-    max-width: 72ch;
+    max-width: 68ch;
 
     flex-shrink: 0;
 
@@ -834,9 +834,9 @@ body {
     min-height: 0;
 
     padding:
-        14px
-        14px
-        128px;
+        18px
+        10px
+        150px;
 
     user-select: text;
 
@@ -920,30 +920,32 @@ body {
 
     justify-content: center;
 
-    gap: 4px;
+    gap: 3px;
 
-    width: auto;
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
 
-    min-width: 64px;
-
-    padding: 6px 8px;
+    padding: 8px;
 
     border:
         1px solid
-        rgba(255,255,255,0.16);
+        rgba(255,255,255,0.28);
 
-    border-radius: 9px;
+    border-radius: 50%;
 
     background:
-        rgba(0,0,0,0.76);
+        rgba(0,0,0,0.82);
 
     backdrop-filter: blur(6px);
 
     -webkit-backdrop-filter: blur(6px);
 
     box-shadow:
-        0 4px 14px
-        rgba(0,0,0,0.30);
+        0 0 18px
+        rgba(255,255,255,0.06),
+        0 5px 18px
+        rgba(0,0,0,0.38);
 
     pointer-events: auto;
 
@@ -971,11 +973,11 @@ body {
 
     color: white;
 
-    font-size: 13px;
+    font-size: 12px;
 
     line-height: 1;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 0.2px;
 
@@ -991,11 +993,11 @@ body {
 
     color: white;
 
-    font-size: 10px;
+    font-size: 9px;
 
     line-height: 1;
 
-    font-weight: 500;
+    font-weight: 600;
 
     opacity: 0.82;
 
@@ -1021,7 +1023,7 @@ body {
 
     align-self: center;
 
-    margin-top: 14px;
+    margin-top: 10px;
 
     flex-shrink: 0;
 }
@@ -1030,11 +1032,11 @@ body {
 
     flex: 1;
 
-    padding: 12px;
+    padding: 11px;
 
     border:
         1px solid
-        rgba(255,255,255,0.3);
+        rgba(255,255,255,0.24);
 
     border-radius: 20px;
 
@@ -1053,7 +1055,7 @@ body {
 
     color: white;
 
-    opacity: 0.55;
+    opacity: 0.42;
 
     text-align: center;
 
@@ -1109,7 +1111,7 @@ body {
 
     #reader {
 
-        padding: 8px;
+        padding: 0;
     }
 
     .reader-panel {
@@ -1145,7 +1147,7 @@ body {
         max-width: none;
 
         padding:
-            10px 4px 128px;
+            14px 4px 150px;
 
         letter-spacing: 0;
 
@@ -1153,11 +1155,9 @@ body {
 
     #readerHUD {
 
-        right: 10px;
+        right: 12px;
 
-        bottom: 10px;
-
-        padding: 6px 8px;
+        bottom: 12px;
     }
 
     .prologue-panel {
