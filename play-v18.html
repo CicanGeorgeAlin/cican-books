@@ -4046,6 +4046,107 @@ readerText.addEventListener(
     { passive: true }
 );
 
+
+/* =================================================
+   TEXT-ONLY FULLSCREEN DOUBLE-TAP EXIT
+================================================= */
+
+let readerFullscreenLastTapTime = 0;
+let readerFullscreenLastTapX = 0;
+let readerFullscreenLastTapY = 0;
+
+async function exitTextOnlyFullscreen() {
+
+    reader.classList.remove(
+        "text-only-fullscreen"
+    );
+
+    try {
+
+        if (
+            document.fullscreenElement === reader &&
+            document.exitFullscreen
+        ) {
+            await document.exitFullscreen();
+
+        } else if (
+            document.webkitFullscreenElement === reader &&
+            document.webkitExitFullscreen
+        ) {
+            document.webkitExitFullscreen();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "CICAN could not exit full screen:",
+            error
+        );
+    }
+
+    updateReaderFullscreenUI();
+}
+
+readerText.addEventListener(
+    "pointerup",
+    function(e) {
+
+        if (
+            !reader.classList.contains(
+                "text-only-fullscreen"
+            ) &&
+            !isReaderFullscreen()
+        ) {
+            return;
+        }
+
+        if (
+            e.pointerType === "mouse" &&
+            e.button !== 0
+        ) {
+            return;
+        }
+
+        const now = performance.now();
+
+        const distanceX =
+            e.clientX -
+            readerFullscreenLastTapX;
+
+        const distanceY =
+            e.clientY -
+            readerFullscreenLastTapY;
+
+        const distanceSquared =
+            distanceX * distanceX +
+            distanceY * distanceY;
+
+        const isDoubleTap =
+            now -
+                readerFullscreenLastTapTime <=
+                350 &&
+            distanceSquared <=
+                24 * 24;
+
+        if (isDoubleTap) {
+
+            e.preventDefault();
+
+            readerFullscreenLastTapTime = 0;
+
+            exitTextOnlyFullscreen();
+
+            return;
+        }
+
+        readerFullscreenLastTapTime = now;
+        readerFullscreenLastTapX = e.clientX;
+        readerFullscreenLastTapY = e.clientY;
+
+    },
+    { passive: false }
+);
+
 readerText.addEventListener("scroll", function() {
     /*
         IMPORTANT:
