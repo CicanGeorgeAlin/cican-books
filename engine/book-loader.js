@@ -176,7 +176,6 @@ export function validateBook(book) {
   );
 
   const hasReaderSource =
-    (book && String(book.text || "").trim()) ||
     (book && String(book.fifteenMinuteText || "").trim()) ||
     (book && String(book.fullText || "").trim()) ||
     (book && String(book.fullTextUrl || "").trim());
