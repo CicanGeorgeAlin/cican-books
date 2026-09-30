@@ -2310,84 +2310,87 @@ function pointerUp() {
    POINTER EVENTS
 ================================================= */
 
-document.addEventListener(
+function isGameUIElement(target) {
+    return !!(
+        target &&
+        typeof target.closest === "function" &&
+        (
+            target.closest("#reader") ||
+            target.closest("#prologue") ||
+            target.closest(".knowledge") ||
+            target.closest("#reset")
+        )
+    );
+}
+
+/*
+    Game input is attached at the window level so the CICAN
+    remains controllable even when the finger/cursor crosses
+    the document surface during a drag.
+*/
+window.addEventListener(
     "pointerdown",
     function(e) {
 
-        if (
-            e.target.closest("#reader") ||
-            e.target.closest("#prologue") ||
-            e.target.closest(".knowledge") ||
-            e.target.id === "reset"
-        ) {
-
+        if (isGameUIElement(e.target)) {
             return;
         }
-
 
         pointerDown(
             e.clientX,
             e.clientY
         );
+    },
+    {
+        passive: false
     }
 );
 
-
-document.addEventListener(
+window.addEventListener(
     "pointermove",
     function(e) {
 
-        if (
-            e.target.closest("#reader") ||
-            e.target.closest("#prologue") ||
-            e.target.closest(".knowledge") ||
-            e.target.id === "reset"
-        ) {
-
+        if (isGameUIElement(e.target)) {
             return;
         }
-
 
         pointerMove(
             e.clientX,
             e.clientY
         );
+    },
+    {
+        passive: false
     }
 );
 
-
-document.addEventListener(
+window.addEventListener(
     "pointerup",
     function(e) {
 
-        if (
-            e.target.closest("#reader") ||
-            e.target.closest("#prologue") ||
-            e.target.closest(".knowledge")
-        ) {
-
+        if (isGameUIElement(e.target)) {
             return;
         }
 
         pointerUp();
+    },
+    {
+        passive: false
     }
 );
 
-
-document.addEventListener(
+window.addEventListener(
     "pointercancel",
     function(e) {
 
-        if (
-            e.target.closest("#reader") ||
-            e.target.closest("#prologue") ||
-            e.target.closest(".knowledge")
-        ) {
-
+        if (isGameUIElement(e.target)) {
             return;
         }
 
         pointerUp();
+    },
+    {
+        passive: false
     }
 );
 
