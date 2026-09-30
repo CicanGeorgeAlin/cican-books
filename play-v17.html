@@ -3041,18 +3041,26 @@ async function openReader(modeOverride) {
         }
     }
 
-    if (
-        !isFullBook &&
-        !currentBook.fifteenMinuteText &&
-        currentBook.fullText &&
-        String(currentBook.fullText).trim()
-    ) {
-        currentBook.fifteenMinuteText =
-            selectFifteenMinuteText(
-                currentBook.fullText,
-                FIFTEEN_MINUTE_TARGET_WORDS,
-                currentBook.fifteenMinuteStartMarker
-            );
+    if (!isFullBook) {
+        /*
+            Recalibrate the 15-minute source to the current reader
+            speed. This keeps the 15-minute experience aligned with
+            the slower 135 WPM target instead of inheriting an older
+            150 WPM / 2700-word calibration.
+        */
+        const fifteenSource =
+            currentBook.fullText ||
+            currentBook.fifteenMinuteText ||
+            "";
+
+        if (String(fifteenSource).trim()) {
+            currentBook.fifteenMinuteText =
+                selectFifteenMinuteText(
+                    fifteenSource,
+                    FIFTEEN_MINUTE_TARGET_WORDS,
+                    currentBook.fifteenMinuteStartMarker
+                );
+        }
     }
 
     if (
@@ -3473,10 +3481,8 @@ function fluidAutoReader(now) {
 
 
     readerProgrammaticScroll = true;
-    readerProgrammaticScroll = true;
     readerText.scrollTop =
         readerScrollPosition;
-    readerProgrammaticScroll = false;
     readerProgrammaticScroll = false;
 
 
