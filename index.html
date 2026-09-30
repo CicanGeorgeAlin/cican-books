@@ -49,7 +49,10 @@ body{min-height:100vh;background:#000;color:#fff;font-family:Arial,Helvetica,san
 .play-button{display:inline-flex;align-items:center;justify-content:center;min-width:174px;min-height:58px;margin-top:38px;padding:0 30px;border:1px solid rgba(255,255,255,.70);border-radius:100px;background:#fff;color:#000;text-decoration:none;font-size:14px;font-weight:900;letter-spacing:.22em;transition:transform .2s ease,box-shadow .2s ease;-webkit-tap-highlight-color:transparent}
 .play-button:hover{transform:scale(1.045);box-shadow:0 0 18px rgba(255,255,255,.45),0 0 40px rgba(255,255,255,.20)}
 .play-button:active{transform:scale(.97)}
-.cican-link:focus-visible,.play-button:focus-visible{outline:2px solid #fff;outline-offset:5px}
+.support-link{display:inline-flex;align-items:center;justify-content:center;margin-top:18px;padding:8px 14px;border:1px solid rgba(255,255,255,.18);border-radius:100px;background:transparent;color:rgba(255,255,255,.62);text-decoration:none;font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;transition:color .2s ease,border-color .2s ease,transform .2s ease;-webkit-tap-highlight-color:transparent}
+.support-link:hover{color:#fff;border-color:rgba(255,255,255,.48);transform:translateY(-1px)}
+.support-link:active{transform:translateY(0)}
+.cican-link:focus-visible,.play-button:focus-visible,.support-link:focus-visible{outline:2px solid #fff;outline-offset:5px}
 .footer{width:100%;max-width:760px;margin-top:27px;padding-top:22px;border-top:1px solid rgba(255,255,255,.07);text-align:center}
 .footer-brand{color:rgba(255,255,255,.30);font-size:10px;font-weight:800;letter-spacing:.32em;text-transform:uppercase}
 @media(max-width:600px){
@@ -63,6 +66,7 @@ body{min-height:100vh;background:#000;color:#fff;font-family:Arial,Helvetica,san
 .subtitle{margin-top:22px;font-size:16px;letter-spacing:.16em}
 .minutes{margin-top:15px;font-size:10px;letter-spacing:.24em}
 .play-button{min-width:156px;min-height:54px;margin-top:32px}
+.support-link{margin-top:16px;font-size:9px;letter-spacing:.15em}
 }
 @media(max-width:360px){
 .hero{min-height:560px}
@@ -74,7 +78,7 @@ body{min-height:100vh;background:#000;color:#fff;font-family:Arial,Helvetica,san
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
 .background-track,.cican{animation:none}
-.play-button{transition:none}
+.play-button,.support-link{transition:none}
 }
 </style>
     <link rel="manifest" href="manifest.webmanifest">
@@ -95,6 +99,7 @@ html{scroll-behavior:auto}
 <div class="subtitle">PLAY THE BOOK</div>
 <div class="minutes">EXPERIENCE → UNDERSTAND → READ</div>
 <a class="play-button" href="library.html">PLAY</a>
+<a class="support-link" href="https://buymeacoffee.com/cican" target="_blank" rel="noopener noreferrer" aria-label="Support CICAN on Buy Me a Coffee">SUPPORT CICAN ☕</a>
 </section>
 <footer class="footer"><div class="footer-brand">CICAN</div></footer>
 </main>
