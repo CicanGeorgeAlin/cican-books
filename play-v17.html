@@ -44,6 +44,97 @@ body {
 }
 
 
+
+/* =================================================
+   BOOK IDENTITY ATMOSPHERE
+   One shared visual layer; book configs provide data.
+================================================= */
+
+#bookIdentityAtmosphere {
+
+    position: fixed;
+    inset: -18%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.82;
+    background:
+        radial-gradient(
+            circle at 50% 46%,
+            var(--identity-glow, rgba(255,255,255,0.08)),
+            transparent 42%
+        ),
+        radial-gradient(
+            circle at 18% 82%,
+            var(--identity-a, rgba(255,255,255,0.05)),
+            transparent 48%
+        ),
+        radial-gradient(
+            circle at 82% 18%,
+            var(--identity-b, rgba(255,255,255,0.025)),
+            transparent 46%
+        );
+    filter: blur(18px);
+    transform: translate3d(0,0,0) scale(1.04);
+    transition:
+        background 900ms ease,
+        opacity 900ms ease,
+        transform 1200ms ease;
+}
+
+#bookIdentityAtmosphere.texture-grid {
+    background-image:
+        linear-gradient(
+            90deg,
+            transparent 49.5%,
+            var(--identity-glow, rgba(255,255,255,0.08)) 50%,
+            transparent 50.5%
+        ),
+        linear-gradient(
+            0deg,
+            transparent 49.5%,
+            var(--identity-glow, rgba(255,255,255,0.08)) 50%,
+            transparent 50.5%
+        ),
+        radial-gradient(circle at 50% 50%, var(--identity-glow, rgba(255,255,255,0.08)), transparent 55%);
+    background-size: 110px 110px, 110px 110px, auto;
+    opacity: 0.24;
+    filter: blur(1px);
+}
+
+#bookIdentityAtmosphere.texture-ocean,
+#bookIdentityAtmosphere.texture-flow {
+    animation: identityDrift 18s ease-in-out infinite alternate;
+}
+
+#bookIdentityAtmosphere.texture-sun,
+#bookIdentityAtmosphere.texture-dust {
+    animation: identityRise 14s ease-in-out infinite alternate;
+}
+
+@keyframes identityDrift {
+    from { transform: translate3d(-1%, 0, 0) scale(1.04); }
+    to { transform: translate3d(1%, -1%, 0) scale(1.08); }
+}
+
+@keyframes identityRise {
+    from { transform: translate3d(0, 1%, 0) scale(1.04); }
+    to { transform: translate3d(0, -1%, 0) scale(1.08); }
+}
+
+body.reader-open #bookIdentityAtmosphere,
+body.prologue-open #bookIdentityAtmosphere {
+    opacity: 0.18;
+    filter: blur(24px);
+}
+
+@media(prefers-reduced-motion: reduce) {
+    #bookIdentityAtmosphere {
+        animation: none !important;
+        transition: none;
+    }
+}
+
+
 /* =================================================
    CICAN
 ================================================= */
@@ -844,15 +935,15 @@ body {
         "Times New Roman",
         serif;
 
-    font-size: clamp(17px, 1.9vw, 19px);
+    font-size: clamp(16px, 1.72vw, 18px);
 
     font-weight: 400;
 
-    line-height: 1.82;
+    line-height: 1.72;
 
-    letter-spacing: 0.008em;
+    letter-spacing: 0;
 
-    max-width: 68ch;
+    max-width: 62ch;
 
     width: 100%;
 
@@ -1166,16 +1257,16 @@ body {
 
     #readerText {
 
-        font-size: 17px;
+        font-size: 16px;
 
-        line-height: 1.78;
+        line-height: 1.72;
 
-        max-width: none;
+        max-width: 62ch;
 
         padding:
             10px 4px 128px;
 
-        letter-spacing: 0.006em;
+        letter-spacing: 0;
 
     }
 
@@ -1206,6 +1297,8 @@ body {
 
 
 <body>
+
+<div id="bookIdentityAtmosphere" aria-hidden="true"></div>
 
 
 <!-- =================================================
@@ -1362,6 +1455,47 @@ const selectedBookId =
 */
 
 window.BOOK_READ = null;
+
+const BOOK_IDENTITY_TEXTURES = Object.freeze({
+    radial: "radial",
+    flow: "flow",
+    columns: "columns",
+    stone: "stone",
+    leaves: "leaves",
+    sun: "sun",
+    storm: "storm",
+    moon: "moon",
+    dust: "dust",
+    grid: "grid",
+    ocean: "ocean",
+    lace: "lace"
+});
+
+function applyBookIdentity(book) {
+
+    const identity = book && book.identity;
+    const atmosphere = document.getElementById("bookIdentityAtmosphere");
+
+    if (!atmosphere) return;
+
+    const root = document.documentElement;
+
+    const a = identity && identity.atmosphereA;
+    const b = identity && identity.atmosphereB;
+    const glow = identity && identity.glow;
+    const texture = identity && BOOK_IDENTITY_TEXTURES[identity.texture]
+        ? BOOK_IDENTITY_TEXTURES[identity.texture]
+        : "radial";
+
+    root.style.setProperty("--identity-a", a || "rgba(255,255,255,0.05)");
+    root.style.setProperty("--identity-b", b || "rgba(255,255,255,0.025)");
+    root.style.setProperty("--identity-glow", glow || "rgba(255,255,255,0.08)");
+
+    atmosphere.className = "";
+    atmosphere.classList.add("texture-" + texture);
+
+    document.body.classList.remove("reader-open", "prologue-open");
+}
 window.CICAN_ACTIVE_BOOK = null;
 window.CICAN_ACTIVE_BOOK_ID = null;
 
@@ -1862,6 +1996,8 @@ let lastReaderSaveTime = 0;
 
 currentBook =
     BOOK_READ;
+
+applyBookIdentity(currentBook);
 
 if (currentBook && window.CICAN_ACTIVE_BOOK_ID) {
     try {
@@ -3541,6 +3677,7 @@ async function openReader(modeOverride) {
     reader.classList.add(
         "open"
     );
+    document.body.classList.add("reader-open");
 
     restoreHUDPosition();
 
@@ -4024,6 +4161,7 @@ function closeReader() {
     reader.classList.remove(
         "open"
     );
+    document.body.classList.remove("reader-open");
 
 
     readerPause.textContent =
