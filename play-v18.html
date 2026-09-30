@@ -1078,31 +1078,44 @@ body {
 
 #readerHUD {
 
+    /*
+       V18 TIMER FIX
+       Keep the timer as a compact, fixed-size floating control.
+       Explicit inline/block sizing prevents mobile flex/viewport
+       calculations from ever stretching the HUD into a full-height rail.
+    */
+
     position: absolute;
 
     right: 12px;
     bottom: 12px;
-
     left: auto;
     top: auto;
 
     z-index: 20;
 
     display: flex;
+    flex: 0 0 72px;
 
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
 
     gap: 3px;
 
-    width: 72px;
-    height: 72px;
-    min-width: 72px;
+    width: 72px !important;
+    min-width: 72px !important;
+    max-width: 72px !important;
+
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
 
     padding: 8px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
 
     border:
         1px solid
@@ -1118,7 +1131,6 @@ body {
         );
 
     backdrop-filter: blur(6px);
-
     -webkit-backdrop-filter: blur(6px);
 
     box-shadow:
@@ -1127,15 +1139,10 @@ body {
         0 5px 18px rgba(0,0,0,0.38);
 
     pointer-events: auto;
-
     touch-action: none;
-
     user-select: none;
-
     -webkit-user-select: none;
-
     cursor: grab;
-
     -webkit-tap-highlight-color: transparent;
 }
 
