@@ -3793,54 +3793,46 @@ readerText.addEventListener(
 );
 
 readerText.addEventListener("scroll", function() {
-    if (readerProgrammaticScroll) return;
-
+    /*
+        IMPORTANT:
+        Do not stop the auto-reader from the scroll event.
+        scrollTop writes from requestAnimationFrame can dispatch
+        their scroll event asynchronously, after the programmatic
+        flag has already been cleared. Pointer events are the
+        reliable signal for a human touch/mouse gesture.
+    */
     readerScrollPosition = readerText.scrollTop;
     updateReaderUI();
 
     const maxScroll =
-        Math.max(0, readerText.scrollHeight - readerText.clientHeight);
+        Math.max(
+            0,
+            readerText.scrollHeight - readerText.clientHeight
+        );
 
     const atEnd =
         maxScroll > 0 &&
         readerScrollPosition >= maxScroll - 2;
 
-    if (atEnd) {
+    if (atEnd && !readerComplete) {
         finishReader();
         return;
     }
 
-    /*
-        Manual scrolling is available in BOTH modes.
-        A user gesture temporarily takes control from the
-        auto-reader, then the fluid reader resumes naturally.
-    */
-    stopReaderAnimation();
-
-    if (readerManualResumeTimer !== null) {
-        clearTimeout(readerManualResumeTimer);
+    if (
+        !readerProgrammaticScroll &&
+        readerPaused
+    ) {
+        readerStatus.textContent = "PAUSED";
     }
-
-    readerStatus.textContent = "MANUAL SCROLL";
 
     const now = performance.now();
-    if (now - lastReaderSaveTime > 700) {
+    if (
+        !readerProgrammaticScroll &&
+        now - lastReaderSaveTime > 700
+    ) {
         saveReaderPosition(now);
     }
-
-    readerManualResumeTimer = setTimeout(function() {
-        readerManualResumeTimer = null;
-
-        if (
-            !reader.classList.contains("open") ||
-            readerComplete ||
-            readerPaused
-        ) {
-            return;
-        }
-
-        startReaderAnimation(0, readerOpenToken);
-    }, READER_MANUAL_RESUME_MS);
 });
 
 readerPause.addEventListener(
