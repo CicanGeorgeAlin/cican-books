@@ -506,6 +506,47 @@ body {
     display: flex;
 }
 
+/* =================================================
+   TEXT-ONLY FULLSCREEN READING MODE
+================================================= */
+
+#reader.text-only-fullscreen #readerLabel,
+#reader.text-only-fullscreen #readerClose,
+#reader.text-only-fullscreen #readerTitle,
+#reader.text-only-fullscreen .reader-modebar,
+#reader.text-only-fullscreen #readerModeNote,
+#reader.text-only-fullscreen #readerProgress,
+#reader.text-only-fullscreen #readerHUD,
+#reader.text-only-fullscreen .reader-controls,
+#reader.text-only-fullscreen #readerStatus,
+#reader.text-only-fullscreen #readerFullscreen {
+    display: none !important;
+}
+
+#reader.text-only-fullscreen .reader-panel {
+    padding:
+        max(24px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(24px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+}
+
+#reader.text-only-fullscreen #readerText {
+    width: 100%;
+    max-width: 72ch;
+    margin: 0 auto;
+    padding:
+        24px
+        8px
+        max(24px, env(safe-area-inset-bottom));
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.82;
+}
+
+#reader.text-only-fullscreen {
+    background: #000;
+}
+
 #reader.reader-viewport-fullscreen {
     position: fixed;
     inset: 0;
@@ -4061,6 +4102,11 @@ function updateReaderFullscreenUI() {
 
     const active = isReaderFullscreen();
 
+    reader.classList.toggle(
+        "text-only-fullscreen",
+        active
+    );
+
     button.textContent = active
         ? "EXIT FULL SCREEN"
         : "FULL SCREEN";
@@ -4068,8 +4114,8 @@ function updateReaderFullscreenUI() {
     button.setAttribute(
         "aria-label",
         active
-            ? "Exit full screen"
-            : "Enter full screen"
+            ? "Exit text-only full screen"
+            : "Enter text-only full screen"
     );
 }
 
@@ -4085,8 +4131,11 @@ async function toggleReaderFullscreen() {
             });
         } else if (reader.webkitRequestFullscreen) {
             reader.webkitRequestFullscreen();
+        } else {
+            reader.classList.add("text-only-fullscreen");
         }
     } catch (error) {
+        reader.classList.add("text-only-fullscreen");
         console.warn("CICAN full-screen request was not available.", error);
     }
 
@@ -4114,6 +4163,8 @@ if (document.webkitFullscreenElement !== undefined) {
 ================================================= */
 
 function closeReader() {
+
+    reader.classList.remove("text-only-fullscreen");
 
     if (document.fullscreenElement === reader) {
         try {
