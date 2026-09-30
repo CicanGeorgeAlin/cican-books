@@ -2968,6 +2968,15 @@ async function openReader(modeOverride) {
         false;
 
 
+    /*
+        Resolve the requested mode before calculating
+        the reader duration. The mode must exist before
+        any FULL BOOK timing logic runs.
+    */
+    const requestedMode = readingMode;
+    const requestedBook = currentBook;
+    const isFullBook = requestedMode === "full";
+
     readerSeconds =
         isFullBook && currentBook.fullText
             ? calculateFullReadingSeconds(currentBook.fullText)
@@ -2983,10 +2992,6 @@ async function openReader(modeOverride) {
         No chunks.
         No typing effect.
     */
-
-    const requestedMode = readingMode;
-    const requestedBook = currentBook;
-    const isFullBook = requestedMode === "full";
 
     /*
         15 MIN is source text only.
