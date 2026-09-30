@@ -1496,6 +1496,11 @@ let readerScrollPosition = 0;
 let readingMode = "15";
 let fullTextLoading = false;
 let readerOpenToken = 0;
+let readerProgrammaticScroll = false;
+let readerManualResumeTimer = null;
+
+const READER_FIRST_TEXT_HOLD_MS = 2500;
+const READER_MANUAL_RESUME_MS = 1800;
 
 const TARGET_READING_SECONDS =
     Math.max(
@@ -1506,7 +1511,12 @@ const TARGET_READING_SECONDS =
         ) * 60 || 900
     );
 
-const FULL_READING_WPM = 150;
+/* Reader speed: intentionally slower than the previous 150 WPM baseline. */
+const READER_WPM = 135;
+const FIFTEEN_MINUTE_TARGET_WORDS =
+    Math.round((READER_WPM * TARGET_READING_SECONDS) / 60);
+
+const FULL_READING_WPM = READER_WPM;
 
 let fullReaderSeconds = TARGET_READING_SECONDS;
 
@@ -2586,7 +2596,6 @@ function formatTime(
             Math.floor(seconds)
         );
 
-
     const hours = Math.floor(s / 3600);
     const minutes = Math.floor((s % 3600) / 60);
     const remainingSeconds = s % 60;
@@ -2596,6 +2605,21 @@ function formatTime(
         + String(minutes).padStart(2, "0")
         + ":"
         + String(remainingSeconds).padStart(2, "0");
+}
+
+function formatReaderTime(seconds) {
+    const s = Math.max(0, Math.floor(seconds));
+
+    if (readingMode === "15") {
+        const minutes = Math.floor(s / 60);
+        const remainingSeconds = s % 60;
+
+        return String(minutes).padStart(2, "0")
+            + ":"
+            + String(remainingSeconds).padStart(2, "0");
+    }
+
+    return formatTime(s);
 }
 
 
@@ -2684,7 +2708,7 @@ function updateReaderUI() {
     document.getElementById(
         "readerTimer"
     ).textContent =
-        formatTime(readerSeconds);
+        formatReaderTime(readerSeconds);
 
 
     document.getElementById(
@@ -3026,7 +3050,7 @@ async function openReader(modeOverride) {
         currentBook.fifteenMinuteText =
             selectFifteenMinuteText(
                 currentBook.fullText,
-                currentBook.targetWords,
+                FIFTEEN_MINUTE_TARGET_WORDS,
                 currentBook.fifteenMinuteStartMarker
             );
     }
@@ -3063,7 +3087,7 @@ async function openReader(modeOverride) {
                 currentBook.fifteenMinuteText =
                     selectFifteenMinuteText(
                         sourceText,
-                        currentBook.targetWords,
+                        FIFTEEN_MINUTE_TARGET_WORDS,
                         currentBook.fifteenMinuteStartMarker
                     );
             }
@@ -3263,7 +3287,7 @@ async function openReader(modeOverride) {
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = !fullAvailable;
     document.getElementById("readerTimer").textContent =
-        formatTime(readerSeconds);
+        formatReaderTime(readerSeconds);
 
     readerPause.style.display = "";
     readerPause.textContent = "PAUSE";
@@ -3301,19 +3325,39 @@ async function openReader(modeOverride) {
                     availableScroll
                 );
 
+            readerProgrammaticScroll = true;
             readerText.scrollTop =
                 readerScrollPosition;
-
-            readerLastTime =
-                performance.now();
+            readerProgrammaticScroll = false;
 
             updateReaderUI();
 
+            /*
+                Give the reader a short, stable view of the
+                first text before automatic movement begins.
+                Returning readers resume immediately.
+            */
+            const firstTextHold =
+                readerScrollPosition <= 0.5
+                    ? READER_FIRST_TEXT_HOLD_MS
+                    : 0;
 
-            readerAnimation =
-                requestAnimationFrame(
-                    fluidAutoReader
-                );
+            setTimeout(function() {
+                if (
+                    openToken !== readerOpenToken ||
+                    !reader.classList.contains("open") ||
+                    readerComplete ||
+                    readerPaused
+                ) {
+                    return;
+                }
+
+                readerLastTime = performance.now();
+                readerAnimation =
+                    requestAnimationFrame(
+                        fluidAutoReader
+                    );
+            }, firstTextHold);
         }
     );
 }
@@ -3428,8 +3472,12 @@ function fluidAutoReader(now) {
         );
 
 
+    readerProgrammaticScroll = true;
+    readerProgrammaticScroll = true;
     readerText.scrollTop =
         readerScrollPosition;
+    readerProgrammaticScroll = false;
+    readerProgrammaticScroll = false;
 
 
     /*
@@ -3589,7 +3637,7 @@ function finishReader() {
     document.getElementById(
         "readerTimer"
     ).textContent =
-        "00:00:00";
+        formatReaderTime(0);
 
 
     document.getElementById(
@@ -3630,16 +3678,56 @@ modeFull.addEventListener("pointerdown", async function(e) {
 });
 
 readerText.addEventListener("scroll", function() {
-    if (readingMode !== "full") return;
+    if (readerProgrammaticScroll) return;
+
     readerScrollPosition = readerText.scrollTop;
     updateReaderUI();
-    const maxScroll = Math.max(0, readerText.scrollHeight - readerText.clientHeight);
-    readerStatus.textContent =
-        maxScroll > 0 && readerScrollPosition >= maxScroll - 2
-            ? "COMPLETE"
-            : (readerPaused ? "PAUSED" : "AUTO-READING");
+
+    const maxScroll =
+        Math.max(0, readerText.scrollHeight - readerText.clientHeight);
+
+    const atEnd =
+        maxScroll > 0 &&
+        readerScrollPosition >= maxScroll - 2;
+
+    if (atEnd) {
+        finishReader();
+        return;
+    }
+
+    /*
+        Manual scrolling is available in BOTH modes.
+        A user gesture temporarily takes control from the
+        auto-reader, then the fluid reader resumes naturally.
+    */
+    stopReaderAnimation();
+
+    if (readerManualResumeTimer !== null) {
+        clearTimeout(readerManualResumeTimer);
+    }
+
+    readerStatus.textContent = "MANUAL SCROLL";
+
     const now = performance.now();
-    if (now - lastReaderSaveTime > 700) saveReaderPosition(now);
+    if (now - lastReaderSaveTime > 700) {
+        saveReaderPosition(now);
+    }
+
+    readerManualResumeTimer = setTimeout(function() {
+        readerManualResumeTimer = null;
+
+        if (
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            return;
+        }
+
+        readerLastTime = performance.now();
+        readerStatus.textContent = "AUTO-READING";
+        readerAnimation = requestAnimationFrame(fluidAutoReader);
+    }, READER_MANUAL_RESUME_MS);
 });
 
 readerPause.addEventListener(
@@ -3728,6 +3816,11 @@ readerPause.addEventListener(
 function closeReader() {
 
     readerOpenToken += 1;
+
+    if (readerManualResumeTimer !== null) {
+        clearTimeout(readerManualResumeTimer);
+        readerManualResumeTimer = null;
+    }
 
     saveReaderPosition(
         performance.now()
