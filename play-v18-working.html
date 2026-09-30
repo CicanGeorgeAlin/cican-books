@@ -1822,12 +1822,22 @@ const TARGET_READING_SECONDS =
         ) * 60 || 900
     );
 
-/* Reader speed: deliberate 100 WPM benchmark for comfortable reading. */
-const READER_WPM = 100;
-const FIFTEEN_MINUTE_TARGET_WORDS =
-    Math.round((READER_WPM * TARGET_READING_SECONDS) / 60);
+/*
+ * FULL BOOK uses a deliberate 100 WPM estimate for its duration.
+ * The 15 MIN source length comes from each book's calibrated
+ * targetWords value so the actual source selection matches the
+ * book's 15-minute content contract.
+ */
+const DEFAULT_getFifteenMinuteTargetWords(currentBook) = 2700;
+const FULL_READING_WPM = 100;
 
-const FULL_READING_WPM = READER_WPM;
+function getFifteenMinuteTargetWords(book) {
+    return Math.max(
+        1,
+        Number(book && book.targetWords) ||
+        DEFAULT_getFifteenMinuteTargetWords(currentBook)
+    );
+}
 
 let fullReaderSeconds = TARGET_READING_SECONDS;
 
@@ -3441,7 +3451,7 @@ async function openReader(modeOverride) {
             currentBook.fifteenMinuteText =
                 selectFifteenMinuteText(
                     fifteenSource,
-                    FIFTEEN_MINUTE_TARGET_WORDS,
+                    getFifteenMinuteTargetWords(currentBook),
                     currentBook.fifteenMinuteStartMarker
                 );
         }
@@ -3479,7 +3489,7 @@ async function openReader(modeOverride) {
                 currentBook.fifteenMinuteText =
                     selectFifteenMinuteText(
                         sourceText,
-                        FIFTEEN_MINUTE_TARGET_WORDS,
+                        getFifteenMinuteTargetWords(currentBook),
                         currentBook.fifteenMinuteStartMarker
                     );
             }
