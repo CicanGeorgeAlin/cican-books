@@ -519,11 +519,75 @@ body {
 #reader.text-only-fullscreen #readerHUD,
 #reader.text-only-fullscreen .reader-controls,
 #reader.text-only-fullscreen #readerStatus,
-#reader.text-only-fullscreen #readerFullscreen,
 #reader.text-only-fullscreen #readerFullscreen {
+    display: none !important;
+}
+
+#reader.text-only-fullscreen {
+    background: #000;
+}
+
+#reader.text-only-fullscreen .reader-panel {
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+}
+
+#reader.text-only-fullscreen #readerText {
+    width: 100%;
+    max-width: 72ch;
+    margin: 0 auto;
+    padding:
+        18px
+        6px
+        max(24px, env(safe-area-inset-bottom));
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.82;
+}
+
+#reader.reader-viewport-fullscreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 10000;
+}
+
+#reader:fullscreen,
+#reader:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #000;
+}
+
+#reader:fullscreen #readerLabel,
+#reader:fullscreen #readerClose,
+#reader:fullscreen #readerTitle,
+#reader:fullscreen .reader-modebar,
+#reader:fullscreen #readerModeNote,
+#reader:fullscreen #readerProgress,
+#reader:fullscreen #readerHUD,
+#reader:fullscreen .reader-controls,
+#reader:fullscreen #readerStatus,
+#reader:fullscreen #readerFullscreen,
+#reader:-webkit-full-screen #readerLabel,
+#reader:-webkit-full-screen #readerClose,
+#reader:-webkit-full-screen #readerTitle,
+#reader:-webkit-full-screen .reader-modebar,
+#reader:-webkit-full-screen #readerModeNote,
+#reader:-webkit-full-screen #readerProgress,
+#reader:-webkit-full-screen #readerHUD,
+#reader:-webkit-full-screen .reader-controls,
+#reader:-webkit-full-screen #readerStatus,
+#reader:-webkit-full-screen #readerFullscreen {
     position: absolute;
     left: 21.5%;
     top: clamp(64px, 9vh, 78px);
+
     z-index: 25;
 
     display: inline-flex;
@@ -553,9 +617,7 @@ body {
         sans-serif;
 
     font-size: 9px;
-
     font-weight: 800;
-
     letter-spacing: 1px;
 
     touch-action: none;
@@ -568,7 +630,6 @@ body {
     -webkit-tap-highlight-color: transparent;
 
     backdrop-filter: blur(6px);
-
     -webkit-backdrop-filter: blur(6px);
 
     box-shadow:
@@ -590,209 +651,6 @@ body {
 #readerFullscreen:active {
     transform: scale(0.98);
 }
-
-
-
-#reader.text-only-fullscreen .reader-panel {
-    padding:
-        max(24px, env(safe-area-inset-top))
-        max(18px, env(safe-area-inset-right))
-        max(24px, env(safe-area-inset-bottom))
-        max(18px, env(safe-area-inset-left));
-}
-
-#reader.text-only-fullscreen #readerText {
-    width: 100%;
-    max-width: 72ch;
-    margin: 0 auto;
-    padding:
-        24px
-        8px
-        max(24px, env(safe-area-inset-bottom));
-    font-size: clamp(18px, 2.4vw, 22px);
-    line-height: 1.82;
-}
-
-#reader.text-only-fullscreen {
-    background: #000;
-}
-
-#reader.reader-viewport-fullscreen {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    z-index: 10000;
-}
-
-
-#reader:fullscreen {
-
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-}
-
-/* Native fullscreen is the authoritative text-only state. */
-#reader:fullscreen #readerLabel,
-#reader:fullscreen #readerClose,
-#reader:fullscreen #readerTitle,
-#reader:fullscreen .reader-modebar,
-#reader:fullscreen #readerModeNote,
-#reader:fullscreen #readerProgress,
-#reader:fullscreen #readerHUD,
-#reader:fullscreen .reader-controls,
-#reader:fullscreen #readerStatus,
-#reader:fullscreen #readerFullscreen {
-    display: none !important;
-}
-
-#reader:fullscreen .reader-panel {
-    padding:
-        max(18px, env(safe-area-inset-top))
-        max(12px, env(safe-area-inset-right))
-        max(18px, env(safe-area-inset-bottom))
-        max(12px, env(safe-area-inset-left));
-}
-
-#reader:fullscreen #readerText {
-    width: 100%;
-    max-width: 72ch;
-    margin: 0 auto;
-    padding:
-        18px
-        6px
-        max(24px, env(safe-area-inset-bottom));
-    font-size: clamp(18px, 2.4vw, 22px);
-    line-height: 1.82;
-}
-
-
-
-#reader:-webkit-full-screen {
-
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-}
-
-#reader:-webkit-full-screen #readerLabel,
-#reader:-webkit-full-screen #readerClose,
-#reader:-webkit-full-screen #readerTitle,
-#reader:-webkit-full-screen .reader-modebar,
-#reader:-webkit-full-screen #readerModeNote,
-#reader:-webkit-full-screen #readerProgress,
-#reader:-webkit-full-screen #readerHUD,
-#reader:-webkit-full-screen .reader-controls,
-#reader:-webkit-full-screen #readerStatus,
-#reader:-webkit-full-screen #readerFullscreen {
-    display: none !important;
-}
-
-#reader:-webkit-full-screen .reader-panel {
-    padding:
-        max(18px, env(safe-area-inset-top))
-        max(12px, env(safe-area-inset-right))
-        max(18px, env(safe-area-inset-bottom))
-        max(12px, env(safe-area-inset-left));
-}
-
-#reader:-webkit-full-screen #readerText {
-    width: 100%;
-    max-width: 72ch;
-    margin: 0 auto;
-    padding:
-        18px
-        6px
-        max(24px, env(safe-area-inset-bottom));
-    font-size: clamp(18px, 2.4vw, 22px);
-    line-height: 1.82;
-}
-
-
-
-.reader-panel {
-
-    /*
-        V18 FULL-SCREEN READER
-
-        The reader now owns the entire viewport.
-        The text remains intentionally constrained for
-        comfortable line length; only the surrounding
-        container becomes full-screen.
-    */
-
-    width: 100vw;
-
-    height: 100vh;
-    height: 100dvh;
-
-    max-height: none;
-
-    background: #000;
-
-    border: none;
-
-    border-radius: 0;
-
-    padding:
-        max(18px, env(safe-area-inset-top))
-        max(18px, env(safe-area-inset-right))
-        max(18px, env(safe-area-inset-bottom))
-        max(18px, env(safe-area-inset-left));
-
-    box-shadow:
-        0 0 55px
-        rgba(255,255,255,0.10),
-        0 18px 60px
-        rgba(0,0,0,0.55);
-
-    display: flex;
-
-    flex-direction: column;
-
-    overflow: hidden;
-
-    position: relative;
-}
-
-.reader-header-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-}
-
-#readerFullscreen {
-    position: fixed;
-    left: 10px;
-    bottom: 10px;
-    z-index: 30;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 88px;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid rgba(255,255,255,0.24);
-    border-radius: 16px;
-    background: rgba(0,0,0,0.78);
-    color: rgba(255,255,255,0.72);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: .8px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-}
-#readerFullscreen:active { transform: scale(0.97); }
-#readerFullscreen.exit { color: white; border-color: rgba(255,255,255,0.42); }
 
 .reader-header {
 
@@ -1354,20 +1212,21 @@ body {
 }
 
 
-@media(max-width:480px) {
-
-    #readerFullscreen {
+@media(max-width:480px) {    #readerFullscreen {
         left: 18%;
         top: 64px;
         width: 118px;
         min-width: 118px;
+        bottom: auto;
     }
 
     #readerHUD {
         right: 12%;
         top: 64px;
         min-width: 82px;
+        bottom: auto;
     }
+
 #reader {
 
         padding: 0;
@@ -4647,7 +4506,10 @@ window.addEventListener(
 );
 
 function isReaderFullscreen() {
-    return document.fullscreenElement === reader;
+    return (
+        document.fullscreenElement === reader ||
+        document.webkitFullscreenElement === reader
+    );
 }
 
 function updateReaderFullscreenUI() {
@@ -4677,8 +4539,12 @@ async function toggleReaderFullscreen() {
     if (!reader.classList.contains("open")) return;
 
     try {
-        if (document.fullscreenElement) {
-            await document.exitFullscreen();
+        if (isReaderFullscreen()) {
+            if (document.exitFullscreen) {
+                await document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
         } else if (reader.requestFullscreen) {
             await reader.requestFullscreen({
                 navigationUI: "hide"
@@ -4713,9 +4579,13 @@ function closeReader() {
 
     reader.classList.remove("text-only-fullscreen");
 
-    if (document.fullscreenElement === reader) {
+    if (isReaderFullscreen()) {
         try {
-            document.exitFullscreen();
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
         } catch (_) {}
     }
 
@@ -5035,7 +4905,7 @@ function restoreHUDPosition() {
     if (!window.CICAN_ACTIVE_BOOK_ID) return;
     try {
         const saved = localStorage.getItem(
-            "cican_reader_hud:" + window.CICAN_ACTIVE_BOOK_ID
+            "cican_reader_hud:aligned-v1:" + window.CICAN_ACTIVE_BOOK_ID
         );
         if (!saved) return;
         const position = JSON.parse(saved);
