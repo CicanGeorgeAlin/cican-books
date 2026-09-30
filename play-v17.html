@@ -1507,7 +1507,7 @@ const TARGET_READING_SECONDS =
         ) * 60 || 900
     );
 
-const FULL_READING_WPM = 180;
+const FULL_READING_WPM = 160;
 
 function calculateFullReadingSeconds(text) {
     const words = String(text || "").trim().match(/\S+/g);
@@ -2583,23 +2583,15 @@ function formatTime(
         );
 
 
-    return String(
-        Math.floor(
-            s / 60
-        )
-    ).padStart(
-        2,
-        "0"
-    )
-    +
-    ":"
-    +
-    String(
-        s % 60
-    ).padStart(
-        2,
-        "0"
-    );
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const remainingSeconds = s % 60;
+
+    return String(hours).padStart(2, "0")
+        + ":"
+        + String(minutes).padStart(2, "0")
+        + ":"
+        + String(remainingSeconds).padStart(2, "0");
 }
 
 
