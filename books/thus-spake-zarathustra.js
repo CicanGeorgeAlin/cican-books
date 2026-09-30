@@ -6,7 +6,7 @@ window.BOOK_READ = {
     difficulty: "VERY_DENSE",
     targetMinutes: 15,
     targetWords: 3000,
-    fifteenMinuteStartMarker: "ZARATHUSTRA’S PROLOGUE.",
+    fifteenMinuteStartMarker: "ZARATHUSTRA'S PROLOGUE.",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     gameMode: "classic",
