@@ -519,6 +519,7 @@ body {
 #reader.text-only-fullscreen #readerHUD,
 #reader.text-only-fullscreen .reader-controls,
 #reader.text-only-fullscreen #readerStatus,
+#reader.text-only-fullscreen #readerFullscreen,
 #reader.text-only-fullscreen #readerFullscreenHint {
     display: none;
     position: fixed;
@@ -553,8 +554,76 @@ body {
 }
 
 #readerFullscreen {
-    display: none !important;
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    z-index: 25;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 92px;
+    height: 34px;
+    padding: 0 11px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.16);
+
+    border-radius: 9px;
+
+    background:
+        rgba(0,0,0,0.76);
+
+    color:
+        rgba(255,255,255,0.78);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    touch-action: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    cursor: grab;
+
+    -webkit-tap-highlight-color: transparent;
+
+    backdrop-filter: blur(6px);
+
+    -webkit-backdrop-filter: blur(6px);
+
+    box-shadow:
+        0 4px 14px
+        rgba(0,0,0,0.30);
 }
+
+#readerFullscreen.dragging {
+    cursor: grabbing;
+
+    border-color:
+        rgba(255,255,255,0.28);
+
+    box-shadow:
+        0 0 16px
+        rgba(255,255,255,0.10);
+}
+
+#readerFullscreen:active {
+    transform: scale(0.98);
+}
+
+
 
 #reader.text-only-fullscreen .reader-panel {
     padding:
@@ -3592,6 +3661,7 @@ async function openReader(modeOverride) {
     );
 
     restoreHUDPosition();
+    restoreFullscreenButtonPosition();
 
 
     /*
@@ -4306,6 +4376,312 @@ readerPause.addEventListener(
    READER FULL SCREEN
 ================================================= */
 
+let fullscreenButtonDragging = false;
+let fullscreenButtonPointerId = null;
+let fullscreenButtonMoved = false;
+let fullscreenButtonOffsetX = 0;
+let fullscreenButtonOffsetY = 0;
+
+function saveFullscreenButtonPosition() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return;
+    if (!readerFullscreen.style.left || !readerFullscreen.style.top) return;
+
+    try {
+        localStorage.setItem(
+            "cican_reader_fullscreen_button:" +
+            window.CICAN_ACTIVE_BOOK_ID,
+            JSON.stringify({
+                left: readerFullscreen.style.left,
+                top: readerFullscreen.style.top
+            })
+        );
+    } catch (_) {}
+}
+
+function restoreFullscreenButtonPosition() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return;
+
+    try {
+        const saved = localStorage.getItem(
+            "cican_reader_fullscreen_button:" +
+            window.CICAN_ACTIVE_BOOK_ID
+        );
+
+        if (!saved) return;
+
+        const position = JSON.parse(saved);
+
+        if (
+            position &&
+            position.left &&
+            position.top
+        ) {
+            readerFullscreen.style.left = position.left;
+            readerFullscreen.style.top = position.top;
+            readerFullscreen.style.right = "auto";
+            readerFullscreen.style.bottom = "auto";
+        }
+    } catch (_) {}
+}
+
+readerFullscreen.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        if (
+            e.pointerType === "mouse" &&
+            e.button !== 0
+        ) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        fullscreenButtonDragging = true;
+        fullscreenButtonMoved = false;
+        fullscreenButtonPointerId = e.pointerId;
+
+        const rect =
+            readerFullscreen.getBoundingClientRect();
+
+        fullscreenButtonOffsetX =
+            e.clientX - rect.left;
+
+        fullscreenButtonOffsetY =
+            e.clientY - rect.top;
+
+        readerFullscreen.classList.add(
+            "dragging"
+        );
+
+        try {
+            readerFullscreen.setPointerCapture(
+                e.pointerId
+            );
+        } catch (_) {}
+    },
+    { passive: false }
+);
+
+readerFullscreen.addEventListener(
+    "pointermove",
+    function(e) {
+
+        if (
+            !fullscreenButtonDragging ||
+            e.pointerId !== fullscreenButtonPointerId
+        ) {
+            return;
+        }
+
+        const dx =
+            e.clientX -
+            (
+                readerFullscreen.getBoundingClientRect().left +
+                fullscreenButtonOffsetX
+            );
+
+        const dy =
+            e.clientY -
+            (
+                readerFullscreen.getBoundingClientRect().top +
+                fullscreenButtonOffsetY
+            );
+
+        if (
+            Math.abs(dx) > 5 ||
+            Math.abs(dy) > 5
+        ) {
+            fullscreenButtonMoved = true;
+        }
+
+        if (!fullscreenButtonMoved) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const panelRect =
+            readerPanel.getBoundingClientRect();
+
+        const buttonRect =
+            readerFullscreen.getBoundingClientRect();
+
+        const padding = 6;
+
+        let left =
+            e.clientX -
+            panelRect.left -
+            fullscreenButtonOffsetX;
+
+        let top =
+            e.clientY -
+            panelRect.top -
+            fullscreenButtonOffsetY;
+
+        const maxLeft =
+            Math.max(
+                padding,
+                panelRect.width -
+                buttonRect.width -
+                padding
+            );
+
+        const maxTop =
+            Math.max(
+                padding,
+                panelRect.height -
+                buttonRect.height -
+                padding
+            );
+
+        left =
+            Math.max(
+                padding,
+                Math.min(
+                    maxLeft,
+                    left
+                )
+            );
+
+        top =
+            Math.max(
+                padding,
+                Math.min(
+                    maxTop,
+                    top
+                )
+            );
+
+        readerFullscreen.style.left =
+            left + "px";
+
+        readerFullscreen.style.top =
+            top + "px";
+
+        readerFullscreen.style.right =
+            "auto";
+
+        readerFullscreen.style.bottom =
+            "auto";
+    },
+    { passive: false }
+);
+
+function endFullscreenButtonDrag(e) {
+
+    if (!fullscreenButtonDragging) return;
+
+    if (
+        e &&
+        e.pointerId !== fullscreenButtonPointerId
+    ) {
+        return;
+    }
+
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    const shouldActivate =
+        !fullscreenButtonMoved;
+
+    fullscreenButtonDragging = false;
+
+    readerFullscreen.classList.remove(
+        "dragging"
+    );
+
+    if (fullscreenButtonMoved) {
+        saveFullscreenButtonPosition();
+    }
+
+    try {
+        readerFullscreen.releasePointerCapture(
+            fullscreenButtonPointerId
+        );
+    } catch (_) {}
+
+    fullscreenButtonPointerId = null;
+
+    if (shouldActivate) {
+        toggleReaderFullscreen();
+    }
+}
+
+readerFullscreen.addEventListener(
+    "pointerup",
+    endFullscreenButtonDrag,
+    { passive: false }
+);
+
+readerFullscreen.addEventListener(
+    "pointercancel",
+    endFullscreenButtonDrag,
+    { passive: false }
+);
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (
+            !readerFullscreen.style.left ||
+            !readerFullscreen.style.top
+        ) {
+            return;
+        }
+
+        const panelRect =
+            readerPanel.getBoundingClientRect();
+
+        const buttonRect =
+            readerFullscreen.getBoundingClientRect();
+
+        const padding = 6;
+
+        let left =
+            parseFloat(
+                readerFullscreen.style.left
+            );
+
+        let top =
+            parseFloat(
+                readerFullscreen.style.top
+            );
+
+        if (!Number.isFinite(left)) left = padding;
+        if (!Number.isFinite(top)) top = padding;
+
+        left = Math.max(
+            padding,
+            Math.min(
+                panelRect.width -
+                    buttonRect.width -
+                    padding,
+                left
+            )
+        );
+
+        top = Math.max(
+            padding,
+            Math.min(
+                panelRect.height -
+                    buttonRect.height -
+                    padding,
+                top
+            )
+        );
+
+        readerFullscreen.style.left =
+            left + "px";
+
+        readerFullscreen.style.top =
+            top + "px";
+    }
+);
+
 function isReaderFullscreen() {
     return document.fullscreenElement === reader;
 }
@@ -4355,15 +4731,6 @@ async function toggleReaderFullscreen() {
 
     updateReaderFullscreenUI();
 }
-
-document.getElementById("readerFullscreen").addEventListener(
-    "pointerdown",
-    function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleReaderFullscreen();
-    }
-);
 
 document.addEventListener("fullscreenchange", updateReaderFullscreenUI);
 
