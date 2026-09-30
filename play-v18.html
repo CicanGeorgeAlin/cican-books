@@ -584,72 +584,36 @@ body {
 #reader:-webkit-full-screen .reader-controls,
 #reader:-webkit-full-screen #readerStatus,
 #reader:-webkit-full-screen #readerFullscreen {
-    position: absolute;
-    left: 21.5%;
-    top: clamp(64px, 9vh, 78px);
-
-    z-index: 25;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: clamp(112px, 21.5vw, 148px);
-    min-width: 112px;
-    height: 34px;
-    padding: 0 11px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.16);
-
-    border-radius: 9px;
-
-    background:
-        rgba(0,0,0,0.76);
-
-    color:
-        rgba(255,255,255,0.78);
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1px;
-
-    touch-action: none;
-
-    user-select: none;
-    -webkit-user-select: none;
-
-    cursor: grab;
-
-    -webkit-tap-highlight-color: transparent;
-
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-
-    box-shadow:
-        0 4px 14px
-        rgba(0,0,0,0.30);
+    display: none !important;
 }
 
-#readerFullscreen.dragging {
-    cursor: grabbing;
-
-    border-color:
-        rgba(255,255,255,0.28);
-
-    box-shadow:
-        0 0 16px
-        rgba(255,255,255,0.10);
+#reader:fullscreen .reader-panel,
+#reader:-webkit-full-screen .reader-panel {
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
 }
 
-#readerFullscreen:active {
-    transform: scale(0.98);
+#reader:fullscreen #readerText,
+#reader:-webkit-full-screen #readerText {
+    width: 100%;
+    max-width: 72ch;
+    margin: 0 auto;
+    padding:
+        18px
+        6px
+        max(24px, env(safe-area-inset-bottom));
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.82;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#reader:fullscreen #readerText::-webkit-scrollbar,
+#reader:-webkit-full-screen #readerText::-webkit-scrollbar {
+    display: none;
 }
 
 .reader-header {
@@ -1419,7 +1383,8 @@ body {
 
             <button
                 id="readerPause"
-                class="reader-button">
+                class="reader-button"
+                type="button">
 
                 PAUSE
 
@@ -4248,6 +4213,15 @@ function restoreFullscreenButtonPosition() {
 }
 
 readerFullscreen.addEventListener(
+    "keydown",
+    function(e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        toggleReaderFullscreen();
+    }
+);
+
+readerFullscreen.addEventListener(
     "pointerdown",
     function(e) {
 
@@ -4532,6 +4506,11 @@ function updateReaderFullscreenUI() {
         active
             ? "Exit text-only full screen"
             : "Enter text-only full screen"
+    );
+
+    button.setAttribute(
+        "aria-pressed",
+        active ? "true" : "false"
     );
 }
 
@@ -5153,6 +5132,24 @@ document.addEventListener(
                 "open"
             )
         ) {
+
+            if (isReaderFullscreen()) {
+                try {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    }
+                } catch (_) {}
+
+                reader.classList.remove(
+                    "text-only-fullscreen"
+                );
+
+                updateReaderFullscreenUI();
+
+                return;
+            }
 
             closeReader();
 
