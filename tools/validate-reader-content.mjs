@@ -18,15 +18,6 @@ const books = [
 
 const failures = [];
 
-const IDENTITY_REQUIRED = [
-    "mode",
-    "atmosphereA",
-    "atmosphereB",
-    "glow",
-    "texture"
-];
-
-
 for (const id of books) {
     const file = path.join("books", id + ".js");
     const source = fs.readFileSync(file, "utf8");
@@ -37,11 +28,7 @@ for (const id of books) {
     const explicitlyPending =
         /\breaderSourceStatus\s*:\s*"SOURCE_PENDING"/.test(source);
 
-    const hasIdentity = /\bidentity\s*:\s*\{[\s\S]*?\}/.test(source);
-    if (!hasIdentity) failures.push(id + ": missing book identity profile");
-    for (const key of IDENTITY_REQUIRED) {
-        if (!new RegExp("\\b" + key + "\\s*:").test(source)) failures.push(id + ": identity missing " + key);
-    }
+    if (/\bidentity\s*:/.test(source)) failures.push(id + ": book-specific identity layer must be absent");
 
     const hasPrologue =
         /\bprologueScenes\s*:\s*\[/.test(source);
