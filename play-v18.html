@@ -506,6 +506,20 @@ body {
     display: flex;
 }
 
+#reader:fullscreen {
+
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+}
+
+#reader:-webkit-full-screen {
+
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+}
+
 .reader-panel {
 
     /*
@@ -549,6 +563,55 @@ body {
     overflow: hidden;
 
     position: relative;
+}
+
+.reader-header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+#readerFullscreen {
+
+    border:
+        1px solid
+        rgba(255,255,255,0.18);
+
+    background:
+        rgba(255,255,255,0.018);
+
+    color:
+        rgba(255,255,255,0.62);
+
+    border-radius: 16px;
+
+    padding: 7px 10px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    touch-action: manipulation;
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+#readerFullscreen:active {
+
+    transform: scale(0.97);
+
 }
 
 .reader-header {
@@ -773,7 +836,7 @@ body {
         Helvetica,
         sans-serif;
 
-    font-size: 9px;
+    font-size: 8px;
 
     font-weight: 700;
 
@@ -925,11 +988,11 @@ body {
 
     gap: 3px;
 
-    width: 72px;
-    height: 72px;
-    min-width: 72px;
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
 
-    padding: 8px;
+    padding: 6px;
 
     border:
         1px solid
@@ -979,7 +1042,7 @@ body {
 
     color: white;
 
-    font-size: 12px;
+    font-size: 10px;
 
     line-height: 1;
 
@@ -1109,6 +1172,7 @@ body {
     .readerHUD,
     .reader-button,
     #readerClose,
+    #readerFullscreen,
     #reset,
     #prologueButton {
         transition: none;
@@ -1149,6 +1213,15 @@ body {
         margin-bottom: 5px;
     }
 
+    #readerFullscreen {
+
+        padding: 7px 8px;
+
+        font-size: 8px;
+
+        letter-spacing: .8px;
+    }
+
     #readerText {
 
         font-size: 16px;
@@ -1166,9 +1239,9 @@ body {
 
     #readerHUD {
 
-        right: 10px;
+        right: 9px;
 
-        bottom: 10px;
+        bottom: 9px;
     }
 
     .prologue-panel {
@@ -1259,9 +1332,15 @@ body {
                 CICAN
             </div>
 
-            <button id="readerClose">
-                CLOSE
-            </button>
+            <div class="reader-header-actions">
+                <button id="readerFullscreen" type="button" aria-label="Enter full screen">
+                    FULL SCREEN
+                </button>
+
+                <button id="readerClose" type="button">
+                    CLOSE
+                </button>
+            </div>
 
         </div>
 
@@ -3974,10 +4053,78 @@ readerPause.addEventListener(
 
 
 /* =================================================
+   READER FULL SCREEN
+================================================= */
+
+function isReaderFullscreen() {
+    return document.fullscreenElement === reader;
+}
+
+function updateReaderFullscreenUI() {
+    const button = document.getElementById("readerFullscreen");
+    if (!button) return;
+
+    const active = isReaderFullscreen();
+
+    button.textContent = active
+        ? "EXIT FULL SCREEN"
+        : "FULL SCREEN";
+
+    button.setAttribute(
+        "aria-label",
+        active
+            ? "Exit full screen"
+            : "Enter full screen"
+    );
+}
+
+async function toggleReaderFullscreen() {
+    if (!reader.classList.contains("open")) return;
+
+    try {
+        if (document.fullscreenElement) {
+            await document.exitFullscreen();
+        } else if (reader.requestFullscreen) {
+            await reader.requestFullscreen({
+                navigationUI: "hide"
+            });
+        } else if (reader.webkitRequestFullscreen) {
+            reader.webkitRequestFullscreen();
+        }
+    } catch (error) {
+        console.warn("CICAN full-screen request was not available.", error);
+    }
+
+    updateReaderFullscreenUI();
+}
+
+document.getElementById("readerFullscreen").addEventListener(
+    "pointerdown",
+    function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleReaderFullscreen();
+    }
+);
+
+document.addEventListener("fullscreenchange", updateReaderFullscreenUI);
+
+if (document.webkitFullscreenElement !== undefined) {
+    document.addEventListener("webkitfullscreenchange", updateReaderFullscreenUI);
+}
+
+
+/* =================================================
    CLOSE READER
 ================================================= */
 
 function closeReader() {
+
+    if (document.fullscreenElement === reader) {
+        try {
+            document.exitFullscreen();
+        } catch (_) {}
+    }
 
     readerOpenToken += 1;
 
