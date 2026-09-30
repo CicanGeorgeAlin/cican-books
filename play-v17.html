@@ -1507,7 +1507,7 @@ const TARGET_READING_SECONDS =
         ) * 60 || 900
     );
 
-const FULL_READING_WPM = 160;
+const FULL_READING_WPM = 150;
 
 function calculateFullReadingSeconds(text) {
     const words = String(text || "").trim().match(/\S+/g);
@@ -2605,6 +2605,24 @@ function updateReaderModeUI() {
         only a complete source asset or complete source URL
         may enable FULL BOOK.
     */
+    /*
+        FULL BOOK timing is calculated only after the complete
+        source has actually been resolved. URL-backed books must
+        never inherit the 15-minute target while their full source
+        is loading.
+    */
+    if (
+        isFullBook &&
+        currentBook.fullText
+    ) {
+        fullReaderSeconds =
+            calculateFullReadingSeconds(
+                currentBook.fullText
+            );
+        readerSeconds =
+            fullReaderSeconds;
+    }
+
     const fullAvailable = !!(
         currentBook &&
         (
