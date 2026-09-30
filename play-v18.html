@@ -520,40 +520,7 @@ body {
 #reader.text-only-fullscreen .reader-controls,
 #reader.text-only-fullscreen #readerStatus,
 #reader.text-only-fullscreen #readerFullscreen,
-#reader.text-only-fullscreen #readerFullscreenHint {
-    display: none;
-    position: fixed;
-    left: 50%;
-    bottom: max(42px, calc(env(safe-area-inset-bottom) + 18px));
-    transform: translateX(-50%);
-    z-index: 40;
-    width: max-content;
-    max-width: calc(100vw - 28px);
-    padding: 7px 13px;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 14px;
-    background: rgba(0,0,0,0.76);
-    color: rgba(255,255,255,0.72);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    line-height: 1.2;
-    text-align: center;
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-select: none;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-}
-
-#reader.text-only-fullscreen #readerFullscreenHint,
-#reader:fullscreen #readerFullscreenHint,
-#reader:-webkit-full-screen #readerFullscreenHint {
-    display: block;
-}
-
-#readerFullscreen {
+#reader.text-only-fullscreen #readerFullscreen {
     position: absolute;
     left: 21.5%;
     top: clamp(64px, 9vh, 78px);
@@ -1401,20 +1368,7 @@ body {
         top: 64px;
         min-width: 82px;
     }
-
-
-
-    #readerFullscreenHint {
-        bottom: max(42px, calc(env(safe-area-inset-bottom) + 18px));
-        max-width: calc(100vw - 24px);
-        padding: 7px 11px;
-        font-size: 7px;
-        letter-spacing: .8px;
-    }
-
-
-
-    #reader {
+#reader {
 
         padding: 0;
     }
@@ -1589,12 +1543,7 @@ body {
 
 
         <button id="readerFullscreen" type="button" aria-label="Enter full screen">FULL SCREEN</button>
-
-        <div id="readerFullscreenHint" aria-live="polite">
-            DOUBLE-TAP TO RETURN TO READER
-        </div>
-
-        <div id="readerHUD">
+<div id="readerHUD">
 
             <div id="readerTimer">
                 15:00
