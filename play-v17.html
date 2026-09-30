@@ -3389,9 +3389,10 @@ function fluidAutoReader(now) {
     /*
         CONSTANT FLUID SPEED.
 
-        Complete scroll distance is
-        divided across this book's configured
-        15-minute target duration.
+        Complete scroll distance is divided
+        across this mode's actual reading duration:
+        the configured 15-minute target for 15 MIN,
+        or the full-source duration for FULL BOOK.
     */
 
     const activeReadingSeconds =
