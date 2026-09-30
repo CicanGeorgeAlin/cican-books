@@ -772,24 +772,42 @@ body {
     left: 10px;
     bottom: 10px;
     z-index: 30;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 88px;
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid rgba(255,255,255,0.24);
-    border-radius: 16px;
-    background: rgba(0,0,0,0.78);
-    color: rgba(255,255,255,0.72);
+
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    max-width: 58px;
+    min-height: 58px;
+    max-height: 58px;
+
+    padding: 6px;
+
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 50%;
+
+    background: rgba(0,0,0,0.82);
+    color: rgba(255,255,255,0.78);
+
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 800;
-    letter-spacing: .8px;
+    letter-spacing: .65px;
+    line-height: 1.1;
+    text-align: center;
+
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
+
+    box-shadow:
+        0 0 18px rgba(255,255,255,0.06),
+        0 5px 18px rgba(0,0,0,0.38);
 }
 #readerFullscreen:active { transform: scale(0.97); }
 #readerFullscreen.exit { color: white; border-color: rgba(255,255,255,0.42); }
