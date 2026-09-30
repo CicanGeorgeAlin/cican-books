@@ -73,4 +73,11 @@ prologueScenes: [
     sourceUrl:
         "https://www.gutenberg.org/ebooks/41445"
 
+  identity: {
+    mode: "classic",
+    atmosphereA: "rgba(190,205,225,0.08)",
+    atmosphereB: "rgba(255,255,255,0.025)",
+    glow: "rgba(190,205,225,0.13)",
+    texture: "storm"
+  },
 };
