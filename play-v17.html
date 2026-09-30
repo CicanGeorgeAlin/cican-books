@@ -4369,42 +4369,6 @@ selectedOne =
     );
 
 
-/*
-    Book-specific visuals are optional layers.
-    Failure here must never disable the canonical game.
-*/
-try {
-
-
-        createDhammapadaThoughts();
-
-        dhammaLastX =
-            selectedOne.x;
-
-        dhammaLastY =
-            selectedOne.y;
-    }
-
-
-        createTaoFlows();
-
-        taoLastX =
-            selectedOne.x;
-
-        taoLastY =
-            selectedOne.y;
-    }
-
-} catch (bookExperienceError) {
-
-    console.error(
-        "CICAN book-specific setup error:",
-        bookExperienceError
-    );
-
-}
-
-
 /* =================================================
    MAIN LOOP
 ================================================= */
