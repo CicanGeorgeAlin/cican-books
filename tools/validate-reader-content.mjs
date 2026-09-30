@@ -16,7 +16,9 @@ const books = [
     "pride-and-prejudice"
 ];
 
-const failures = [];\n\nconst IDENTITY_REQUIRED = [
+const failures = [];
+
+const IDENTITY_REQUIRED = [
     "mode",
     "atmosphereA",
     "atmosphereB",
@@ -35,7 +37,13 @@ for (const id of books) {
     const explicitlyPending =
         /\breaderSourceStatus\s*:\s*"SOURCE_PENDING"/.test(source);
 
-    const hasIdentity = /\\bidentity\\s*:\\s*\\{[\\s\\S]*?\\}/.test(source);\n    if (!hasIdentity) failures.push(id + ": missing book identity profile");\n    for (const key of IDENTITY_REQUIRED) {\n        if (!new RegExp("\\\\b" + key + "\\\\s*:").test(source)) failures.push(id + ": identity missing " + key);\n    }\n\n    const hasPrologue =
+    const hasIdentity = /\bidentity\s*:\s*\{[\s\S]*?\}/.test(source);
+    if (!hasIdentity) failures.push(id + ": missing book identity profile");
+    for (const key of IDENTITY_REQUIRED) {
+        if (!new RegExp("\\b" + key + "\\s*:").test(source)) failures.push(id + ": identity missing " + key);
+    }
+
+    const hasPrologue =
         /\bprologueScenes\s*:\s*\[/.test(source);
 
     if (!hasPrologue) {
