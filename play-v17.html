@@ -1369,8 +1369,7 @@ async function startCicanBook() {
         const hasReaderSource =
             BOOK_READ &&
             (
-                String(BOOK_READ.text || "").trim() ||
-                String(BOOK_READ.fifteenMinuteText || "").trim() ||
+                    String(BOOK_READ.fifteenMinuteText || "").trim() ||
                 String(BOOK_READ.fullText || "").trim() ||
                 String(BOOK_READ.fullTextUrl || "").trim()
             );
@@ -2605,24 +2604,6 @@ function updateReaderModeUI() {
         only a complete source asset or complete source URL
         may enable FULL BOOK.
     */
-    /*
-        FULL BOOK timing is calculated only after the complete
-        source has actually been resolved. URL-backed books must
-        never inherit the 15-minute target while their full source
-        is loading.
-    */
-    if (
-        isFullBook &&
-        currentBook.fullText
-    ) {
-        fullReaderSeconds =
-            calculateFullReadingSeconds(
-                currentBook.fullText
-            );
-        readerSeconds =
-            fullReaderSeconds;
-    }
-
     const fullAvailable = !!(
         currentBook &&
         (
@@ -3202,6 +3183,24 @@ async function openReader(modeOverride) {
         readerModeNote.textContent =
             "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
         return;
+    }
+
+    /*
+        FULL BOOK timing is finalized only after the complete
+        source has actually been resolved. This prevents a
+        URL-backed book from inheriting the 15-minute duration.
+    */
+    if (
+        isFullBook &&
+        currentBook.fullText
+    ) {
+        fullReaderSeconds =
+            calculateFullReadingSeconds(
+                currentBook.fullText
+            );
+
+        readerSeconds =
+            fullReaderSeconds;
     }
 
     if (
