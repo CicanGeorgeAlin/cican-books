@@ -348,12 +348,4 @@ Darcy, looking at the eldest Miss Bennet.
 "Oh! she is the most beautiful creature I ever beheld! But there is one
 of her sisters sitting down just behind you, who is very pretty, and I
 dare say, very agreeable. Do let me ask my partner to introduce you."`
-
-  identity: {
-    mode: "classic",
-    atmosphereA: "rgba(235,215,235,0.075)",
-    atmosphereB: "rgba(255,255,255,0.025)",
-    glow: "rgba(235,215,235,0.12)",
-    texture: "lace"
-  },
 };
