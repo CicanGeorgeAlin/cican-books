@@ -555,15 +555,16 @@ body {
 
 #readerFullscreen {
     position: absolute;
-    left: 12px;
-    bottom: 12px;
+    left: 21.5%;
+    top: clamp(64px, 9vh, 78px);
     z-index: 25;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    min-width: 92px;
+    width: clamp(112px, 21.5vw, 148px);
+    min-width: 112px;
     height: 34px;
     padding: 0 11px;
 
@@ -1182,8 +1183,8 @@ body {
 
     position: absolute;
 
-    right: 12px;
-    bottom: 12px;
+    right: 30%;
+    top: clamp(64px, 9vh, 78px);
 
     left: auto;
     top: auto;
@@ -1388,6 +1389,20 @@ body {
 
 
 @media(max-width:480px) {
+
+    #readerFullscreen {
+        left: 18%;
+        top: 64px;
+        width: 118px;
+        min-width: 118px;
+    }
+
+    #readerHUD {
+        right: 12%;
+        top: 64px;
+    }
+
+
 
     #readerFullscreenHint {
         bottom: max(42px, calc(env(safe-area-inset-bottom) + 18px));
@@ -4388,7 +4403,7 @@ function saveFullscreenButtonPosition() {
 
     try {
         localStorage.setItem(
-            "cican_reader_fullscreen_button:" +
+            "cican_reader_fullscreen_button:aligned-v1:" +
             window.CICAN_ACTIVE_BOOK_ID,
             JSON.stringify({
                 left: readerFullscreen.style.left,
@@ -5055,7 +5070,7 @@ function saveHUDPosition() {
     if (!readerHUD.style.left || !readerHUD.style.top) return;
     try {
         localStorage.setItem(
-            "cican_reader_hud:" + window.CICAN_ACTIVE_BOOK_ID,
+            "cican_reader_hud:aligned-v1:" + window.CICAN_ACTIVE_BOOK_ID,
             JSON.stringify({
                 left: readerHUD.style.left,
                 top: readerHUD.style.top
