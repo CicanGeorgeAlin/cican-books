@@ -1,0 +1,69 @@
+name: Acquire The Republic complete source
+
+on:
+  push:
+    paths:
+      - ".github/workflows/acquire-the-republic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download and normalize complete source
+        run: |
+          python - <<'PY'
+          from urllib.request import Request, urlopen
+          from pathlib import Path
+
+          url = "https://www.gutenberg.org/cache/epub/55201/pg55201.txt"
+          req = Request(url, headers={"User-Agent": "CICAN-PLAY-THE-BOOK source acquisition"})
+          raw = urlopen(req, timeout=60).read().decode("utf-8")
+
+          start_marker = "*** START OF THE PROJECT GUTENBERG EBOOK THE REPUBLIC ***"
+          end_marker = "*** END OF THE PROJECT GUTENBERG EBOOK THE REPUBLIC ***"
+
+          start = raw.find(start_marker)
+          end = raw.find(end_marker)
+          if start < 0 or end <= start:
+              raise SystemExit("Gutenberg wrapper markers not found")
+
+          body_start = raw.find("\n", start) + 1
+          body = raw[body_start:end].replace("\r\n", "\n").replace("\r", "\n").strip() + "\n"
+
+          words = len(body.split())
+          checks = {
+              "minimum_word_count": words > 100000,
+              "title": "THE REPUBLIC" in body,
+              "opening": "I went down yesterday to the Piraeus" in body,
+              "book_i": "BOOK I" in body or "BOOK I." in body,
+              "book_x": "BOOK X" in body or "BOOK X." in body,
+          }
+          if not all(checks.values()):
+              raise SystemExit("The Republic verification failed: " + repr(checks))
+
+          edge = (body[:2500] + "\n" + body[-2500:]).lower()
+          if "project gutenberg" in edge or "you may copy it" in edge:
+              raise SystemExit("Gutenberg transport wrapper leaked into stored source")
+
+          Path("fulltext/the-republic.txt").write_text(body, encoding="utf-8")
+          print({"words": words, "characters": len(body), "checks": checks})
+          PY
+
+      - name: Commit verified source asset
+        run: |
+          git config user.name "CICAN acquisition bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fulltext/the-republic.txt
+          if git diff --cached --quiet; then
+            echo "The Republic source asset is already current."
+          else
+            git commit -m "Acquire verified The Republic complete source"
+            git push
+          fi
