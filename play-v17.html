@@ -1484,6 +1484,7 @@ let readObjects = [];
 let currentBook = null;
 
 let readerAnimation = null;
+let readerStartTimer = null;
 
 let readerPaused = false;
 
@@ -2737,6 +2738,11 @@ function updateReaderUI() {
 
 function stopReaderAnimation() {
 
+    if (readerStartTimer !== null) {
+        clearTimeout(readerStartTimer);
+        readerStartTimer = null;
+    }
+
     if (
         readerAnimation !== null
     ) {
@@ -2747,6 +2753,47 @@ function stopReaderAnimation() {
 
         readerAnimation =
             null;
+    }
+}
+
+function startReaderAnimation(delayMs = 0, openToken = readerOpenToken) {
+
+    if (readerStartTimer !== null) {
+        clearTimeout(readerStartTimer);
+        readerStartTimer = null;
+    }
+
+    const start = function() {
+        readerStartTimer = null;
+
+        if (
+            openToken !== readerOpenToken ||
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            return;
+        }
+
+        const maxScroll = Math.max(
+            0,
+            readerText.scrollHeight - readerText.clientHeight
+        );
+
+        if (maxScroll <= 0) {
+            finishReader();
+            return;
+        }
+
+        readerStatus.textContent = "AUTO-READING";
+        readerLastTime = performance.now();
+        readerAnimation = requestAnimationFrame(fluidAutoReader);
+    };
+
+    if (delayMs > 0) {
+        readerStartTimer = setTimeout(start, delayMs);
+    } else {
+        start();
     }
 }
 
@@ -2964,6 +3011,11 @@ async function openReader(modeOverride) {
     stopReaderAnimation();
 
     const openToken = ++readerOpenToken;
+
+    // A newly opened reader always begins at the first character.
+    readerScrollPosition = 0;
+    readerComplete = false;
+    readerPaused = false;
 
     if (modeOverride === "15" || modeOverride === "full") {
         readingMode = modeOverride;
@@ -3265,21 +3317,10 @@ async function openReader(modeOverride) {
 
     renderReaderText(activeReaderSource);
 
-    readerScrollPosition = loadReaderPosition();
+    // Do not restore an old reading position: every opening starts at 0.
+    readerScrollPosition = 0;
 
-    const savedProgress =
-        Math.max(
-            0,
-            Math.min(
-                1,
-                readerScrollPosition /
-                Math.max(
-                    1,
-                    readerText.scrollHeight -
-                    readerText.clientHeight
-                )
-            )
-        );
+    const savedProgress = 0;
 
     readerModeNote.textContent =
         isFullBook
@@ -3346,27 +3387,19 @@ async function openReader(modeOverride) {
                 first text before automatic movement begins.
                 Returning readers resume immediately.
             */
-            const firstTextHold =
-                readerScrollPosition <= 0.5
-                    ? READER_FIRST_TEXT_HOLD_MS
-                    : 0;
+            // Force the beginning again after layout has settled.
+            readerProgrammaticScroll = true;
+            readerScrollPosition = 0;
+            readerText.scrollTop = 0;
+            readerProgrammaticScroll = false;
+            updateReaderUI();
 
-            setTimeout(function() {
-                if (
-                    openToken !== readerOpenToken ||
-                    !reader.classList.contains("open") ||
-                    readerComplete ||
-                    readerPaused
-                ) {
-                    return;
-                }
-
-                readerLastTime = performance.now();
-                readerAnimation =
-                    requestAnimationFrame(
-                        fluidAutoReader
-                    );
-            }, firstTextHold);
+            // Hold the first text briefly, then start one controlled
+            // auto-reader loop.
+            startReaderAnimation(
+                READER_FIRST_TEXT_HOLD_MS,
+                openToken
+            );
         }
     );
 }
@@ -3734,10 +3767,7 @@ readerText.addEventListener(
                 return;
             }
 
-            readerLastTime = performance.now();
-            readerStatus.textContent = "AUTO-READING";
-            readerAnimation =
-                requestAnimationFrame(fluidAutoReader);
+            startReaderAnimation(0, readerOpenToken);
         }, READER_MANUAL_RESUME_MS);
     },
     { passive: true }
@@ -3809,9 +3839,7 @@ readerText.addEventListener("scroll", function() {
             return;
         }
 
-        readerLastTime = performance.now();
-        readerStatus.textContent = "AUTO-READING";
-        readerAnimation = requestAnimationFrame(fluidAutoReader);
+        startReaderAnimation(0, readerOpenToken);
     }, READER_MANUAL_RESUME_MS);
 });
 
@@ -3901,6 +3929,8 @@ readerPause.addEventListener(
 function closeReader() {
 
     readerOpenToken += 1;
+
+    stopReaderAnimation();
 
     if (readerManualResumeTimer !== null) {
         clearTimeout(readerManualResumeTimer);
