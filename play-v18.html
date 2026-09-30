@@ -506,6 +506,16 @@ body {
     display: flex;
 }
 
+#reader.reader-viewport-fullscreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 10000;
+}
+
+
 #reader:fullscreen {
 
     width: 100vw;
@@ -576,43 +586,31 @@ body {
 }
 
 #readerFullscreen {
-
-    border:
-        1px solid
-        rgba(255,255,255,0.18);
-
-    background:
-        rgba(255,255,255,0.018);
-
-    color:
-        rgba(255,255,255,0.62);
-
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    z-index: 30;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 88px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid rgba(255,255,255,0.24);
     border-radius: 16px;
-
-    padding: 7px 10px;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    font-size: 9px;
-
+    background: rgba(0,0,0,0.78);
+    color: rgba(255,255,255,0.72);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
     font-weight: 800;
-
-    letter-spacing: 1px;
-
+    letter-spacing: .8px;
     touch-action: manipulation;
-
     -webkit-tap-highlight-color: transparent;
-
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
-
-#readerFullscreen:active {
-
-    transform: scale(0.97);
-
-}
+#readerFullscreen:active { transform: scale(0.97); }
+#readerFullscreen.exit { color: white; border-color: rgba(255,255,255,0.42); }
 
 .reader-header {
 
@@ -988,9 +986,9 @@ body {
 
     gap: 3px;
 
-    width: 58px;
-    height: 58px;
-    min-width: 58px;
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
 
     padding: 6px;
 
@@ -1332,12 +1330,7 @@ body {
                 CICAN
             </div>
 
-            <div class="reader-header-actions">
-                <button id="readerFullscreen" type="button" aria-label="Enter full screen">
-                    FULL SCREEN
-                </button>
-
-                <button id="readerClose" type="button">
+            <div class="reader-header-actions">                <button id="readerClose" type="button">
                     CLOSE
                 </button>
             </div>
@@ -1360,6 +1353,8 @@ body {
 
         <div id="readerText"></div>
 
+
+        <button id="readerFullscreen" type="button" aria-label="Enter full screen">FULL SCREEN</button>
 
         <div id="readerHUD">
 
