@@ -519,47 +519,9 @@ body {
 #reader.text-only-fullscreen #readerHUD,
 #reader.text-only-fullscreen .reader-controls,
 #reader.text-only-fullscreen #readerStatus,
-#reader.text-only-fullscreen #readerFullscreen,
 #reader.text-only-fullscreen #readerFullscreen {
-
-    position: fixed;
-    left: 10px;
-    bottom: 10px;
-    z-index: 30;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 88px;
-    height: 32px;
-
-    padding: 7px 10px;
-
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 16px;
-
-    background: rgba(255,255,255,0.018);
-    color: rgba(255,255,255,0.62);
-
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    line-height: 1.1;
-    text-align: center;
-
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-
-#readerFullscreen:active {
-    transform: scale(0.98);
+    display: none !important;
 }
-
-
 
 #reader.text-only-fullscreen .reader-panel {
     padding:
@@ -736,6 +698,7 @@ body {
 }
 
 #readerFullscreen {
+
     position: fixed;
     left: 10px;
     bottom: 10px;
@@ -745,25 +708,21 @@ body {
     align-items: center;
     justify-content: center;
 
-    width: 58px;
-    height: 58px;
-    min-width: 58px;
-    max-width: 58px;
-    min-height: 58px;
-    max-height: 58px;
+    min-width: 88px;
+    height: 32px;
 
-    padding: 6px;
+    padding: 7px 10px;
 
-    border: 1px solid rgba(255,255,255,0.28);
-    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
 
-    background: rgba(0,0,0,0.82);
-    color: rgba(255,255,255,0.78);
+    background: rgba(255,255,255,0.018);
+    color: rgba(255,255,255,0.62);
 
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 7px;
+    font-size: 9px;
     font-weight: 800;
-    letter-spacing: .65px;
+    letter-spacing: 1px;
     line-height: 1.1;
     text-align: center;
 
@@ -773,10 +732,6 @@ body {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
 
-    box-shadow:
-        0 0 18px rgba(255,255,255,0.06),
-        0 5px 18px rgba(0,0,0,0.38);
-}
 #readerFullscreen:active { transform: scale(0.97); }
 #readerFullscreen.exit { color: white; border-color: rgba(255,255,255,0.42); }
 
