@@ -70,13 +70,4 @@ window.BOOK_READ = {
         }
 
     ],
-
-
-  identity: {
-    mode: "classic",
-    atmosphereA: "rgba(245,220,170,0.08)",
-    atmosphereB: "rgba(255,255,255,0.025)",
-    glow: "rgba(245,220,170,0.13)",
-    texture: "dust"
-  },
 };
