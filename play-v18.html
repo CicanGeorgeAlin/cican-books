@@ -1,0 +1,4817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<meta name="description"
+content="CICAN — PLAY THE BOOK. Experience, understand, and read books.">
+
+<meta name="author"
+content="Cican George Alin">
+
+<meta name="theme-color"
+content="#000000">
+
+<title>CICAN — PLAY THE BOOK V17</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    touch-action: none;
+}
+
+body {
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+
+/* =================================================
+   CICAN
+================================================= */
+
+.one {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    background: white;
+
+    transform:
+        translate(-50%, -50%);
+
+    pointer-events: none;
+
+    box-shadow:
+        0 0 10px white,
+        0 0 25px rgba(255,255,255,0.8),
+        0 0 45px rgba(255,255,255,0.4);
+}
+
+
+/* =================================================
+   CICAN FACE
+================================================= */
+
+.cican-face {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 42%;
+    height: 42%;
+
+    transform:
+        translate(-50%, -50%);
+
+    pointer-events: none;
+}
+
+.eye {
+
+    position: absolute;
+
+    width: 22%;
+    height: 34%;
+
+    top: 28%;
+
+    background: #000;
+
+    border-radius: 50%;
+}
+
+.eye.left {
+    left: 18%;
+}
+
+.eye.right {
+    right: 18%;
+}
+
+
+/* =================================================
+   MERGED CICAN
+================================================= */
+
+.memory-one {
+
+    box-shadow:
+        0 0 12px white,
+        0 0 30px white,
+        0 0 55px rgba(255,255,255,0.9);
+}
+
+
+.trail {
+
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    transform:
+        translate(-50%, -50%);
+
+    pointer-events: none;
+
+    opacity: 0.8;
+
+    box-shadow:
+        0 0 6px white;
+
+    animation:
+        fadeTrail 1.5s linear forwards;
+}
+
+
+@keyframes fadeTrail {
+
+    from {
+        opacity: 0.8;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+/* =================================================
+   HUD
+================================================= */
+
+#hud {
+
+    position: fixed;
+
+    top: 18px;
+    left: 18px;
+
+    z-index: 1000;
+
+    color: white;
+
+    pointer-events: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#brand {
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+#subtitle {
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    opacity: 0.6;
+}
+
+
+/* =================================================
+   RESET
+================================================= */
+
+#reset {
+
+    position: fixed;
+
+    top: 20px;
+    right: 20px;
+
+    z-index: 1000;
+
+    padding: 10px 16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.35);
+
+    border-radius: 20px;
+
+    background:
+        rgba(0,0,0,0.6);
+
+    color: white;
+
+    font-size: 14px;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: manipulation;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =================================================
+   READ OBJECT
+================================================= */
+
+.knowledge {
+
+    position: absolute;
+
+    width: 68px;
+    height: 68px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color: black;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 500;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    box-shadow:
+        0 0 14px white,
+        0 0 30px white,
+        0 0 55px rgba(255,255,255,0.8);
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: none;
+
+    cursor: grab;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+.knowledge.dragging {
+
+    cursor: grabbing;
+
+    box-shadow:
+        0 0 18px white,
+        0 0 38px white,
+        0 0 70px rgba(255,255,255,0.95);
+}
+
+
+/* =================================================
+   PROLOGUE
+================================================= */
+
+#prologue {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 4000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,255,255,0.08),
+            rgba(0,0,0,0.98) 55%
+        );
+
+    color: white;
+
+    touch-action: auto;
+}
+
+#prologue.open {
+
+    display: flex;
+}
+
+.prologue-panel {
+
+    width: min(92vw, 650px);
+
+    min-height: min(70vh, 600px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 30px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.2);
+
+    border-radius: 28px;
+
+    background:
+        rgba(0,0,0,0.72);
+
+    box-shadow:
+        0 0 50px
+        rgba(255,255,255,0.08);
+}
+
+.prologue-cican {
+
+    width: 82px;
+    height: 82px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 0 15px white,
+        0 0 40px rgba(255,255,255,0.8),
+        0 0 80px rgba(255,255,255,0.3);
+
+    position: relative;
+}
+
+.prologue-cican .eye {
+
+    width: 12px;
+    height: 22px;
+
+    top: 29px;
+}
+
+.prologue-cican .eye.left {
+    left: 22px;
+}
+
+.prologue-cican .eye.right {
+    right: 22px;
+}
+
+#prologueLabel {
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    opacity: 0.55;
+
+    margin-bottom: 12px;
+}
+
+#prologueTitle {
+
+    font-size: clamp(26px, 7vw, 46px);
+
+    line-height: 1.1;
+
+    margin-bottom: 25px;
+}
+
+#prologueText {
+
+    max-width: 520px;
+
+    min-height: 100px;
+
+    font-size: 18px;
+
+    line-height: 1.7;
+
+    opacity: 0.82;
+}
+
+#prologueStep {
+
+    margin-top: 25px;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    opacity: 0.4;
+}
+
+#prologueButton {
+
+    margin-top: 30px;
+
+    padding: 13px 24px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.4);
+
+    border-radius: 24px;
+
+    background: white;
+
+    color: black;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    touch-action: manipulation;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =================================================
+   READER
+================================================= */
+
+#reader {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    display: none;
+
+    align-items: stretch;
+    justify-content: stretch;
+
+    padding: 0;
+
+    background: #000;
+
+    touch-action: auto;
+}
+
+#reader.open {
+
+    display: flex;
+}
+
+.reader-panel {
+
+    /*
+        V18 FULL-SCREEN READER
+
+        The reader now owns the entire viewport.
+        The text remains intentionally constrained for
+        comfortable line length; only the surrounding
+        container becomes full-screen.
+    */
+
+    width: 100vw;
+
+    height: 100vh;
+
+    max-height: none;
+
+    background: #000;
+
+    border: none;
+
+    border-radius: 0;
+
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+
+    box-shadow:
+        0 0 55px
+        rgba(255,255,255,0.10),
+        0 18px 60px
+        rgba(0,0,0,0.55);
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    position: relative;
+}
+
+.reader-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 6px;
+
+    flex-shrink: 0;
+}
+
+#readerLabel {
+
+    color: rgba(255,255,255,0.62);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+#readerClose {
+
+    border:
+        1px solid
+        rgba(255,255,255,0.22);
+
+    background:
+        rgba(255,255,255,0.025);
+
+    color: rgba(255,255,255,0.82);
+
+    border-radius: 18px;
+
+    padding: 8px 14px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    touch-action: manipulation;
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+#readerTitle {
+
+    color: #fff;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: clamp(23px, 4vw, 30px);
+
+    font-weight: 700;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.015em;
+
+    margin-bottom: 6px;
+
+    max-width: 72ch;
+
+    flex-shrink: 0;
+
+    text-wrap: balance;
+}
+
+
+/* =================================================
+   READER PROGRESS RAIL
+================================================= */
+
+#readerProgress {
+
+    width: 100%;
+    height: 2px;
+    margin: 0 auto 10px;
+
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+#readerProgressFill {
+
+    width: 0%;
+    height: 100%;
+
+    background: rgba(255,255,255,0.82);
+    border-radius: inherit;
+
+    transition: width 120ms linear;
+}
+
+
+/* =================================================
+   READER TEXT
+================================================= */
+
+.reader-modebar {
+
+    display: flex;
+
+    gap: 8px;
+
+    width: min(100%, 390px);
+
+    align-self: center;
+
+    margin: 10px auto 6px;
+
+}
+
+.reader-mode {
+
+    flex: 1;
+
+    min-height: 38px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.14);
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,0.015);
+
+    color:
+        rgba(255,255,255,0.48);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        color 160ms ease,
+        border-color 160ms ease,
+        transform 160ms ease;
+
+    touch-action: manipulation;
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.reader-mode:active {
+
+    transform: scale(0.985);
+
+}
+
+.reader-mode.active {
+
+    background: #fff;
+
+    color: #000;
+
+    border-color: #fff;
+
+}
+
+.reader-mode:disabled {
+
+    opacity: .25;
+
+    cursor: not-allowed;
+
+}
+
+#readerModeNote {
+
+    min-height: 15px;
+
+    margin-bottom: 8px;
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,0.30);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+
+}
+
+.reader-block {
+    margin: 0 0 1.05em;
+}
+.reader-block:last-child {
+    margin-bottom: 0;
+}
+.reader-heading {
+    margin-top: 1.5em;
+    margin-bottom: .9em;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .72em;
+    font-weight: 800;
+    letter-spacing: .12em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+.reader-block:first-child {
+    margin-top: 0;
+}
+#readerText {
+
+    color:
+        rgba(255,255,255,0.94);
+
+    font-family:
+        "Iowan Old Style",
+        "Palatino Linotype",
+        "Book Antiqua",
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(16px, 1.72vw, 18px);
+
+    font-weight: 400;
+
+    line-height: 1.72;
+
+    letter-spacing: 0;
+
+    max-width: 68ch;
+
+    width: 100%;
+
+    margin: 0 auto;
+
+    overflow-y: auto;
+
+    flex: 1;
+
+    min-height: 0;
+
+    padding:
+        14px
+        14px
+        128px;
+
+    user-select: text;
+
+    -webkit-user-select: text;
+
+    touch-action: pan-y !important;
+    overscroll-behavior-y: contain;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: break-word;
+
+    text-wrap: pretty;
+
+    font-kerning: normal;
+
+    text-rendering: optimizeLegibility;
+
+    overscroll-behavior: contain;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255,255,255,0.25)
+        transparent;
+}
+
+#readerText::-webkit-scrollbar {
+
+    width: 5px;
+
+}
+
+#readerText::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+#readerText::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255,255,255,0.24);
+
+    border-radius: 10px;
+
+}
+
+#readerText::selection {
+
+    background: rgba(255,255,255,0.92);
+
+    color: #000;
+
+}
+
+
+/* =================================================
+   SMALL MOVABLE READER TIMER
+================================================= */
+
+#readerHUD {
+
+    position: absolute;
+
+    right: 12px;
+    bottom: 12px;
+
+    left: auto;
+    top: auto;
+
+    z-index: 20;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    width: auto;
+
+    min-width: 64px;
+
+    padding: 6px 8px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.16);
+
+    border-radius: 9px;
+
+    background:
+        rgba(0,0,0,0.76);
+
+    backdrop-filter: blur(6px);
+
+    -webkit-backdrop-filter: blur(6px);
+
+    box-shadow:
+        0 4px 14px
+        rgba(0,0,0,0.30);
+
+    pointer-events: auto;
+
+    touch-action: none;
+
+    user-select: none;
+
+    -webkit-user-select: none;
+
+    cursor: grab;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+#readerHUD.dragging {
+
+    cursor: grabbing;
+
+    box-shadow:
+        0 0 16px
+        rgba(255,255,255,0.13);
+}
+
+#readerTimer {
+
+    color: white;
+
+    font-size: 13px;
+
+    line-height: 1;
+
+    font-weight: bold;
+
+    letter-spacing: 0.2px;
+
+    font-variant-numeric:
+        tabular-nums;
+
+    margin: 0;
+
+    white-space: nowrap;
+}
+
+#readerPercent {
+
+    color: white;
+
+    font-size: 10px;
+
+    line-height: 1;
+
+    font-weight: 500;
+
+    opacity: 0.82;
+
+    letter-spacing: 0.4px;
+
+    margin: 0;
+
+    white-space: nowrap;
+}
+
+
+/* =================================================
+   READER CONTROLS
+================================================= */
+
+.reader-controls {
+
+    display: flex;
+
+    gap: 10px;
+
+    width: min(100%, 360px);
+
+    align-self: center;
+
+    margin-top: 14px;
+
+    flex-shrink: 0;
+}
+
+.reader-button {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.3);
+
+    border-radius: 20px;
+
+    background: #000;
+
+    color: white;
+
+    font-size: 14px;
+
+    touch-action: manipulation;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+#readerStatus {
+
+    color: white;
+
+    opacity: 0.55;
+
+    text-align: center;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+
+    margin-top: 9px;
+
+    min-height: 14px;
+
+    flex-shrink: 0;
+}
+
+
+/* =================================================
+   BUTTON FEEDBACK
+================================================= */
+
+.reader-button:active,
+#readerClose:active,
+#reset:active,
+#prologueButton:active {
+
+    transform: scale(0.97);
+}
+
+
+/* =================================================
+   MOBILE
+================================================= */
+
+@media(prefers-reduced-motion: reduce) {
+
+    .trail {
+        animation: none;
+        transition: none;
+    }
+
+    .readerHUD,
+    .reader-button,
+    #readerClose,
+    #reset,
+    #prologueButton {
+        transition: none;
+    }
+}
+
+
+@media(max-width:480px) {
+
+    #reader {
+
+        padding: 8px;
+    }
+
+    .reader-panel {
+
+        width: 100vw;
+
+        height: 100vh;
+
+        border-radius: 0;
+
+        padding:
+            max(14px, env(safe-area-inset-top))
+            max(14px, env(safe-area-inset-right))
+            max(14px, env(safe-area-inset-bottom))
+            max(14px, env(safe-area-inset-left));
+    }
+
+    .reader-modebar {
+        width: 100%;
+    }
+
+    #readerTitle {
+
+        font-size: 23px;
+    }
+
+    #readerText {
+
+        font-size: 16px;
+
+        line-height: 1.72;
+
+        max-width: none;
+
+        padding:
+            10px 4px 128px;
+
+        letter-spacing: 0;
+
+    }
+
+    #readerHUD {
+
+        right: 10px;
+
+        bottom: 10px;
+
+        padding: 6px 8px;
+    }
+
+    .prologue-panel {
+
+        padding: 22px;
+
+        min-height: 72vh;
+    }
+
+    #prologueText {
+
+        font-size: 16px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     MAIN HUD
+================================================= -->
+
+<div id="hud">
+
+    <div id="brand">
+        CICAN
+    </div>
+
+    <div id="subtitle"></div>
+
+</div>
+
+
+<button id="reset">
+    BACK
+</button>
+
+
+<!-- =================================================
+     PROLOGUE
+================================================= -->
+
+<div id="prologue">
+
+    <div class="prologue-panel">
+
+        <div class="prologue-cican">
+
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+
+        </div>
+
+        <div id="prologueLabel">
+            CICAN — PLAY THE BOOK
+        </div>
+
+        <div id="prologueTitle"></div>
+
+        <div id="prologueText"></div>
+
+        <div id="prologueStep"></div>
+
+        <button id="prologueButton">
+            CONTINUE
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     READER
+================================================= -->
+
+<div id="reader">
+
+    <div class="reader-panel">
+
+        <div class="reader-header">
+
+            <div id="readerLabel">
+                CICAN
+            </div>
+
+            <button id="readerClose">
+                CLOSE
+            </button>
+
+        </div>
+
+
+        <div id="readerTitle"></div>
+
+        <div class="reader-modebar" aria-label="Reading mode">
+            <button id="mode15" class="reader-mode active" type="button">15 MIN</button>
+            <button id="modeFull" class="reader-mode" type="button">FULL BOOK</button>
+        </div>
+
+        <div id="readerModeNote"></div>
+
+        <div id="readerProgress" aria-hidden="true">
+            <div id="readerProgressFill"></div>
+        </div>
+
+        <div id="readerText"></div>
+
+
+        <div id="readerHUD">
+
+            <div id="readerTimer">
+                15:00
+            </div>
+
+            <div id="readerPercent">
+                0%
+            </div>
+
+        </div>
+
+
+        <div class="reader-controls">
+
+            <button
+                id="readerPause"
+                class="reader-button">
+
+                PAUSE
+
+            </button>
+
+        </div>
+
+
+        <div id="readerStatus">
+            AUTO-READING
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     CURRENT BOOK
+================================================= -->
+
+<script>
+/*
+==================================================
+CICAN — PLAY THE BOOK V17
+MULTI-BOOK LOADER
+==================================================
+*/
+
+const requestedBookId =
+    new URLSearchParams(window.location.search).get("book");
+
+const selectedBookId =
+    requestedBookId
+        ? requestedBookId
+        : null;
+
+/*
+    V16 HAS NO DEFAULT BOOK.
+
+    Missing or invalid ?book= means
+    CICAN only.
+*/
+
+window.BOOK_READ = null;
+window.CICAN_ACTIVE_BOOK = null;
+window.CICAN_ACTIVE_BOOK_ID = null;
+
+document.getElementById("subtitle").textContent = "";
+document.getElementById("prologueTitle").textContent = "";
+document.getElementById("readerTitle").textContent = "";
+
+async function startCicanBook() {
+
+    if (!selectedBookId) {
+
+        window.CICAN_ACTIVE_BOOK =
+            null;
+
+        window.CICAN_ACTIVE_BOOK_ID =
+            null;
+
+        initializeCicanBook(
+            null,
+            null
+        );
+
+        return;
+    }
+
+    /*
+        Clear any previous global book before
+        loading the requested book.
+        The central catalog remains the discovery source; publication status is kept separate from experience loading.
+    */
+
+    try {
+        const loader = await import("./engine/book-loader.js?v=17.3");
+        const BOOK_READ = await loader.loadBook(selectedBookId);
+
+        const hasReaderSource =
+            BOOK_READ &&
+            (
+                    String(BOOK_READ.fifteenMinuteText || "").trim() ||
+                String(BOOK_READ.fullText || "").trim() ||
+                String(BOOK_READ.fullTextUrl || "").trim()
+            );
+
+        if (!BOOK_READ || !BOOK_READ.title || !hasReaderSource) {
+            throw new Error("Selected CICAN book did not provide playable content: " + selectedBookId);
+        }
+
+        window.BOOK_READ = BOOK_READ;
+        window.CICAN_ACTIVE_BOOK = BOOK_READ;
+        window.CICAN_ACTIVE_BOOK_ID = selectedBookId;
+
+        initializeCicanBook(
+            BOOK_READ,
+            selectedBookId
+        );
+    } catch (error) {
+        console.warn(error.message || error);
+        window.BOOK_READ = null;
+        window.CICAN_ACTIVE_BOOK = null;
+        window.CICAN_ACTIVE_BOOK_ID = null;
+        initializeCicanBook(null, null);
+    }
+}
+
+</script>
+
+
+<script>
+
+
+function initializeCicanBook(
+    BOOK_READ,
+    BOOK_ID
+) {
+
+
+/*
+==================================================
+CICAN — PLAY THE BOOK V16
+==================================================
+
+V13 CORE ENGINE PRESERVED.
+
+V14 READER:
+
+The complete book is rendered normally.
+
+The reader viewport moves continuously
+through the book.
+
+There is NO word-by-word display.
+
+There are NO three-word chunks.
+
+There is NO typing effect.
+
+The movement is calculated from real
+elapsed time using requestAnimationFrame.
+
+The book itself is external to this engine.
+
+==================================================
+*/
+
+
+/* =================================================
+   V13 CONSTANTS
+================================================= */
+
+const MIN_SIZE = 34;
+
+const MAX_SIZE = 180;
+
+const DOUBLE_TAP_TIME = 350;
+
+const TRAIL_DISTANCE = 35;
+
+const MERGE_DISTANCE = 20;
+
+/* CICAN merge when their visible bodies touch; keeps the original 20px minimum. */
+const FULL_SIZE_TOLERANCE = 0;
+
+
+/* =================================================
+   PLAYABLE CICAN
+================================================= */
+
+let ones = [];
+
+
+/* =================================================
+   CONTROL
+================================================= */
+
+let selectedOne = null;
+
+let growing = false;
+
+let lastTap = 0;
+
+let lastTappedOne = null;
+
+
+/* =================================================
+   BOOK / READER STATE
+================================================= */
+
+let readObjects = [];
+
+let currentBook = null;
+
+let readerAnimation = null;
+let readerStartTimer = null;
+
+let readerPaused = false;
+
+let readerComplete = false;
+
+let readerSeconds = 900;
+
+let readerLastTime = 0;
+
+let readerScrollPosition = 0;
+let readingMode = "15";
+let fullTextLoading = false;
+let readerOpenToken = 0;
+let readerProgrammaticScroll = false;
+let readerManualResumeTimer = null;
+
+const READER_FIRST_TEXT_HOLD_MS = 0;
+const READER_MANUAL_RESUME_MS = 350;
+
+const TARGET_READING_SECONDS =
+    Math.max(
+        60,
+        Number(
+            BOOK_READ &&
+            BOOK_READ.targetMinutes
+        ) * 60 || 900
+    );
+
+/* Reader speed: deliberate 100 WPM benchmark for comfortable reading. */
+const READER_WPM = 100;
+const FIFTEEN_MINUTE_TARGET_WORDS =
+    Math.round((READER_WPM * TARGET_READING_SECONDS) / 60);
+
+const FULL_READING_WPM = READER_WPM;
+
+let fullReaderSeconds = TARGET_READING_SECONDS;
+
+function calculateFullReadingSeconds(text) {
+    const words = String(text || "").trim().match(/\S+/g);
+    const count = words ? words.length : 0;
+    return Math.max(
+        TARGET_READING_SECONDS,
+        Math.ceil((count / FULL_READING_WPM) * 60)
+    );
+}
+
+const READER_STATE_PREFIX =
+    "cican_reader_position:";
+
+const READER_MODE_PREFIX =
+    "cican_reader_mode:";
+
+let lastReaderSaveTime = 0;
+
+
+/* =================================================
+   BOOK
+================================================= */
+
+currentBook =
+    BOOK_READ;
+
+if (currentBook && window.CICAN_ACTIVE_BOOK_ID) {
+    try {
+        const savedMode = localStorage.getItem(READER_MODE_PREFIX + window.CICAN_ACTIVE_BOOK_ID);
+        if (savedMode === "15" || savedMode === "full") readingMode = savedMode;
+    } catch (_) {}
+}
+
+
+/* =================================================
+   LOAD BOOK UI
+================================================= */
+
+if (BOOK_READ) {
+
+    document.getElementById(
+        "subtitle"
+    ).textContent =
+        BOOK_READ.title;
+
+    document.getElementById(
+        "prologueTitle"
+    ).textContent =
+        BOOK_READ.title;
+
+    document.getElementById(
+        "readerTitle"
+    ).textContent =
+        BOOK_READ.title;
+
+} else {
+
+    /*
+        NO BOOK SELECTED.
+    */
+
+    document.getElementById(
+        "subtitle"
+    ).textContent = "";
+
+    document.getElementById(
+        "prologueTitle"
+    ).textContent = "";
+
+    document.getElementById(
+        "readerTitle"
+    ).textContent = "";
+}
+
+
+/* =================================================
+   DISTANCE
+================================================= */
+
+function distance(
+    ax,
+    ay,
+    bx,
+    by
+) {
+
+    const dx =
+        bx - ax;
+
+    const dy =
+        by - ay;
+
+    return Math.sqrt(
+        dx * dx +
+        dy * dy
+    );
+}
+
+
+/* =================================================
+   CREATE CICAN
+================================================= */
+
+function createOne(
+    px,
+    py,
+    startingSize = MIN_SIZE,
+    isMemory = false
+) {
+
+    const element =
+        document.createElement("div");
+
+    element.className =
+        "one";
+
+
+    if (isMemory) {
+
+        element.classList.add(
+            "memory-one"
+        );
+    }
+
+
+    document.body.appendChild(
+        element
+    );
+
+
+    const face =
+        document.createElement("div");
+
+    face.className =
+        "cican-face";
+
+    face.innerHTML =
+        '<div class="eye left"></div>' +
+        '<div class="eye right"></div>';
+
+    element.appendChild(face);
+
+
+    const one = {
+
+        x: px,
+        y: py,
+
+        targetX: px,
+        targetY: py,
+
+        size: startingSize,
+
+        element: element,
+
+        isMemory: isMemory,
+
+        lastTrailX: px,
+        lastTrailY: py
+    };
+
+
+    ones.push(one);
+
+    updateOne(one);
+
+    return one;
+}
+
+
+/* =================================================
+   UPDATE CICAN
+================================================= */
+
+function updateOne(one) {
+
+    one.element.style.left =
+        one.x + "px";
+
+    one.element.style.top =
+        one.y + "px";
+
+    one.element.style.width =
+        one.size + "px";
+
+    one.element.style.height =
+        one.size + "px";
+}
+
+
+/* =================================================
+   TRAIL
+================================================= */
+
+function createTrail(
+    px,
+    py
+) {
+
+    const trail =
+        document.createElement(
+            "div"
+        );
+
+    trail.className =
+        "trail";
+
+    trail.style.left =
+        px + "px";
+
+    trail.style.top =
+        py + "px";
+
+    document.body.appendChild(
+        trail
+    );
+
+
+    setTimeout(
+        () => trail.remove(),
+        1500
+    );
+}
+
+
+/* =================================================
+   FIND CLOSEST CICAN
+================================================= */
+
+function findClosestOne(
+    px,
+    py
+) {
+
+    if (
+        ones.length === 0
+    ) {
+
+        return null;
+    }
+
+
+    let closest = null;
+
+    let closestDistance =
+        Infinity;
+
+
+    for (
+        const one of ones
+    ) {
+
+        const d =
+            distance(
+                px,
+                py,
+                one.x,
+                one.y
+            );
+
+
+        if (
+            d <
+            closestDistance
+        ) {
+
+            closestDistance = d;
+
+            closest = one;
+        }
+    }
+
+
+    return closest;
+}
+
+
+/* =================================================
+   SPLIT
+================================================= */
+
+function splitOne(one) {
+
+    const newOne =
+        createOne(
+            one.x + 45,
+            one.y,
+            MIN_SIZE,
+            false
+        );
+
+
+    newOne.targetX =
+        newOne.x;
+
+    newOne.targetY =
+        newOne.y;
+
+
+    selectedOne =
+        one;
+
+    growing = false;
+}
+
+
+/* =================================================
+   MERGE
+================================================= */
+
+function mergeOnes(
+    oneA,
+    oneB
+) {
+
+    const mergeX =
+        (
+            oneA.x +
+            oneB.x
+        ) / 2;
+
+    const mergeY =
+        (
+            oneA.y +
+            oneB.y
+        ) / 2;
+
+
+    const mergedSize =
+        Math.min(
+            MAX_SIZE,
+            oneA.size +
+            oneB.size
+        );
+
+
+    /*
+        READ is a deliberate final gate:
+        BOTH CICANs must already be full size.
+        A full CICAN merging with a smaller CICAN
+        does not unlock READ.
+    */
+    const oneAIsFullSize =
+        oneA.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
+
+    const oneBIsFullSize =
+        oneB.size >= MAX_SIZE - FULL_SIZE_TOLERANCE;
+
+    const createsKnowledge =
+        oneAIsFullSize && oneBIsFullSize;
+
+
+    oneA.element.remove();
+
+    oneB.element.remove();
+
+
+    ones =
+        ones.filter(
+            one =>
+                one !== oneA &&
+                one !== oneB
+        );
+
+
+    const mergedOne =
+        createOne(
+            mergeX,
+            mergeY,
+            mergedSize,
+            createsKnowledge
+        );
+
+
+    selectedOne =
+        mergedOne;
+
+    growing = false;
+
+
+    /*
+        A full + full merge is the definitive READ unlock.
+        The selected book is already loaded before gameplay
+        begins, so READ creation must not depend on the
+        mutable reader state variable.
+    */
+    if (
+        createsKnowledge &&
+        (window.CICAN_ACTIVE_BOOK || BOOK_READ)
+    ) {
+        createKnowledge(mergeX, mergeY);
+    }
+}
+
+
+/* =================================================
+   CHECK MERGE
+================================================= */
+
+function checkForMerges() {
+
+    if (
+        ones.length < 2
+    ) {
+
+        return;
+    }
+
+
+    for (
+        let i = 0;
+        i < ones.length;
+        i++
+    ) {
+
+        for (
+            let j = i + 1;
+            j < ones.length;
+            j++
+        ) {
+
+            const oneA =
+                ones[i];
+
+            const oneB =
+                ones[j];
+
+
+            const d =
+                distance(
+                    oneA.x,
+                    oneA.y,
+                    oneB.x,
+                    oneB.y
+                );
+
+
+            if (d <= MERGE_DISTANCE) {
+
+                mergeOnes(
+                    oneA,
+                    oneB
+                );
+
+                return;
+            }
+        }
+    }
+}
+
+
+/* =================================================
+   CREATE READ OBJECT
+================================================= */
+
+function createKnowledge(
+    px,
+    py
+) {
+
+    /* Only one READ entry point exists per game session. */
+    if (readObjects.length > 0) {
+        return;
+    }
+
+    /*
+        READ is a gameplay object, not part of the reader
+        overlay. Give it a dedicated layer immediately.
+    */
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+    element.className =
+        "knowledge";
+
+    element.style.zIndex =
+        "3000";
+
+    element.textContent =
+        "READ";
+
+    document.body.appendChild(
+        element
+    );
+
+
+    const knowledge = {
+
+        x: px,
+        y: py,
+
+        targetX: px,
+        targetY: py,
+
+        element: element,
+
+        dragging: false,
+
+        moved: false,
+
+        downX: 0,
+
+        downY: 0
+    };
+
+
+    readObjects.push(
+        knowledge
+    );
+
+
+    element.addEventListener(
+        "pointerdown",
+        function(e) {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            knowledge.dragging =
+                true;
+
+            knowledge.moved =
+                false;
+
+            knowledge.downX =
+                e.clientX;
+
+            knowledge.downY =
+                e.clientY;
+
+            try {
+
+                element.setPointerCapture(
+                    e.pointerId
+                );
+
+            } catch (_) {}
+
+        }
+    );
+
+
+    element.addEventListener(
+        "pointermove",
+        function(e) {
+
+            if (
+                !knowledge.dragging
+            ) {
+
+                return;
+            }
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+
+            if (
+                distance(
+                    e.clientX,
+                    e.clientY,
+                    knowledge.downX,
+                    knowledge.downY
+                ) > 8
+            ) {
+
+                knowledge.moved =
+                    true;
+            }
+
+
+            knowledge.targetX =
+                e.clientX;
+
+            knowledge.targetY =
+                e.clientY;
+        }
+    );
+
+
+    const end =
+        function(e) {
+
+            if (
+                !knowledge.dragging
+            ) {
+
+                return;
+            }
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            knowledge.dragging =
+                false;
+
+
+            if (
+                !knowledge.moved
+            ) {
+
+                openPrologue();
+            }
+        };
+
+
+    element.addEventListener(
+        "pointerup",
+        end
+    );
+
+
+    element.addEventListener(
+        "pointercancel",
+        function(e) {
+
+            e.stopPropagation();
+
+            knowledge.dragging =
+                false;
+        }
+    );
+
+
+    updateKnowledge(
+        knowledge
+    );
+}
+
+
+/* =================================================
+   UPDATE READ OBJECT
+================================================= */
+
+function updateKnowledge(
+    knowledge
+) {
+
+    knowledge.x +=
+        (
+            knowledge.targetX -
+            knowledge.x
+        ) * 0.10;
+
+    knowledge.y +=
+        (
+            knowledge.targetY -
+            knowledge.y
+        ) * 0.10;
+
+
+    const r = 34;
+
+
+    knowledge.x =
+        Math.max(
+            r,
+            Math.min(
+                window.innerWidth - r,
+                knowledge.x
+            )
+        );
+
+
+    knowledge.y =
+        Math.max(
+            r,
+            Math.min(
+                window.innerHeight - r,
+                knowledge.y
+            )
+        );
+
+
+    knowledge.element.style.left =
+        knowledge.x + "px";
+
+    knowledge.element.style.top =
+        knowledge.y + "px";
+}
+
+
+/* =================================================
+   POINTER DOWN
+================================================= */
+
+function pointerDown(
+    px,
+    py
+) {
+
+    const now =
+        Date.now();
+
+
+    const closest =
+        findClosestOne(
+            px,
+            py
+        );
+
+
+    if (!closest) {
+
+        lastTap = 0;
+
+        lastTappedOne = null;
+
+        return;
+    }
+
+
+    if (
+        now - lastTap <
+        DOUBLE_TAP_TIME &&
+        lastTappedOne === closest
+    ) {
+
+        splitOne(
+            closest
+        );
+
+
+        lastTap = 0;
+
+        lastTappedOne = null;
+
+        return;
+    }
+
+
+    lastTap = now;
+
+    lastTappedOne =
+        closest;
+
+
+    selectedOne =
+        closest;
+
+
+    growing = true;
+
+
+    selectedOne.targetX =
+        px;
+
+    selectedOne.targetY =
+        py;
+}
+
+
+/* =================================================
+   POINTER MOVE
+================================================= */
+
+function pointerMove(
+    px,
+    py
+) {
+
+    if (!growing) {
+
+        return;
+    }
+
+
+    if (!selectedOne) {
+
+        return;
+    }
+
+
+    selectedOne.targetX =
+        px;
+
+    selectedOne.targetY =
+        py;
+}
+
+
+/* =================================================
+   POINTER UP
+================================================= */
+
+function pointerUp() {
+
+    growing = false;
+}
+
+
+/* =================================================
+   POINTER EVENTS
+================================================= */
+
+function isGameUIElement(target) {
+    return !!(
+        target &&
+        typeof target.closest === "function" &&
+        (
+            target.closest("#reader") ||
+            target.closest("#prologue") ||
+            target.closest(".knowledge") ||
+            target.closest("#reset")
+        )
+    );
+}
+
+/*
+    Game input is attached at the window level so the CICAN
+    remains controllable even when the finger/cursor crosses
+    the document surface during a drag.
+*/
+window.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        if (isGameUIElement(e.target)) {
+            return;
+        }
+
+        pointerDown(
+            e.clientX,
+            e.clientY
+        );
+    },
+    {
+        passive: false
+    }
+);
+
+window.addEventListener(
+    "pointermove",
+    function(e) {
+
+        if (isGameUIElement(e.target)) {
+            return;
+        }
+
+        pointerMove(
+            e.clientX,
+            e.clientY
+        );
+    },
+    {
+        passive: false
+    }
+);
+
+window.addEventListener(
+    "pointerup",
+    function(e) {
+
+        if (isGameUIElement(e.target)) {
+            return;
+        }
+
+        pointerUp();
+    },
+    {
+        passive: false
+    }
+);
+
+window.addEventListener(
+    "pointercancel",
+    function(e) {
+
+        if (isGameUIElement(e.target)) {
+            return;
+        }
+
+        pointerUp();
+    },
+    {
+        passive: false
+    }
+);
+
+
+/* =================================================
+   PROLOGUE
+================================================= */
+
+const prologue =
+    document.getElementById(
+        "prologue"
+    );
+
+const prologueText =
+    document.getElementById(
+        "prologueText"
+    );
+
+const prologueStep =
+    document.getElementById(
+        "prologueStep"
+    );
+
+const prologueButton =
+    document.getElementById(
+        "prologueButton"
+    );
+
+
+const DEFAULT_PROLOGUE_SCENES = [
+    {
+        text: "THE BOOK",
+        button: "CONTINUE"
+    },
+    {
+        text: "Move through the experience. Then enter the text itself.",
+        button: "CONTINUE"
+    },
+    {
+        text: "The game is the doorway. The book is the destination.",
+        button: "CONTINUE"
+    },
+    {
+        text: "READ",
+        button: "OPEN BOOK"
+    }
+];
+
+
+const prologueScenes =
+    BOOK_READ &&
+    Array.isArray(BOOK_READ.prologueScenes) &&
+    BOOK_READ.prologueScenes.length
+        ? BOOK_READ.prologueScenes
+        : DEFAULT_PROLOGUE_SCENES;
+
+
+let prologueIndex = 0;
+
+
+function openPrologue() {
+
+    if (!currentBook) {
+        return;
+    }
+
+    prologueIndex = 0;
+
+    prologue.classList.add(
+        "open"
+    );
+
+    showPrologueScene();
+}
+
+
+function showPrologueScene() {
+
+    const scene =
+        prologueScenes[
+            prologueIndex
+        ] ||
+        prologueScenes[
+            prologueScenes.length - 1
+        ];
+
+    if (!scene) {
+        closePrologue();
+        openReader("15");
+        return;
+    }
+
+
+    prologueText.textContent =
+        String(scene.text || "");
+
+    prologueStep.textContent =
+        (
+            prologueIndex + 1
+        ) +
+        " / " +
+        prologueScenes.length;
+
+    prologueButton.textContent =
+        scene.button ||
+        "CONTINUE";
+}
+
+
+prologueButton.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+
+        if (
+            prologueIndex <
+            prologueScenes.length - 1
+        ) {
+
+            prologueIndex++;
+
+            showPrologueScene();
+
+            return;
+        }
+
+
+        closePrologue();
+
+        openReader("15");
+    }
+);
+
+
+function closePrologue() {
+
+    prologue.classList.remove(
+        "open"
+    );
+}
+
+
+/* =================================================
+   READER ELEMENTS
+================================================= */
+
+const reader =
+    document.getElementById(
+        "reader"
+    );
+
+const readerText =
+    document.getElementById(
+        "readerText"
+    );
+
+const readerPause =
+    document.getElementById(
+        "readerPause"
+    );
+
+const readerClose =
+    document.getElementById(
+        "readerClose"
+    );
+
+const readerStatus =
+    document.getElementById(
+        "readerStatus"
+    );
+
+const mode15 = document.getElementById("mode15");
+const modeFull = document.getElementById("modeFull");
+const readerModeNote = document.getElementById("readerModeNote");
+const readerProgressFill = document.getElementById("readerProgressFill");
+
+
+/* =================================================
+   FORMAT TIME
+================================================= */
+
+function formatTime(
+    seconds
+) {
+
+    const s =
+        Math.max(
+            0,
+            Math.floor(seconds)
+        );
+
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const remainingSeconds = s % 60;
+
+    return String(hours).padStart(2, "0")
+        + ":"
+        + String(minutes).padStart(2, "0")
+        + ":"
+        + String(remainingSeconds).padStart(2, "0");
+}
+
+function formatReaderTime(seconds) {
+    const s = Math.max(0, Math.floor(seconds));
+
+    if (readingMode === "15") {
+        const minutes = Math.floor(s / 60);
+        const remainingSeconds = s % 60;
+
+        return String(minutes).padStart(2, "0")
+            + ":"
+            + String(remainingSeconds).padStart(2, "0");
+    }
+
+    return formatTime(s);
+}
+
+
+/* =================================================
+   READER UI
+================================================= */
+
+function updateReaderModeUI() {
+    /*
+        FULL BOOK availability is strict:
+        only a complete source asset or complete source URL
+        may enable FULL BOOK.
+    */
+    const fullAvailable = !!(
+        currentBook &&
+        (
+            currentBook.fullText ||
+            currentBook.fullTextUrl
+        )
+    );
+
+    const fifteenAvailable = !!(
+        currentBook &&
+        (
+            currentBook.fifteenMinuteText ||
+            currentBook.fullText
+        )
+    );
+
+    mode15.classList.toggle("active", readingMode === "15");
+    modeFull.classList.toggle("active", readingMode === "full");
+
+    modeFull.disabled =
+        fullTextLoading ||
+        !fullAvailable;
+
+    mode15.disabled =
+        fullTextLoading ||
+        !fifteenAvailable;
+
+    readerModeNote.textContent =
+        readingMode === "full"
+            ? (
+                fullAvailable
+                    ? "FULL SOURCE TEXT"
+                    : "FULL BOOK NOT YET LOADED FOR THIS EDITION"
+            )
+            : (
+                fifteenAvailable
+                    ? "15-MINUTE SOURCE TEXT"
+                    : "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION"
+            );
+}
+
+function saveReaderMode() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return;
+    try { localStorage.setItem(READER_MODE_PREFIX + window.CICAN_ACTIVE_BOOK_ID, readingMode); } catch (_) {}
+}
+
+function updateReaderUI() {
+
+    const maxScroll =
+        Math.max(
+            0,
+            readerText.scrollHeight -
+            readerText.clientHeight
+        );
+
+
+    const progress =
+        maxScroll > 0
+        ? Math.min(
+            1,
+            readerText.scrollTop /
+            maxScroll
+        )
+        : 0;
+
+
+    const percent =
+        Math.floor(
+            progress * 100
+        );
+
+
+    document.getElementById(
+        "readerTimer"
+    ).textContent =
+        formatReaderTime(readerSeconds);
+
+
+    document.getElementById(
+        "readerPercent"
+    ).textContent =
+        percent + "%";
+
+    if (readerProgressFill) {
+        readerProgressFill.style.width =
+            (progress * 100).toFixed(2) + "%";
+    }
+
+
+    /*
+       The movable reader HUD remains the primary
+       information display. The rail is a quiet
+       visual orientation aid only.
+    */
+}
+
+
+/* =================================================
+   STOP READER
+================================================= */
+
+function stopReaderAnimation() {
+
+    if (readerStartTimer !== null) {
+        clearTimeout(readerStartTimer);
+        readerStartTimer = null;
+    }
+
+    if (
+        readerAnimation !== null
+    ) {
+
+        cancelAnimationFrame(
+            readerAnimation
+        );
+
+        readerAnimation =
+            null;
+    }
+}
+
+function startReaderAnimation(delayMs = 0, openToken = readerOpenToken) {
+
+    if (readerStartTimer !== null) {
+        clearTimeout(readerStartTimer);
+        readerStartTimer = null;
+    }
+
+    const start = function() {
+        readerStartTimer = null;
+
+        if (
+            openToken !== readerOpenToken ||
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            return;
+        }
+
+        const maxScroll = Math.max(
+            0,
+            readerText.scrollHeight - readerText.clientHeight
+        );
+
+        if (maxScroll <= 0) {
+            finishReader();
+            return;
+        }
+
+        readerStatus.textContent = "AUTO-READING";
+        readerLastTime = performance.now();
+        readerAnimation = requestAnimationFrame(fluidAutoReader);
+    };
+
+    if (delayMs > 0) {
+        readerStartTimer = setTimeout(start, delayMs);
+    } else {
+        start();
+    }
+}
+
+
+/* =================================================
+   OPEN READER
+================================================= */
+
+function normalizeSourceText(sourceText) {
+
+    let normalizedText =
+        String(sourceText || "")
+            .replace(/\r\n/g, "\n");
+
+    const startMarker =
+        normalizedText.indexOf(
+            "*** START OF THE PROJECT GUTENBERG EBOOK"
+        );
+
+    const endMarker =
+        normalizedText.indexOf(
+            "*** END OF THE PROJECT GUTENBERG EBOOK"
+        );
+
+    if (
+        startMarker >= 0 &&
+        endMarker > startMarker
+    ) {
+        normalizedText =
+            normalizedText
+                .slice(
+                    normalizedText.indexOf("\n", startMarker) + 1,
+                    endMarker
+                )
+                .trim();
+    }
+
+    return normalizedText.trim();
+}
+
+
+function selectFifteenMinuteText(
+    sourceText,
+    targetWords,
+    startMarker = ""
+) {
+
+    let normalizedText =
+        normalizeSourceText(sourceText);
+
+    if (!normalizedText) {
+        return "";
+    }
+
+    const marker =
+        String(startMarker || "").trim();
+
+    if (marker) {
+        const markerIndex =
+            normalizedText.indexOf(marker);
+
+        if (markerIndex >= 0) {
+            normalizedText =
+                normalizedText
+                    .slice(markerIndex)
+                    .trim();
+        }
+    }
+
+    const words =
+        [...normalizedText.matchAll(/\S+/g)];
+
+    const limit =
+        Math.max(
+            1,
+            Number(targetWords) || 2700
+        );
+
+    if (
+        words.length <= limit
+    ) {
+        return normalizedText;
+    }
+
+    const lastWord =
+        words[limit - 1];
+
+    return normalizedText
+        .slice(
+            0,
+            lastWord.index +
+            lastWord[0].length
+        )
+        .trim();
+}
+
+
+async function loadSourceTextForReader(
+    book,
+    openToken
+) {
+
+    if (
+        book.fullText &&
+        String(book.fullText).trim()
+    ) {
+        return normalizeSourceText(
+            book.fullText
+        );
+    }
+
+    /*
+        SOURCE CONTRACT:
+        book.fifteenMinuteText is the calibrated 15-minute source selection.
+        book.text is legacy-compatible source selection only when present.
+        Neither is eligible as a FULL BOOK source.
+    */
+
+    if (
+        !book.fullTextUrl
+    ) {
+        return "";
+    }
+
+    const sourceUrl =
+        new URL(
+            book.fullTextUrl,
+            document.baseURI
+        ).href;
+
+    const response =
+        await fetch(
+            sourceUrl,
+            {
+                cache: "no-store"
+            }
+        );
+
+    if (
+        !response.ok
+    ) {
+        throw new Error(
+            "Full text request failed"
+        );
+    }
+
+    const sourceText =
+        await response.text();
+
+    if (
+        sourceText.trim().length < 1000
+    ) {
+        throw new Error(
+            "Full text is unexpectedly short"
+        );
+    }
+
+    if (
+        openToken !== readerOpenToken
+    ) {
+        return "";
+    }
+
+    const normalizedText =
+        normalizeSourceText(
+            sourceText
+        );
+
+    book.fullText =
+        normalizedText;
+
+    return normalizedText;
+}
+
+
+function renderReaderText(sourceText) {
+    const raw = String(sourceText || "")
+        .replace(/\r\n/g, "\n")
+        .trim();
+
+    readerText.replaceChildren();
+
+    if (!raw) return;
+
+    const blocks = raw.split(/\n[ \t]*\n+/);
+    const fragment = document.createDocumentFragment();
+
+    for (const block of blocks) {
+        const text = block
+            .replace(/\n+/g, " ")
+            .replace(/[ \t]+/g, " ")
+            .trim();
+
+        if (!text) continue;
+
+        const el = document.createElement("div");
+        el.className = "reader-block";
+
+        if (
+            /^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) ||
+            (text.length < 90 && !/[.!?]$/.test(text))
+        ) {
+            el.classList.add("reader-heading");
+        }
+
+        el.textContent = text;
+        fragment.appendChild(el);
+    }
+
+    readerText.appendChild(fragment);
+}
+
+async function openReader(modeOverride) {
+
+    stopReaderAnimation();
+
+    const openToken = ++readerOpenToken;
+
+    // A newly opened reader always begins at the first character.
+    readerScrollPosition = 0;
+    readerComplete = false;
+    readerPaused = false;
+
+    if (modeOverride === "15" || modeOverride === "full") {
+        readingMode = modeOverride;
+    }
+
+
+    currentBook =
+        window.CICAN_ACTIVE_BOOK ||
+        BOOK_READ;
+
+    if (!currentBook) {
+        return;
+    }
+
+
+    readerPaused =
+        false;
+
+
+    readerComplete =
+        false;
+
+
+    /*
+        Resolve the requested mode before calculating
+        the reader duration. The mode must exist before
+        any FULL BOOK timing logic runs.
+    */
+    const requestedMode = readingMode;
+    const requestedBook = currentBook;
+    const isFullBook = requestedMode === "full";
+
+    readerSeconds =
+        isFullBook && currentBook.fullText
+            ? calculateFullReadingSeconds(currentBook.fullText)
+            : TARGET_READING_SECONDS;
+
+    fullReaderSeconds = readerSeconds;
+
+
+    /*
+        RENDER THE ENTIRE BOOK.
+
+        No word-by-word progression.
+        No chunks.
+        No typing effect.
+    */
+
+    /*
+        15 MIN is source text only.
+        Never fall back to a CICAN-written summary.
+
+        IMPORTANT:
+        fullTextUrl is a LOCATION, not the source text itself.
+        Never display the path as reader content.
+    */
+    if (!isFullBook) {
+        const fifteenValue = String(
+            currentBook.fifteenMinuteText || ""
+        ).trim();
+        const fullPath = String(
+            currentBook.fullTextUrl || ""
+        ).trim();
+
+        /*
+            Guard against stale/cached book modules that may have
+            populated fifteenMinuteText with the asset path itself.
+            That value is metadata, never reader text.
+        */
+        if (
+            fifteenValue &&
+            fullPath &&
+            fifteenValue === fullPath
+        ) {
+            currentBook.fifteenMinuteText = "";
+        }
+    }
+
+    if (!isFullBook) {
+        /*
+            Recalibrate the 15-minute source to the current reader
+            speed. This keeps the 15-minute experience aligned with
+            the slower 135 WPM target instead of inheriting an older
+            150 WPM / 2700-word calibration.
+        */
+        const fifteenSource =
+            currentBook.fullText ||
+            currentBook.fifteenMinuteText ||
+            "";
+
+        if (String(fifteenSource).trim()) {
+            currentBook.fifteenMinuteText =
+                selectFifteenMinuteText(
+                    fifteenSource,
+                    FIFTEEN_MINUTE_TARGET_WORDS,
+                    currentBook.fifteenMinuteStartMarker
+                );
+        }
+    }
+
+    if (
+        !isFullBook &&
+        !currentBook.fifteenMinuteText
+    ) {
+
+        fullTextLoading = true;
+        readerModeNote.textContent =
+            "LOADING SOURCE TEXT";
+
+        try {
+
+            const sourceText =
+                await loadSourceTextForReader(
+                    currentBook,
+                    openToken
+                );
+
+            if (
+                openToken !== readerOpenToken ||
+                readingMode !== requestedMode ||
+                currentBook !== requestedBook
+            ) {
+                fullTextLoading = false;
+                return;
+            }
+
+            if (
+                sourceText
+            ) {
+                currentBook.fifteenMinuteText =
+                    selectFifteenMinuteText(
+                        sourceText,
+                        FIFTEEN_MINUTE_TARGET_WORDS,
+                        currentBook.fifteenMinuteStartMarker
+                    );
+            }
+
+            if (
+                !currentBook.fifteenMinuteText
+            ) {
+                throw new Error(
+                    "15-minute source text unavailable"
+                );
+            }
+
+        } catch (_) {
+
+            if (
+                openToken !== readerOpenToken ||
+                readingMode !== requestedMode ||
+                currentBook !== requestedBook
+            ) {
+                fullTextLoading = false;
+                return;
+            }
+
+            fullTextLoading = false;
+            readerModeNote.textContent =
+                "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
+            updateReaderModeUI();
+            return;
+        }
+
+        fullTextLoading = false;
+    }
+
+
+    if (
+        isFullBook &&
+        !currentBook.fullText
+    ) {
+        /*
+            Prefer a dedicated full-text asset when one exists.
+            Otherwise use the book's canonical text already loaded
+            in the book record.
+        */
+        if (!currentBook.fullTextUrl) {
+            readerModeNote.textContent = "FULL BOOK SOURCE NOT AVAILABLE FOR THIS EDITION";
+            updateReaderModeUI();
+            return;
+        } else {
+            fullTextLoading = true;
+            modeFull.disabled = true;
+            readerModeNote.textContent = "LOADING FULL BOOK";
+            try {
+                const response = await fetch(currentBook.fullTextUrl, { cache: "no-store" });
+                if (!response.ok) throw new Error("Full text request failed");
+                const sourceText = await response.text();
+                if (sourceText.trim().length < 1000) throw new Error("Full text is unexpectedly short");
+
+                let normalizedText = sourceText.replace(/\\r\\n/g, "\\n");
+
+                /*
+                    Project Gutenberg full-text files contain a license
+                    wrapper around the actual book. For FULL BOOK, keep
+                    the complete book itself while excluding that wrapper.
+                */
+                const startMarker = normalizedText.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK");
+                const endMarker = normalizedText.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK");
+
+                if (startMarker >= 0 && endMarker > startMarker) {
+                    normalizedText = normalizedText
+                        .slice(normalizedText.indexOf("\\n", startMarker) + 1, endMarker)
+                        .trim();
+                }
+
+                if (
+                    openToken !== readerOpenToken ||
+                    readingMode !== requestedMode ||
+                    currentBook !== requestedBook
+                ) {
+                    requestedBook.fullText = normalizedText;
+                    fullTextLoading = false;
+                    return;
+                }
+
+                currentBook.fullText = normalizedText;
+                currentBook.fullTextResolved = true;
+            } catch (_) {
+                if (
+                    openToken !== readerOpenToken ||
+                    readingMode !== requestedMode ||
+                    currentBook !== requestedBook
+                ) {
+                    fullTextLoading = false;
+                    return;
+                }
+
+                fullTextLoading = false;
+                updateReaderModeUI();
+                readerModeNote.textContent = "FULL BOOK COULD NOT BE LOADED";
+                return;
+            }
+            fullTextLoading = false;
+        }
+    }
+
+    const fullAvailable = !!(
+        currentBook &&
+        (
+            currentBook.fullText ||
+            currentBook.fullTextUrl
+        )
+    );
+
+    const fifteenAvailable = !!(
+        currentBook &&
+        currentBook.fifteenMinuteText
+    );
+
+    if (
+        !isFullBook &&
+        !fifteenAvailable
+    ) {
+        readerModeNote.textContent =
+            "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
+        return;
+    }
+
+    /*
+        FULL BOOK timing is finalized only after the complete
+        source has actually been resolved. This prevents a
+        URL-backed book from inheriting the 15-minute duration.
+    */
+    if (
+        isFullBook &&
+        currentBook.fullText
+    ) {
+        fullReaderSeconds =
+            calculateFullReadingSeconds(
+                currentBook.fullText
+            );
+
+        readerSeconds =
+            fullReaderSeconds;
+    }
+
+    if (
+        isFullBook &&
+        !fullAvailable
+    ) {
+        readerModeNote.textContent =
+            "FULL BOOK NOT YET LOADED FOR THIS EDITION";
+        return;
+    }
+
+    const activeReaderSource =
+        isFullBook
+            ? currentBook.fullText
+            : currentBook.fifteenMinuteText;
+
+    if (!String(activeReaderSource || "").trim()) {
+        readerModeNote.textContent =
+            isFullBook
+                ? "FULL BOOK NOT YET AVAILABLE FOR THIS EDITION"
+                : "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
+        return;
+    }
+
+    renderReaderText(activeReaderSource);
+
+    // Do not restore an old reading position: every opening starts at 0.
+    readerScrollPosition = 0;
+
+    const savedProgress = 0;
+
+    readerModeNote.textContent =
+        isFullBook
+            ? "FULL SOURCE TEXT"
+            : (
+                savedProgress > 0.01
+                    ? "CONTINUING FROM " +
+                      Math.floor(savedProgress * 100) +
+                      "%"
+                    : "15-MINUTE SOURCE TEXT"
+            );
+
+    mode15.classList.toggle("active", readingMode === "15");
+    modeFull.classList.toggle("active", readingMode === "full");
+    modeFull.disabled = !fullAvailable;
+    document.getElementById("readerTimer").textContent =
+        formatReaderTime(readerSeconds);
+
+    readerPause.style.display = "";
+    readerPause.textContent = "PAUSE";
+
+
+    readerStatus.textContent = "AUTO-READING";
+
+
+    reader.classList.add(
+        "open"
+    );
+
+    restoreHUDPosition();
+
+
+    /*
+        Allow the browser to calculate
+        the complete text height before
+        starting the fluid movement.
+    */
+
+    requestAnimationFrame(
+        function() {
+
+            const availableScroll =
+                Math.max(
+                    0,
+                    readerText.scrollHeight -
+                    readerText.clientHeight
+                );
+
+            readerScrollPosition =
+                Math.min(
+                    Math.max(0, readerScrollPosition),
+                    availableScroll
+                );
+
+            readerProgrammaticScroll = true;
+            readerText.scrollTop =
+                readerScrollPosition;
+            readerProgrammaticScroll = false;
+
+            updateReaderUI();
+
+            /*
+                Give the reader a short, stable view of the
+                first text before automatic movement begins.
+                Returning readers resume immediately.
+            */
+            // Force the beginning again after layout has settled.
+            readerProgrammaticScroll = true;
+            readerScrollPosition = 0;
+            readerText.scrollTop = 0;
+            readerProgrammaticScroll = false;
+            updateReaderUI();
+
+            // Hold the first text briefly, then start one controlled
+            // auto-reader loop.
+            startReaderAnimation(
+                READER_FIRST_TEXT_HOLD_MS,
+                openToken
+            );
+        }
+    );
+}
+
+
+/* =================================================
+   FLUID AUTO READER
+================================================= */
+
+function fluidAutoReader(now) {
+
+    if (
+        readerComplete
+    ) {
+
+        return;
+    }
+
+
+    /*
+        Calculate real frame time.
+    */
+
+    const delta =
+        Math.min(
+            0.05,
+            (
+                now -
+                readerLastTime
+            ) / 1000
+        );
+
+
+    readerLastTime =
+        now;
+
+
+    /*
+        PAUSED
+    */
+
+    if (
+        readerPaused
+    ) {
+
+        readerAnimation =
+            requestAnimationFrame(
+                fluidAutoReader
+            );
+
+        return;
+    }
+
+
+    const maxScroll =
+        Math.max(
+            0,
+            readerText.scrollHeight -
+            readerText.clientHeight
+        );
+
+
+    /*
+        Nothing to scroll.
+    */
+
+    if (
+        maxScroll <= 0
+    ) {
+
+        finishReader();
+
+        return;
+    }
+
+
+    /*
+        CONSTANT FLUID SPEED.
+
+        Complete scroll distance is divided
+        across this mode's actual reading duration:
+        the configured 15-minute target for 15 MIN,
+        or the full-source duration for FULL BOOK.
+    */
+
+    const activeReadingSeconds =
+        readingMode === "full"
+            ? fullReaderSeconds
+            : TARGET_READING_SECONDS;
+
+    const pixelsPerSecond =
+        maxScroll /
+        activeReadingSeconds;
+
+
+    readerScrollPosition +=
+        pixelsPerSecond *
+        delta;
+
+    if (
+        now - lastReaderSaveTime >
+        2000
+    ) {
+        saveReaderPosition(now);
+    }
+
+
+    readerScrollPosition =
+        Math.min(
+            maxScroll,
+            readerScrollPosition
+        );
+
+
+    readerProgrammaticScroll = true;
+    readerText.scrollTop =
+        readerScrollPosition;
+    readerProgrammaticScroll = false;
+
+
+    /*
+        Calculate progress directly
+        from physical reading position.
+    */
+
+    const progress =
+        readerScrollPosition /
+        maxScroll;
+
+
+    readerSeconds =
+        Math.max(
+            0,
+            activeReadingSeconds *
+            (1 - progress)
+        );
+
+
+    updateReaderUI();
+
+
+    /*
+        END
+    */
+
+    if (
+        readerScrollPosition >=
+        maxScroll - 1
+    ) {
+
+        finishReader();
+
+        return;
+    }
+
+
+    /*
+        CONTINUE EVERY FRAME
+    */
+
+    readerAnimation =
+        requestAnimationFrame(
+            fluidAutoReader
+        );
+}
+
+
+/* =================================================
+   FINISH READER
+================================================= */
+
+function readerPositionKey() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return null;
+    return READER_STATE_PREFIX + window.CICAN_ACTIVE_BOOK_ID + ":" + readingMode;
+}
+
+function loadReaderPosition() {
+    const key = readerPositionKey();
+    if (!key) return 0;
+    try {
+        const value = Number(localStorage.getItem(key));
+        return Number.isFinite(value) && value >= 0 ? value : 0;
+    } catch (_) {
+        return 0;
+    }
+}
+
+function saveReaderPosition(now) {
+
+    if (
+        !currentBook ||
+        !window.CICAN_ACTIVE_BOOK_ID
+    ) {
+        return;
+    }
+
+    try {
+        localStorage.setItem(
+            READER_STATE_PREFIX +
+            window.CICAN_ACTIVE_BOOK_ID +
+            ":" +
+            readingMode,
+            String(
+                Math.max(
+                    0,
+                    readerScrollPosition
+                )
+            )
+        );
+        lastReaderSaveTime =
+            now || performance.now();
+    } catch (_) {}
+}
+
+
+function clearReaderPosition() {
+
+    if (!window.CICAN_ACTIVE_BOOK_ID) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(
+            READER_STATE_PREFIX +
+            window.CICAN_ACTIVE_BOOK_ID +
+            ":" +
+            readingMode
+        );
+    } catch (_) {}
+}
+
+
+function finishReader() {
+
+    if (
+        readerComplete
+    ) {
+
+        return;
+    }
+
+
+    readerComplete =
+        true;
+
+
+    stopReaderAnimation();
+
+
+    /*
+        Put reader exactly at the end.
+    */
+
+    readerText.scrollTop =
+        readerText.scrollHeight;
+
+
+    readerScrollPosition =
+        Math.max(
+            0,
+            readerText.scrollHeight -
+            readerText.clientHeight
+        );
+
+
+    // Persist the exact completed position so a lifecycle interruption
+    // cannot restore the reader to an earlier point.
+    saveReaderPosition(performance.now());
+
+
+    readerSeconds =
+        0;
+
+
+    document.getElementById(
+        "readerTimer"
+    ).textContent =
+        formatReaderTime(0);
+
+
+    document.getElementById(
+        "readerPercent"
+    ).textContent =
+        "100%";
+
+
+    readerStatus.textContent =
+        "COMPLETE";
+
+
+    readerPause.textContent =
+        "READ AGAIN";
+}
+
+
+/* =================================================
+   PAUSE / RESUME
+================================================= */
+
+mode15.addEventListener("pointerdown", function(e) {
+    e.preventDefault();
+    if (!currentBook) return;
+
+    readingMode = "15";
+    saveReaderMode();
+    openReader("15");
+});
+
+modeFull.addEventListener("pointerdown", async function(e) {
+    e.preventDefault();
+    if (!currentBook || fullTextLoading) return;
+
+    readingMode = "full";
+    saveReaderMode();
+    await openReader("full");
+});
+
+/*
+    READER TOUCH CONTROL
+
+    A simple tap must NOT interrupt automatic reading.
+    Only an actual drag takes control of the text.
+    One state owns the transition:
+
+        AUTO -> MANUAL -> AUTO
+
+    This prevents a tap/pointer event from racing with
+    the automatic reader or creating a second animation loop.
+*/
+let readerPointerDownX = 0;
+let readerPointerDownY = 0;
+let readerPointerMoved = false;
+let readerManualInteraction = false;
+
+function clearReaderManualResumeTimer() {
+    if (readerManualResumeTimer !== null) {
+        clearTimeout(readerManualResumeTimer);
+        readerManualResumeTimer = null;
+    }
+}
+
+function scheduleReaderAutoResume() {
+    clearReaderManualResumeTimer();
+
+    readerManualResumeTimer = setTimeout(function() {
+        readerManualResumeTimer = null;
+
+        if (
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused ||
+            !readerManualInteraction
+        ) {
+            return;
+        }
+
+        readerManualInteraction = false;
+        startReaderAnimation(0, readerOpenToken);
+    }, READER_MANUAL_RESUME_MS);
+}
+
+readerText.addEventListener(
+    "pointerdown",
+    function(e) {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+
+        readerPointerDownX = e.clientX;
+        readerPointerDownY = e.clientY;
+        readerPointerMoved = false;
+
+        clearReaderManualResumeTimer();
+    },
+    { passive: true }
+);
+
+readerText.addEventListener(
+    "pointermove",
+    function(e) {
+        if (
+            readerPointerMoved ||
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            return;
+        }
+
+        const dx = e.clientX - readerPointerDownX;
+        const dy = e.clientY - readerPointerDownY;
+
+        if (Math.hypot(dx, dy) < 6) {
+            return;
+        }
+
+        readerPointerMoved = true;
+        readerManualInteraction = true;
+
+        stopReaderAnimation();
+        readerStatus.textContent = "MANUAL SCROLL";
+    },
+    { passive: true }
+);
+
+readerText.addEventListener(
+    "pointerup",
+    function() {
+        if (!readerManualInteraction) {
+            readerPointerMoved = false;
+            return;
+        }
+
+        readerPointerMoved = false;
+
+        if (
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            readerManualInteraction = false;
+            return;
+        }
+
+        scheduleReaderAutoResume();
+    },
+    { passive: true }
+);
+
+readerText.addEventListener(
+    "pointercancel",
+    function() {
+        readerPointerMoved = false;
+
+        if (
+            !readerManualInteraction ||
+            !reader.classList.contains("open") ||
+            readerComplete ||
+            readerPaused
+        ) {
+            readerManualInteraction = false;
+            return;
+        }
+
+        scheduleReaderAutoResume();
+    },
+    { passive: true }
+);
+
+readerText.addEventListener("scroll", function() {
+    /*
+        IMPORTANT:
+        Do not stop the auto-reader from the scroll event.
+        scrollTop writes from requestAnimationFrame can dispatch
+        their scroll event asynchronously, after the programmatic
+        flag has already been cleared. Pointer events are the
+        reliable signal for a human touch/mouse gesture.
+    */
+    readerScrollPosition = readerText.scrollTop;
+    updateReaderUI();
+
+    const maxScroll =
+        Math.max(
+            0,
+            readerText.scrollHeight - readerText.clientHeight
+        );
+
+    const atEnd =
+        maxScroll > 0 &&
+        readerScrollPosition >= maxScroll - 2;
+
+    if (atEnd && !readerComplete) {
+        finishReader();
+        return;
+    }
+
+    if (
+        !readerProgrammaticScroll &&
+        readerPaused
+    ) {
+        readerStatus.textContent = "PAUSED";
+    }
+
+    const now = performance.now();
+    if (
+        !readerProgrammaticScroll &&
+        now - lastReaderSaveTime > 700
+    ) {
+        saveReaderPosition(now);
+    }
+});
+
+readerPause.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+
+        if (
+            !currentBook
+        ) {
+
+            return;
+        }
+
+
+        /*
+            COMPLETE → READ AGAIN
+        */
+
+        if (
+            readerComplete
+        ) {
+
+            clearReaderPosition();
+
+            openReader();
+
+            return;
+        }
+
+
+        /*
+            PAUSE
+        */
+
+        if (
+            !readerPaused
+        ) {
+
+            readerPaused = true;
+
+            clearReaderManualResumeTimer();
+            readerManualInteraction = false;
+            stopReaderAnimation();
+
+            readerPause.textContent = "RESUME";
+            readerStatus.textContent = "PAUSED";
+
+            return;
+        }
+
+
+        /*
+            RESUME
+
+            Resume through the same single start path used by
+            opening the reader and ending a manual drag.
+        */
+
+        readerPaused = false;
+
+        readerPause.textContent = "PAUSE";
+
+        startReaderAnimation(0, readerOpenToken);
+    }
+);
+
+
+/* =================================================
+   CLOSE READER
+================================================= */
+
+function closeReader() {
+
+    readerOpenToken += 1;
+
+    stopReaderAnimation();
+
+    clearReaderManualResumeTimer();
+    readerManualInteraction = false;
+
+    saveReaderPosition(
+        performance.now()
+    );
+
+    stopReaderAnimation();
+
+
+    readerPaused =
+        false;
+
+
+    readerComplete =
+        false;
+
+
+    readerSeconds =
+        TARGET_READING_SECONDS;
+
+
+    readerScrollPosition =
+        0;
+
+
+    readerText.textContent =
+        "";
+
+
+    readerText.scrollTop =
+        0;
+
+
+    reader.classList.remove(
+        "open"
+    );
+
+
+    readerPause.textContent =
+        "PAUSE";
+
+
+    readerStatus.textContent =
+        "AUTO-READING";
+}
+
+
+/* =================================================
+   READER CLOSE BUTTON
+================================================= */
+
+readerClose.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+        closeReader();
+    }
+);
+
+
+/* =================================================
+   READER LIFECYCLE PERSISTENCE
+================================================= */
+
+function persistReaderLifecycleState() {
+    if (!reader.classList.contains("open") || !currentBook) return;
+    saveReaderPosition(performance.now());
+}
+
+window.addEventListener("pagehide", persistReaderLifecycleState);
+window.addEventListener("beforeunload", persistReaderLifecycleState);
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === "hidden") {
+        persistReaderLifecycleState();
+    }
+});
+
+
+/* =================================================
+   READER EVENT PROTECTION
+================================================= */
+
+reader.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        e.stopPropagation();
+    }
+);
+
+
+reader.addEventListener(
+    "pointermove",
+    function(e) {
+
+        e.stopPropagation();
+    }
+);
+
+
+reader.addEventListener(
+    "pointerup",
+    function(e) {
+
+        e.stopPropagation();
+    }
+);
+
+
+reader.addEventListener(
+    "pointercancel",
+    function(e) {
+
+        e.stopPropagation();
+    }
+);
+
+
+/* =================================================
+   SMALL MOVABLE TIMER
+================================================= */
+
+const readerHUD =
+    document.getElementById(
+        "readerHUD"
+    );
+
+const readerPanel =
+    document.querySelector(
+        ".reader-panel"
+    );
+
+let hudDragging = false;
+
+let hudPointerId = null;
+
+let hudOffsetX = 0;
+
+let hudOffsetY = 0;
+
+
+readerHUD.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+
+        hudDragging = true;
+
+        hudPointerId =
+            e.pointerId;
+
+
+        const hudRect =
+            readerHUD.getBoundingClientRect();
+
+
+        hudOffsetX =
+            e.clientX -
+            hudRect.left;
+
+
+        hudOffsetY =
+            e.clientY -
+            hudRect.top;
+
+
+        readerHUD.classList.add(
+            "dragging"
+        );
+
+
+        try {
+
+            readerHUD.setPointerCapture(
+                e.pointerId
+            );
+
+        } catch (_) {}
+    },
+    {
+        passive: false
+    }
+);
+
+
+readerHUD.addEventListener(
+    "pointermove",
+    function(e) {
+
+        if (
+            !hudDragging ||
+            e.pointerId !== hudPointerId
+        ) {
+            return;
+        }
+
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+
+        const panelRect =
+            readerPanel.getBoundingClientRect();
+
+        const hudRect =
+            readerHUD.getBoundingClientRect();
+
+
+        const padding =
+            6;
+
+
+        let left =
+            e.clientX -
+            panelRect.left -
+            hudOffsetX;
+
+
+        let top =
+            e.clientY -
+            panelRect.top -
+            hudOffsetY;
+
+
+        const maxLeft =
+            Math.max(
+                padding,
+                panelRect.width -
+                hudRect.width -
+                padding
+            );
+
+
+        const maxTop =
+            Math.max(
+                padding,
+                panelRect.height -
+                hudRect.height -
+                padding
+            );
+
+
+        left =
+            Math.max(
+                padding,
+                Math.min(
+                    maxLeft,
+                    left
+                )
+            );
+
+
+        top =
+            Math.max(
+                padding,
+                Math.min(
+                    maxTop,
+                    top
+                )
+            );
+
+
+        readerHUD.style.left =
+            left + "px";
+
+
+        readerHUD.style.top =
+            top + "px";
+
+
+        readerHUD.style.right =
+            "auto";
+
+
+        readerHUD.style.bottom =
+            "auto";
+    },
+    {
+        passive: false
+    }
+);
+
+
+function saveHUDPosition() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return;
+    if (!readerHUD.style.left || !readerHUD.style.top) return;
+    try {
+        localStorage.setItem(
+            "cican_reader_hud:" + window.CICAN_ACTIVE_BOOK_ID,
+            JSON.stringify({
+                left: readerHUD.style.left,
+                top: readerHUD.style.top
+            })
+        );
+    } catch (_) {}
+}
+
+
+function restoreHUDPosition() {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return;
+    try {
+        const saved = localStorage.getItem(
+            "cican_reader_hud:" + window.CICAN_ACTIVE_BOOK_ID
+        );
+        if (!saved) return;
+        const position = JSON.parse(saved);
+        if (position && position.left && position.top) {
+            readerHUD.style.left = position.left;
+            readerHUD.style.top = position.top;
+            readerHUD.style.right = "auto";
+            readerHUD.style.bottom = "auto";
+        }
+    } catch (_) {}
+}
+
+
+function endHUDDrag(e) {
+
+    if (!hudDragging) {
+        return;
+    }
+
+
+    if (
+        e &&
+        e.pointerId !== hudPointerId
+    ) {
+        return;
+    }
+
+
+    if (e) {
+
+        e.preventDefault();
+
+        e.stopPropagation();
+    }
+
+
+    hudDragging =
+        false;
+
+
+    readerHUD.classList.remove(
+        "dragging"
+    );
+
+    saveHUDPosition();
+
+
+    try {
+
+        readerHUD.releasePointerCapture(
+            hudPointerId
+        );
+
+    } catch (_) {}
+
+
+    hudPointerId =
+        null;
+}
+
+
+readerHUD.addEventListener(
+    "pointerup",
+    endHUDDrag,
+    {
+        passive: false
+    }
+);
+
+
+readerHUD.addEventListener(
+    "pointercancel",
+    endHUDDrag,
+    {
+        passive: false
+    }
+);
+
+
+/* =================================================
+   KEEP HUD INSIDE READER
+================================================= */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (
+            !readerHUD.style.left
+        ) {
+            return;
+        }
+
+
+        const panelRect =
+            readerPanel.getBoundingClientRect();
+
+        const hudRect =
+            readerHUD.getBoundingClientRect();
+
+
+        const padding =
+            6;
+
+
+        let left =
+            parseFloat(
+                readerHUD.style.left
+            );
+
+
+        let top =
+            parseFloat(
+                readerHUD.style.top
+            );
+
+
+        if (
+            !Number.isFinite(left)
+        ) {
+            left = padding;
+        }
+
+
+        if (
+            !Number.isFinite(top)
+        ) {
+            top = padding;
+        }
+
+
+        const maxLeft =
+            Math.max(
+                padding,
+                panelRect.width -
+                hudRect.width -
+                padding
+            );
+
+
+        const maxTop =
+            Math.max(
+                padding,
+                panelRect.height -
+                hudRect.height -
+                padding
+            );
+
+
+        left =
+            Math.max(
+                padding,
+                Math.min(
+                    maxLeft,
+                    left
+                )
+            );
+
+
+        top =
+            Math.max(
+                padding,
+                Math.min(
+                    maxTop,
+                    top
+                )
+            );
+
+
+        readerHUD.style.left =
+            left + "px";
+
+
+        readerHUD.style.top =
+            top + "px";
+    }
+);
+
+
+/* =================================================
+   READER VIEWPORT RESILIENCE
+================================================= */
+
+let readerResizeFrame = null;
+
+window.addEventListener("resize", function() {
+    if (!reader.classList.contains("open") || !currentBook) return;
+
+    const previousMaxScroll = Math.max(
+        0,
+        readerText.scrollHeight - readerText.clientHeight
+    );
+
+    const previousPosition = Math.max(
+        0,
+        Math.min(readerText.scrollTop, previousMaxScroll)
+    );
+
+    const progress = previousMaxScroll > 0
+        ? previousPosition / previousMaxScroll
+        : 0;
+
+    if (readerResizeFrame !== null) {
+        cancelAnimationFrame(readerResizeFrame);
+    }
+
+    readerResizeFrame = requestAnimationFrame(function() {
+        readerResizeFrame = null;
+
+        const nextMaxScroll = Math.max(
+            0,
+            readerText.scrollHeight - readerText.clientHeight
+        );
+
+        readerScrollPosition = Math.min(
+            Math.max(0, nextMaxScroll * progress),
+            nextMaxScroll
+        );
+
+        readerText.scrollTop = readerScrollPosition;
+        updateReaderUI();
+        saveReaderPosition(performance.now());
+    });
+});
+
+
+/* =================================================
+   ESCAPE
+================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e) {
+
+        if (
+            e.key !== "Escape"
+        ) {
+
+            return;
+        }
+
+
+        if (
+            reader.classList.contains(
+                "open"
+            )
+        ) {
+
+            closeReader();
+
+            return;
+        }
+
+
+        if (
+            prologue.classList.contains(
+                "open"
+            )
+        ) {
+
+            closePrologue();
+        }
+    }
+);
+
+
+/* =================================================
+   RESET
+================================================= */
+
+function resetGame() {
+
+    closeReader();
+
+    closePrologue();
+
+
+    /*
+        REMOVE CICAN
+    */
+
+    for (
+        const one of ones
+    ) {
+
+        one.element.remove();
+    }
+
+
+    ones = [];
+
+
+    /*
+        REMOVE READ OBJECTS
+    */
+
+    for (
+        const knowledge of readObjects
+    ) {
+
+        knowledge.element.remove();
+    }
+
+
+    readObjects = [];
+
+
+    /*
+        REMOVE TRAILS
+    */
+
+    document
+        .querySelectorAll(
+            ".trail"
+        )
+        .forEach(
+            element =>
+                element.remove()
+        );
+
+
+    /*
+        RESET CONTROL
+    */
+
+    selectedOne =
+        createOne(
+            window.innerWidth / 2,
+            window.innerHeight / 2,
+            MIN_SIZE,
+            false
+        );
+
+
+    growing = false;
+
+    lastTap = 0;
+
+    lastTappedOne = null;
+}
+
+
+/* =================================================
+   RESET BUTTON
+================================================= */
+
+const resetButton =
+    document.getElementById(
+        "reset"
+    );
+
+
+resetButton.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+        window.location.href = "index.html";
+    }
+);
+
+
+/* =================================================
+   START
+================================================= */
+
+selectedOne =
+    createOne(
+        window.innerWidth / 2,
+        window.innerHeight / 2,
+        MIN_SIZE,
+        false
+    );
+
+
+/* =================================================
+   MAIN LOOP
+================================================= */
+
+function animate() {
+
+    /*
+        BOOK-SPECIFIC EXPERIENCE IS VISUAL ONLY.
+        The canonical CICAN game loop remains independent
+        of book-specific visual effects.
+    */
+
+    /*
+        ORIGINAL V13 FLUID MOVEMENT.
+
+        x += (targetX - x) * 0.10
+        y += (targetY - y) * 0.10
+
+        PRESERVED.
+    */
+
+    for (
+        const one of ones
+    ) {
+
+        one.x +=
+            (
+                one.targetX -
+                one.x
+            ) * 0.10;
+
+
+        one.y +=
+            (
+                one.targetY -
+                one.y
+            ) * 0.10;
+
+
+        /*
+            ONLY SELECTED CICAN
+            GROWS.
+        */
+
+        if (
+            growing &&
+            selectedOne === one
+        ) {
+
+            one.size += 0.5;
+
+
+            if (
+                one.size >
+                MAX_SIZE
+            ) {
+
+                one.size =
+                    MAX_SIZE;
+            }
+        }
+
+
+        /*
+            TRAIL.
+        */
+
+        if (
+            distance(
+                one.x,
+                one.y,
+                one.lastTrailX,
+                one.lastTrailY
+            ) >=
+            TRAIL_DISTANCE
+        ) {
+
+            createTrail(
+                one.x,
+                one.y
+            );
+
+
+            one.lastTrailX =
+                one.x;
+
+            one.lastTrailY =
+                one.y;
+        }
+
+
+        updateOne(one);
+    }
+
+
+    /*
+        MERGE IS THE ONLY
+        INTERACTION BETWEEN
+        TWO CICAN.
+    */
+
+    checkForMerges();
+
+
+    /*
+        UPDATE READ OBJECTS.
+    */
+
+    for (
+        const knowledge of readObjects
+    ) {
+
+        updateKnowledge(
+            knowledge
+        );
+    }
+
+
+    requestAnimationFrame(
+        animate
+    );
+
+}
+
+
+updateReaderModeUI();
+
+
+animate();
+
+
+}
+
+
+startCicanBook().catch(function(error) {
+
+    console.error(
+        "CICAN book loading error:",
+        error
+    );
+
+    document.getElementById(
+        "subtitle"
+    ).textContent =
+        "BOOK COULD NOT LOAD";
+});
+
+
+</script>
+
+</body>
+</html>
