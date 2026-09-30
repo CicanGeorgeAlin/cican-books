@@ -1501,8 +1501,8 @@ let readerOpenToken = 0;
 let readerProgrammaticScroll = false;
 let readerManualResumeTimer = null;
 
-const READER_FIRST_TEXT_HOLD_MS = 2500;
-const READER_MANUAL_RESUME_MS = 1800;
+const READER_FIRST_TEXT_HOLD_MS = 0;
+const READER_MANUAL_RESUME_MS = 350;
 
 const TARGET_READING_SECONDS =
     Math.max(
@@ -1513,8 +1513,8 @@ const TARGET_READING_SECONDS =
         ) * 60 || 900
     );
 
-/* Reader speed: intentionally slower than the previous 150 WPM baseline. */
-const READER_WPM = 135;
+/* Reader speed: deliberate 100 WPM benchmark for comfortable reading. */
+const READER_WPM = 100;
 const FIFTEEN_MINUTE_TARGET_WORDS =
     Math.round((READER_WPM * TARGET_READING_SECONDS) / 60);
 
