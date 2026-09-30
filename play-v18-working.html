@@ -1151,9 +1151,10 @@ body {
     position: absolute;
 
     right: 30%;
-    top: clamp(64px, 9vh, 78px);
+    top: 64px;
 
     left: auto;
+    bottom: auto;
 
     z-index: 20;
 
@@ -1165,30 +1166,35 @@ body {
 
     justify-content: center;
 
-    gap: 4px;
+    gap: 3px;
 
-    width: auto;
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    max-width: 58px;
+    min-height: 58px;
+    max-height: 58px;
 
-    min-width: clamp(82px, 15.7vw, 108px);
-
-    padding: 6px 8px;
+    padding: 6px;
 
     border:
         1px solid
-        rgba(255,255,255,0.16);
+        rgba(255,255,255,0.28);
 
-    border-radius: 9px;
+    border-radius: 50%;
 
     background:
-        rgba(0,0,0,0.76);
+        rgba(0,0,0,0.82);
 
     backdrop-filter: blur(6px);
 
     -webkit-backdrop-filter: blur(6px);
 
     box-shadow:
-        0 4px 14px
-        rgba(0,0,0,0.30);
+        0 0 18px
+        rgba(255,255,255,0.06),
+        0 5px 18px
+        rgba(0,0,0,0.38);
 
     pointer-events: auto;
 
@@ -1216,7 +1222,7 @@ body {
 
     color: white;
 
-    font-size: 13px;
+    font-size: 10px;
 
     line-height: 1;
 
@@ -1427,7 +1433,9 @@ body {
 
         right: 9px;
 
-        bottom: 9px;
+        top: 64px;
+
+        bottom: auto;
     }
 
     .prologue-panel {
