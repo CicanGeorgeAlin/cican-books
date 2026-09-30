@@ -2677,9 +2677,7 @@ function updateReaderUI() {
     document.getElementById(
         "readerTimer"
     ).textContent =
-        readingMode === "full"
-            ? "FULL"
-            : formatTime(readerSeconds);
+        formatTime(readerSeconds);
 
 
     document.getElementById(
@@ -3002,6 +3000,52 @@ async function openReader(modeOverride) {
             );
     }
 
+    /*
+        FULL BOOK must load the complete source asset before rendering.
+        A fullTextUrl is a location, never reader content.
+    */
+    if (
+        isFullBook &&
+        !currentBook.fullText &&
+        currentBook.fullTextUrl
+    ) {
+        fullTextLoading = true;
+        readerModeNote.textContent =
+            "LOADING FULL BOOK";
+
+        try {
+            const sourceText =
+                await loadSourceTextForReader(
+                    currentBook,
+                    openToken
+                );
+
+            if (
+                openToken !== readerOpenToken ||
+                readingMode !== requestedMode ||
+                currentBook !== requestedBook
+            ) {
+                fullTextLoading = false;
+                return;
+            }
+
+            currentBook.fullText =
+                sourceText;
+
+        } catch (fullBookError) {
+            console.error(
+                "CICAN FULL BOOK load error:",
+                fullBookError
+            );
+            fullTextLoading = false;
+            readerModeNote.textContent =
+                "FULL BOOK COULD NOT BE LOADED";
+            return;
+        }
+
+        fullTextLoading = false;
+    }
+
     if (
         !isFullBook &&
         !currentBook.fifteenMinuteText
@@ -3174,6 +3218,14 @@ async function openReader(modeOverride) {
         isFullBook
             ? currentBook.fullText
             : currentBook.fifteenMinuteText;
+
+    if (!String(activeReaderSource || "").trim()) {
+        readerModeNote.textContent =
+            isFullBook
+                ? "FULL BOOK NOT YET AVAILABLE FOR THIS EDITION"
+                : "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
+        return;
+    }
 
     renderReaderText(activeReaderSource);
 
@@ -3588,7 +3640,10 @@ readerText.addEventListener("scroll", function() {
     readerScrollPosition = readerText.scrollTop;
     updateReaderUI();
     const maxScroll = Math.max(0, readerText.scrollHeight - readerText.clientHeight);
-    readerStatus.textContent = maxScroll > 0 && readerScrollPosition >= maxScroll - 2 ? "COMPLETE" : "FULL BOOK";
+    readerStatus.textContent =
+        maxScroll > 0 && readerScrollPosition >= maxScroll - 2
+            ? "COMPLETE"
+            : "FULL BOOK • AUTO-READING";
     const now = performance.now();
     if (now - lastReaderSaveTime > 700) saveReaderPosition(now);
 });
