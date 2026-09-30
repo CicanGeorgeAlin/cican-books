@@ -46,96 +46,6 @@ body {
 
 
 /* =================================================
-   BOOK IDENTITY ATMOSPHERE
-   One shared visual layer; book configs provide data.
-================================================= */
-
-#bookIdentityAtmosphere {
-
-    position: fixed;
-    inset: -18%;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.82;
-    background:
-        radial-gradient(
-            circle at 50% 46%,
-            var(--identity-glow, rgba(255,255,255,0.08)),
-            transparent 42%
-        ),
-        radial-gradient(
-            circle at 18% 82%,
-            var(--identity-a, rgba(255,255,255,0.05)),
-            transparent 48%
-        ),
-        radial-gradient(
-            circle at 82% 18%,
-            var(--identity-b, rgba(255,255,255,0.025)),
-            transparent 46%
-        );
-    filter: blur(18px);
-    transform: translate3d(0,0,0) scale(1.04);
-    transition:
-        background 900ms ease,
-        opacity 900ms ease,
-        transform 1200ms ease;
-}
-
-#bookIdentityAtmosphere.texture-grid {
-    background-image:
-        linear-gradient(
-            90deg,
-            transparent 49.5%,
-            var(--identity-glow, rgba(255,255,255,0.08)) 50%,
-            transparent 50.5%
-        ),
-        linear-gradient(
-            0deg,
-            transparent 49.5%,
-            var(--identity-glow, rgba(255,255,255,0.08)) 50%,
-            transparent 50.5%
-        ),
-        radial-gradient(circle at 50% 50%, var(--identity-glow, rgba(255,255,255,0.08)), transparent 55%);
-    background-size: 110px 110px, 110px 110px, auto;
-    opacity: 0.24;
-    filter: blur(1px);
-}
-
-#bookIdentityAtmosphere.texture-ocean,
-#bookIdentityAtmosphere.texture-flow {
-    animation: identityDrift 18s ease-in-out infinite alternate;
-}
-
-#bookIdentityAtmosphere.texture-sun,
-#bookIdentityAtmosphere.texture-dust {
-    animation: identityRise 14s ease-in-out infinite alternate;
-}
-
-@keyframes identityDrift {
-    from { transform: translate3d(-1%, 0, 0) scale(1.04); }
-    to { transform: translate3d(1%, -1%, 0) scale(1.08); }
-}
-
-@keyframes identityRise {
-    from { transform: translate3d(0, 1%, 0) scale(1.04); }
-    to { transform: translate3d(0, -1%, 0) scale(1.08); }
-}
-
-body.reader-open #bookIdentityAtmosphere,
-body.prologue-open #bookIdentityAtmosphere {
-    opacity: 0.18;
-    filter: blur(24px);
-}
-
-@media(prefers-reduced-motion: reduce) {
-    #bookIdentityAtmosphere {
-        animation: none !important;
-        transition: none;
-    }
-}
-
-
-/* =================================================
    CICAN
 ================================================= */
 
@@ -218,48 +128,6 @@ body.prologue-open #bookIdentityAtmosphere {
 /* =================================================
    TRAIL
 ================================================= */
-
-.dhamma-thought {
-
-    position: absolute;
-
-    width: 4px;
-    height: 4px;
-
-    border-radius: 50%;
-
-    background: #FFFFFF;
-
-    transform: translate(-50%, -50%);
-
-    pointer-events: none;
-
-    opacity: 0.22;
-
-    box-shadow: 0 0 7px rgba(255,255,255,0.8);
-
-    transition: opacity 0.4s ease;
-}
-
-
-
-
-/* =================================================
-   TAO TE CHING EXPERIENCE
-================================================= */
-
-.tao-flow {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    opacity: 0.18;
-    box-shadow: 0 0 6px rgba(255,255,255,0.75);
-}
-
 /* =================================================
    TRAIL
 ================================================= */
@@ -935,15 +803,15 @@ body.prologue-open #bookIdentityAtmosphere {
         "Times New Roman",
         serif;
 
-    font-size: clamp(16px, 1.72vw, 18px);
+    font-size: clamp(16px, 1.78vw, 18.5px);
 
     font-weight: 400;
 
-    line-height: 1.72;
+    line-height: 1.78;
 
     letter-spacing: 0;
 
-    max-width: 62ch;
+    max-width: 60ch;
 
     width: 100%;
 
@@ -956,8 +824,8 @@ body.prologue-open #bookIdentityAtmosphere {
     min-height: 0;
 
     padding:
-        14px
-        14px
+        16px
+        12px
         128px;
 
     user-select: text;
@@ -966,11 +834,12 @@ body.prologue-open #bookIdentityAtmosphere {
 
     touch-action: pan-y;
 
-    white-space: pre-wrap;
+    white-space: normal;
 
     overflow-wrap: break-word;
 
     text-wrap: pretty;
+    text-align: left;
 
     font-kerning: normal;
 
@@ -1008,13 +877,17 @@ body.prologue-open #bookIdentityAtmosphere {
 
 }
 
-#readerText::selection {
-
-    background: rgba(255,255,255,0.92);
-
-    color: #000;
-
+#readerText .reader-block { margin: 0 0 1.15em; }
+#readerText .reader-block:last-child { margin-bottom: 0; }
+#readerText .reader-heading {
+    margin-top: 1.9em; margin-bottom: 1.1em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.78em; font-weight: 700; line-height: 1.45;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.72);
 }
+#readerText .reader-heading:first-child { margin-top: 0; }
+#readerText::selection { background: rgba(255,255,255,0.92); color: #000; }
 
 
 /* =================================================
@@ -1259,9 +1132,9 @@ body.prologue-open #bookIdentityAtmosphere {
 
         font-size: 16px;
 
-        line-height: 1.72;
+        line-height: 1.78;
 
-        max-width: 62ch;
+        max-width: 60ch;
 
         padding:
             10px 4px 128px;
@@ -1297,8 +1170,6 @@ body.prologue-open #bookIdentityAtmosphere {
 
 
 <body>
-
-<div id="bookIdentityAtmosphere" aria-hidden="true"></div>
 
 
 <!-- =================================================
@@ -1456,46 +1327,6 @@ const selectedBookId =
 
 window.BOOK_READ = null;
 
-const BOOK_IDENTITY_TEXTURES = Object.freeze({
-    radial: "radial",
-    flow: "flow",
-    columns: "columns",
-    stone: "stone",
-    leaves: "leaves",
-    sun: "sun",
-    storm: "storm",
-    moon: "moon",
-    dust: "dust",
-    grid: "grid",
-    ocean: "ocean",
-    lace: "lace"
-});
-
-function applyBookIdentity(book) {
-
-    const identity = book && book.identity;
-    const atmosphere = document.getElementById("bookIdentityAtmosphere");
-
-    if (!atmosphere) return;
-
-    const root = document.documentElement;
-
-    const a = identity && identity.atmosphereA;
-    const b = identity && identity.atmosphereB;
-    const glow = identity && identity.glow;
-    const texture = identity && BOOK_IDENTITY_TEXTURES[identity.texture]
-        ? BOOK_IDENTITY_TEXTURES[identity.texture]
-        : "radial";
-
-    root.style.setProperty("--identity-a", a || "rgba(255,255,255,0.05)");
-    root.style.setProperty("--identity-b", b || "rgba(255,255,255,0.025)");
-    root.style.setProperty("--identity-glow", glow || "rgba(255,255,255,0.08)");
-
-    atmosphere.className = "";
-    atmosphere.classList.add("texture-" + texture);
-
-    document.body.classList.remove("reader-open", "prologue-open");
-}
 window.CICAN_ACTIVE_BOOK = null;
 window.CICAN_ACTIVE_BOOK_ID = null;
 
@@ -1641,315 +1472,6 @@ let lastTappedOne = null;
 
 
 /* =================================================
-   DHAMMAPADA EXPERIENCE
-================================================= */
-
-const DHAMMAPADA_MODE =
-    BOOK_READ &&
-    BOOK_READ.gameMode === "dhammapada";
-
-let dhammaThoughts = [];
-let dhammaLastX = window.innerWidth / 2;
-let dhammaLastY = window.innerHeight / 2;
-let dhammaStillTime = 0;
-
-function createDhammapadaThoughts() {
-
-    if (!DHAMMAPADA_MODE) {
-        return;
-    }
-
-    for (let i = 0; i < 18; i++) {
-
-        const element =
-            document.createElement("div");
-
-        element.className =
-            "dhamma-thought";
-
-        document.body.appendChild(element);
-
-        const angle =
-            Math.PI * 2 * (i / 18);
-
-        const radius =
-            110 + Math.random() * 220;
-
-        const thought = {
-            element: element,
-            x: window.innerWidth / 2 + Math.cos(angle) * radius,
-            y: window.innerHeight / 2 + Math.sin(angle) * radius,
-            vx: 0,
-            vy: 0,
-            phase: Math.random() * Math.PI * 2
-        };
-
-        dhammaThoughts.push(thought);
-
-        element.style.left =
-            thought.x + "px";
-
-        element.style.top =
-            thought.y + "px";
-    }
-}
-
-function updateDhammapadaExperience() {
-
-    if (!DHAMMAPADA_MODE || !selectedOne) {
-        return;
-    }
-
-    const dx =
-        selectedOne.x - dhammaLastX;
-
-    const dy =
-        selectedOne.y - dhammaLastY;
-
-    const movement =
-        Math.sqrt(dx * dx + dy * dy);
-
-    dhammaLastX = selectedOne.x;
-    dhammaLastY = selectedOne.y;
-
-    if (movement < 0.45) {
-        dhammaStillTime += 1 / 60;
-    } else {
-        dhammaStillTime =
-            Math.max(0, dhammaStillTime - 0.08);
-    }
-
-    for (const thought of dhammaThoughts) {
-
-        const tx =
-            selectedOne.x - thought.x;
-
-        const ty =
-            selectedOne.y - thought.y;
-
-        const d =
-            Math.sqrt(tx * tx + ty * ty);
-
-        if (d > 1) {
-
-            const nx = tx / d;
-            const ny = ty / d;
-
-            if (movement > 0.45) {
-                thought.vx -= nx * 0.045;
-                thought.vy -= ny * 0.045;
-            } else {
-                thought.vx += nx * 0.018;
-                thought.vy += ny * 0.018;
-            }
-        }
-
-        thought.vx +=
-            Math.cos(thought.phase) * 0.003;
-
-        thought.vy +=
-            Math.sin(thought.phase) * 0.003;
-
-        thought.vx *= 0.96;
-        thought.vy *= 0.96;
-
-        thought.x += thought.vx;
-        thought.y += thought.vy;
-
-        if (
-            thought.x < 20 ||
-            thought.x > window.innerWidth - 20
-        ) {
-            thought.vx *= -0.7;
-        }
-
-        if (
-            thought.y < 20 ||
-            thought.y > window.innerHeight - 20
-        ) {
-            thought.vy *= -0.7;
-        }
-
-        thought.element.style.left =
-            thought.x + "px";
-
-        thought.element.style.top =
-            thought.y + "px";
-
-        const calm =
-            Math.min(1, dhammaStillTime / 4);
-
-        thought.element.style.opacity =
-            String(0.18 + calm * 0.35);
-    }
-}
-
-
-/* =================================================
-   TAO TE CHING EXPERIENCE
-================================================= */
-
-const TAO_MODE =
-    BOOK_READ &&
-    BOOK_READ.gameMode === "tao";
-
-let taoFlows = [];
-let taoLastX = window.innerWidth / 2;
-let taoLastY = window.innerHeight / 2;
-
-function createTaoFlows() {
-
-    if (!TAO_MODE) {
-        return;
-    }
-
-    /*
-        Tao atmosphere is intentionally lightweight.
-        It must never compete with the canonical CICAN
-        movement, growth, split, merge, or READ loop.
-    */
-    for (let i = 0; i < 8; i++) {
-
-        const element =
-            document.createElement("div");
-
-        element.className =
-            "tao-flow";
-
-        document.body.appendChild(element);
-
-        const flow = {
-            element: element,
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            vx: 0.22 + Math.random() * 0.34,
-            vy: 0,
-            phase: Math.random() * Math.PI * 2
-        };
-
-        taoFlows.push(flow);
-
-        element.style.transform =
-            "translate3d(" +
-            flow.x +
-            "px," +
-            flow.y +
-            "px,0) translate(-50%,-50%)";
-    }
-}
-
-function updateTaoExperience() {
-
-    if (!TAO_MODE || !selectedOne) {
-        return;
-    }
-
-    /*
-        Keep the book atmosphere separate from the game.
-        One clock value is shared by all visual particles.
-    */
-    const dx =
-        selectedOne.x - taoLastX;
-
-    const dy =
-        selectedOne.y - taoLastY;
-
-    const movement =
-        Math.sqrt(dx * dx + dy * dy);
-
-    taoLastX = selectedOne.x;
-    taoLastY = selectedOne.y;
-
-    const now =
-        performance.now();
-
-    const waveTime =
-        now * 0.00035;
-
-    for (const flow of taoFlows) {
-
-        const wave =
-            Math.sin(
-                flow.y * 0.008 +
-                flow.phase +
-                waveTime
-            );
-
-        flow.vy += wave * 0.0025;
-
-        if (movement > 0.45) {
-
-            const tx =
-                flow.x - selectedOne.x;
-
-            const ty =
-                flow.y - selectedOne.y;
-
-            const d =
-                Math.sqrt(tx * tx + ty * ty);
-
-            if (d > 1 && d < 190) {
-
-                const nx = tx / d;
-                const ny = ty / d;
-
-                const moveX = dx / movement;
-                const moveY = dy / movement;
-
-                const withFlow =
-                    Math.max(
-                        0,
-                        moveX * 0.92 +
-                        moveY * wave * 0.12
-                    );
-
-                const disturbance =
-                    0.035 *
-                    (1 - d / 190) *
-                    (1.15 - withFlow);
-
-                flow.vx += nx * disturbance;
-                flow.vy += ny * disturbance;
-            }
-        }
-
-        flow.vx =
-            Math.max(
-                0.12,
-                Math.min(0.9, flow.vx * 0.992)
-            );
-
-        flow.vy *= 0.985;
-
-        flow.x += flow.vx;
-        flow.y += flow.vy;
-
-        if (flow.x > window.innerWidth + 12) {
-            flow.x = -12;
-            flow.y = Math.random() * window.innerHeight;
-            flow.vx = 0.22 + Math.random() * 0.34;
-            flow.vy = 0;
-        }
-
-        if (flow.y < -12) {
-            flow.y = window.innerHeight + 12;
-        }
-
-        if (flow.y > window.innerHeight + 12) {
-            flow.y = -12;
-        }
-
-        flow.element.style.transform =
-            "translate3d(" +
-            flow.x +
-            "px," +
-            flow.y +
-            "px,0) translate(-50%,-50%)";
-    }
-}
-
-
-/* =================================================
    BOOK / READER STATE
 ================================================= */
 
@@ -1964,6 +1486,7 @@ let readerPaused = false;
 let readerComplete = false;
 
 let readerSeconds = 900;
+let readerTotalSeconds = 900;
 
 let readerLastTime = 0;
 
@@ -1981,6 +1504,8 @@ const TARGET_READING_SECONDS =
         ) * 60 || 900
     );
 
+const FULL_BOOK_WORDS_PER_MINUTE = 180;
+
 const READER_STATE_PREFIX =
     "cican_reader_position:";
 
@@ -1997,7 +1522,6 @@ let lastReaderSaveTime = 0;
 currentBook =
     BOOK_READ;
 
-applyBookIdentity(currentBook);
 
 if (currentBook && window.CICAN_ACTIVE_BOOK_ID) {
     try {
@@ -3290,6 +2814,28 @@ function selectFifteenMinuteText(
 }
 
 
+function renderReaderText(sourceText) {
+    const raw = String(sourceText || "").replace(/\r\n/g, "\n").trim();
+    readerText.replaceChildren();
+    if (!raw) return;
+    const blocks = raw.split(/\n[ \t]*\n+/);
+    const fragment = document.createDocumentFragment();
+    for (const block of blocks) {
+        const text = block.replace(/\n+/g, " ").replace(/[ \t]+/g, " ").trim();
+        if (!text) continue;
+        const el = document.createElement("div");
+        el.className = "reader-block";
+        if (/^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) || (text.length < 90 && !/[.!?]$/.test(text))) el.classList.add("reader-heading");
+        el.textContent = text;
+        fragment.appendChild(el);
+    }
+    readerText.appendChild(fragment);
+}
+function estimateFullBookSeconds(sourceText) {
+    const words = String(sourceText || "").match(/\S+/g)?.length || 0;
+    return Math.max(60, Math.ceil((words / FULL_BOOK_WORDS_PER_MINUTE) * 60));
+}
+
 async function loadSourceTextForReader(
     book,
     openToken
@@ -3624,12 +3170,12 @@ async function openReader(modeOverride) {
         return;
     }
 
-    readerText.textContent =
+    const activeReaderSource =
         isFullBook
-            ? (
-                currentBook.fullText
-            )
+            ? currentBook.fullText
             : currentBook.fifteenMinuteText;
+
+    renderReaderText(activeReaderSource);
 
     readerScrollPosition = loadReaderPosition();
 
@@ -3647,9 +3193,20 @@ async function openReader(modeOverride) {
             )
         );
 
+    readerTotalSeconds =
+        isFullBook
+            ? estimateFullBookSeconds(currentBook.fullText)
+            : TARGET_READING_SECONDS;
+
+    readerSeconds =
+        Math.max(
+            0,
+            readerTotalSeconds * (1 - savedProgress)
+        );
+
     readerModeNote.textContent =
         isFullBook
-            ? "FULL SOURCE TEXT"
+            ? "FULL BOOK • AUTO-READING"
             : (
                 savedProgress > 0.01
                     ? "CONTINUING FROM " +
@@ -3662,16 +3219,14 @@ async function openReader(modeOverride) {
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = !fullAvailable;
     document.getElementById("readerTimer").textContent =
-        isFullBook && fullAvailable
-            ? "FULL"
-            : formatTime(readerSeconds);
+        formatTime(readerSeconds);
 
-    readerPause.style.display = isFullBook ? "none" : "";
+    readerPause.style.display = "";
     readerPause.textContent = "PAUSE";
 
 
     readerStatus.textContent =
-        isFullBook && fullAvailable ? "FULL BOOK" : "AUTO-READING";
+        isFullBook && fullAvailable ? "FULL BOOK • AUTO-READING" : "AUTO-READING";
 
 
     reader.classList.add(
@@ -3713,12 +3268,10 @@ async function openReader(modeOverride) {
             updateReaderUI();
 
 
-            if (!isFullBook) {
-                readerAnimation =
-                    requestAnimationFrame(
-                        fluidAutoReader
-                    );
-            }
+            readerAnimation =
+                requestAnimationFrame(
+                    fluidAutoReader
+                );
         }
     );
 }
@@ -3805,7 +3358,7 @@ function fluidAutoReader(now) {
 
     const pixelsPerSecond =
         maxScroll /
-        TARGET_READING_SECONDS;
+        Math.max(60, readerTotalSeconds);
 
 
     readerScrollPosition +=
@@ -3845,7 +3398,7 @@ function fluidAutoReader(now) {
         Math.max(
             0,
             (
-                TARGET_READING_SECONDS *
+                readerTotalSeconds *
                 (1 - progress)
             )
         );
@@ -4822,7 +4375,6 @@ selectedOne =
 */
 try {
 
-    if (DHAMMAPADA_MODE) {
 
         createDhammapadaThoughts();
 
@@ -4833,7 +4385,6 @@ try {
             selectedOne.y;
     }
 
-    if (TAO_MODE) {
 
         createTaoFlows();
 
@@ -4960,12 +4511,8 @@ function animate() {
     */
     try {
 
-        if (DHAMMAPADA_MODE) {
-            updateDhammapadaExperience();
         }
 
-        if (TAO_MODE) {
-            updateTaoExperience();
         }
 
     } catch (bookExperienceError) {
