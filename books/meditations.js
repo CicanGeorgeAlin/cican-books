@@ -16,7 +16,7 @@ window.BOOK_READ = {
         15,
 
     targetWords: 2500,
-    fifteenMinuteStartMarker: "FIRST BOOK\n\nI. Of my grandfather Verus",
+    fifteenMinuteStartMarker: "THE FIRST BOOK",
 
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
