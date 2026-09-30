@@ -521,71 +521,39 @@ body {
 #reader.text-only-fullscreen #readerStatus,
 #reader.text-only-fullscreen #readerFullscreen,
 #reader.text-only-fullscreen #readerFullscreen {
-    position: absolute;
-    left: 21.5%;
-    top: clamp(64px, 9vh, 78px);
-    z-index: 25;
+
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    z-index: 30;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    width: clamp(112px, 21.5vw, 148px);
-    min-width: 112px;
-    height: 34px;
-    padding: 0 11px;
+    min-width: 88px;
+    height: 32px;
 
-    border:
-        1px solid
-        rgba(255,255,255,0.16);
+    padding: 7px 10px;
 
-    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
 
-    background:
-        rgba(0,0,0,0.76);
+    background: rgba(255,255,255,0.018);
+    color: rgba(255,255,255,0.62);
 
-    color:
-        rgba(255,255,255,0.78);
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 9px;
-
     font-weight: 800;
-
     letter-spacing: 1px;
+    line-height: 1.1;
+    text-align: center;
 
-    touch-action: none;
-
-    user-select: none;
-    -webkit-user-select: none;
-
-    cursor: grab;
-
+    touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
 
     backdrop-filter: blur(6px);
-
     -webkit-backdrop-filter: blur(6px);
-
-    box-shadow:
-        0 4px 14px
-        rgba(0,0,0,0.30);
-}
-
-#readerFullscreen.dragging {
-    cursor: grabbing;
-
-    border-color:
-        rgba(255,255,255,0.28);
-
-    box-shadow:
-        0 0 16px
-        rgba(255,255,255,0.10);
-}
 
 #readerFullscreen:active {
     transform: scale(0.98);
@@ -1379,49 +1347,6 @@ body {
 
 
 @media(max-width:480px) {
-
-    #readerFullscreen {
-        left: 18%;
-        top: 64px;
-        width: 118px;
-        min-width: 118px;
-    }
-
-    #readerHUD {
-        right: 12%;
-        top: 64px;
-        min-width: 82px;
-    }
-#reader {
-
-        padding: 0;
-    }
-
-    .reader-panel {
-
-        width: 100vw;
-
-        height: 100vh;
-        height: 100dvh;
-
-        border-radius: 0;
-
-        padding:
-            max(14px, env(safe-area-inset-top))
-            max(14px, env(safe-area-inset-right))
-            max(14px, env(safe-area-inset-bottom))
-            max(14px, env(safe-area-inset-left));
-    }
-
-    .reader-modebar {
-        width: 100%;
-    }
-
-    #readerTitle {
-
-        font-size: 22px;
-        margin-bottom: 5px;
-    }
 
     #readerFullscreen {
 
