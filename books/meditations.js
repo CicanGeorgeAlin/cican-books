@@ -66,12 +66,4 @@ sourceEdition: "Project Gutenberg eBook #2680, Meric Casaubon translation",
         }
 
     ],
-
-  identity: {
-    mode: "classic",
-    atmosphereA: "rgba(220,220,220,0.075)",
-    atmosphereB: "rgba(255,255,255,0.025)",
-    glow: "rgba(255,255,255,0.12)",
-    texture: "stone"
-  },
 };
