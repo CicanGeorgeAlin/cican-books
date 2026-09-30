@@ -124,55 +124,6 @@ body {
 }
 
 
-/* =================================================
-   TRAIL
-================================================= */
-
-.dhamma-thought {
-
-    position: absolute;
-
-    width: 4px;
-    height: 4px;
-
-    border-radius: 50%;
-
-    background: #FFFFFF;
-
-    transform: translate(-50%, -50%);
-
-    pointer-events: none;
-
-    opacity: 0.22;
-
-    box-shadow: 0 0 7px rgba(255,255,255,0.8);
-
-    transition: opacity 0.4s ease;
-}
-
-
-
-
-/* =================================================
-   TAO TE CHING EXPERIENCE
-================================================= */
-
-.tao-flow {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    opacity: 0.18;
-    box-shadow: 0 0 6px rgba(255,255,255,0.75);
-}
-
-/* =================================================
-   TRAIL
-================================================= */
-
 .trail {
 
     position: absolute;
@@ -831,6 +782,26 @@ body {
 
 }
 
+.reader-block {
+    margin: 0 0 1.05em;
+}
+.reader-block:last-child {
+    margin-bottom: 0;
+}
+.reader-heading {
+    margin-top: 1.5em;
+    margin-bottom: .9em;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .72em;
+    font-weight: 800;
+    letter-spacing: .12em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+.reader-block:first-child {
+    margin-top: 0;
+}
 #readerText {
 
     color:
@@ -844,15 +815,15 @@ body {
         "Times New Roman",
         serif;
 
-    font-size: clamp(17px, 1.9vw, 19px);
+    font-size: clamp(16px, 1.72vw, 18px);
 
     font-weight: 400;
 
-    line-height: 1.82;
+    line-height: 1.72;
 
-    letter-spacing: 0.008em;
+    letter-spacing: 0;
 
-    max-width: 68ch;
+    max-width: 62ch;
 
     width: 100%;
 
@@ -1120,9 +1091,7 @@ body {
 
 @media(prefers-reduced-motion: reduce) {
 
-    .trail,
-    .dhamma-thought,
-    .tao-flow {
+    .trail {
         animation: none;
         transition: none;
     }
@@ -1166,16 +1135,16 @@ body {
 
     #readerText {
 
-        font-size: 17px;
+        font-size: 16px;
 
-        line-height: 1.78;
+        line-height: 1.72;
 
         max-width: none;
 
         padding:
             10px 4px 128px;
 
-        letter-spacing: 0.006em;
+        letter-spacing: 0;
 
     }
 
@@ -1507,315 +1476,6 @@ let lastTappedOne = null;
 
 
 /* =================================================
-   DHAMMAPADA EXPERIENCE
-================================================= */
-
-const DHAMMAPADA_MODE =
-    BOOK_READ &&
-    BOOK_READ.gameMode === "dhammapada";
-
-let dhammaThoughts = [];
-let dhammaLastX = window.innerWidth / 2;
-let dhammaLastY = window.innerHeight / 2;
-let dhammaStillTime = 0;
-
-function createDhammapadaThoughts() {
-
-    if (!DHAMMAPADA_MODE) {
-        return;
-    }
-
-    for (let i = 0; i < 18; i++) {
-
-        const element =
-            document.createElement("div");
-
-        element.className =
-            "dhamma-thought";
-
-        document.body.appendChild(element);
-
-        const angle =
-            Math.PI * 2 * (i / 18);
-
-        const radius =
-            110 + Math.random() * 220;
-
-        const thought = {
-            element: element,
-            x: window.innerWidth / 2 + Math.cos(angle) * radius,
-            y: window.innerHeight / 2 + Math.sin(angle) * radius,
-            vx: 0,
-            vy: 0,
-            phase: Math.random() * Math.PI * 2
-        };
-
-        dhammaThoughts.push(thought);
-
-        element.style.left =
-            thought.x + "px";
-
-        element.style.top =
-            thought.y + "px";
-    }
-}
-
-function updateDhammapadaExperience() {
-
-    if (!DHAMMAPADA_MODE || !selectedOne) {
-        return;
-    }
-
-    const dx =
-        selectedOne.x - dhammaLastX;
-
-    const dy =
-        selectedOne.y - dhammaLastY;
-
-    const movement =
-        Math.sqrt(dx * dx + dy * dy);
-
-    dhammaLastX = selectedOne.x;
-    dhammaLastY = selectedOne.y;
-
-    if (movement < 0.45) {
-        dhammaStillTime += 1 / 60;
-    } else {
-        dhammaStillTime =
-            Math.max(0, dhammaStillTime - 0.08);
-    }
-
-    for (const thought of dhammaThoughts) {
-
-        const tx =
-            selectedOne.x - thought.x;
-
-        const ty =
-            selectedOne.y - thought.y;
-
-        const d =
-            Math.sqrt(tx * tx + ty * ty);
-
-        if (d > 1) {
-
-            const nx = tx / d;
-            const ny = ty / d;
-
-            if (movement > 0.45) {
-                thought.vx -= nx * 0.045;
-                thought.vy -= ny * 0.045;
-            } else {
-                thought.vx += nx * 0.018;
-                thought.vy += ny * 0.018;
-            }
-        }
-
-        thought.vx +=
-            Math.cos(thought.phase) * 0.003;
-
-        thought.vy +=
-            Math.sin(thought.phase) * 0.003;
-
-        thought.vx *= 0.96;
-        thought.vy *= 0.96;
-
-        thought.x += thought.vx;
-        thought.y += thought.vy;
-
-        if (
-            thought.x < 20 ||
-            thought.x > window.innerWidth - 20
-        ) {
-            thought.vx *= -0.7;
-        }
-
-        if (
-            thought.y < 20 ||
-            thought.y > window.innerHeight - 20
-        ) {
-            thought.vy *= -0.7;
-        }
-
-        thought.element.style.left =
-            thought.x + "px";
-
-        thought.element.style.top =
-            thought.y + "px";
-
-        const calm =
-            Math.min(1, dhammaStillTime / 4);
-
-        thought.element.style.opacity =
-            String(0.18 + calm * 0.35);
-    }
-}
-
-
-/* =================================================
-   TAO TE CHING EXPERIENCE
-================================================= */
-
-const TAO_MODE =
-    BOOK_READ &&
-    BOOK_READ.gameMode === "tao";
-
-let taoFlows = [];
-let taoLastX = window.innerWidth / 2;
-let taoLastY = window.innerHeight / 2;
-
-function createTaoFlows() {
-
-    if (!TAO_MODE) {
-        return;
-    }
-
-    /*
-        Tao atmosphere is intentionally lightweight.
-        It must never compete with the canonical CICAN
-        movement, growth, split, merge, or READ loop.
-    */
-    for (let i = 0; i < 8; i++) {
-
-        const element =
-            document.createElement("div");
-
-        element.className =
-            "tao-flow";
-
-        document.body.appendChild(element);
-
-        const flow = {
-            element: element,
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            vx: 0.22 + Math.random() * 0.34,
-            vy: 0,
-            phase: Math.random() * Math.PI * 2
-        };
-
-        taoFlows.push(flow);
-
-        element.style.transform =
-            "translate3d(" +
-            flow.x +
-            "px," +
-            flow.y +
-            "px,0) translate(-50%,-50%)";
-    }
-}
-
-function updateTaoExperience() {
-
-    if (!TAO_MODE || !selectedOne) {
-        return;
-    }
-
-    /*
-        Keep the book atmosphere separate from the game.
-        One clock value is shared by all visual particles.
-    */
-    const dx =
-        selectedOne.x - taoLastX;
-
-    const dy =
-        selectedOne.y - taoLastY;
-
-    const movement =
-        Math.sqrt(dx * dx + dy * dy);
-
-    taoLastX = selectedOne.x;
-    taoLastY = selectedOne.y;
-
-    const now =
-        performance.now();
-
-    const waveTime =
-        now * 0.00035;
-
-    for (const flow of taoFlows) {
-
-        const wave =
-            Math.sin(
-                flow.y * 0.008 +
-                flow.phase +
-                waveTime
-            );
-
-        flow.vy += wave * 0.0025;
-
-        if (movement > 0.45) {
-
-            const tx =
-                flow.x - selectedOne.x;
-
-            const ty =
-                flow.y - selectedOne.y;
-
-            const d =
-                Math.sqrt(tx * tx + ty * ty);
-
-            if (d > 1 && d < 190) {
-
-                const nx = tx / d;
-                const ny = ty / d;
-
-                const moveX = dx / movement;
-                const moveY = dy / movement;
-
-                const withFlow =
-                    Math.max(
-                        0,
-                        moveX * 0.92 +
-                        moveY * wave * 0.12
-                    );
-
-                const disturbance =
-                    0.035 *
-                    (1 - d / 190) *
-                    (1.15 - withFlow);
-
-                flow.vx += nx * disturbance;
-                flow.vy += ny * disturbance;
-            }
-        }
-
-        flow.vx =
-            Math.max(
-                0.12,
-                Math.min(0.9, flow.vx * 0.992)
-            );
-
-        flow.vy *= 0.985;
-
-        flow.x += flow.vx;
-        flow.y += flow.vy;
-
-        if (flow.x > window.innerWidth + 12) {
-            flow.x = -12;
-            flow.y = Math.random() * window.innerHeight;
-            flow.vx = 0.22 + Math.random() * 0.34;
-            flow.vy = 0;
-        }
-
-        if (flow.y < -12) {
-            flow.y = window.innerHeight + 12;
-        }
-
-        if (flow.y > window.innerHeight + 12) {
-            flow.y = -12;
-        }
-
-        flow.element.style.transform =
-            "translate3d(" +
-            flow.x +
-            "px," +
-            flow.y +
-            "px,0) translate(-50%,-50%)";
-    }
-}
-
-
-/* =================================================
    BOOK / READER STATE
 ================================================= */
 
@@ -1846,6 +1506,17 @@ const TARGET_READING_SECONDS =
             BOOK_READ.targetMinutes
         ) * 60 || 900
     );
+
+const FULL_READING_WPM = 180;
+
+function calculateFullReadingSeconds(text) {
+    const words = String(text || "").trim().match(/\S+/g);
+    const count = words ? words.length : 0;
+    return Math.max(
+        TARGET_READING_SECONDS,
+        Math.ceil((count / FULL_READING_WPM) * 60)
+    );
+}
 
 const READER_STATE_PREFIX =
     "cican_reader_position:";
@@ -3232,6 +2903,43 @@ async function loadSourceTextForReader(
 }
 
 
+function renderReaderText(sourceText) {
+    const raw = String(sourceText || "")
+        .replace(/\r\n/g, "\n")
+        .trim();
+
+    readerText.replaceChildren();
+
+    if (!raw) return;
+
+    const blocks = raw.split(/\n[ \t]*\n+/);
+    const fragment = document.createDocumentFragment();
+
+    for (const block of blocks) {
+        const text = block
+            .replace(/\n+/g, " ")
+            .replace(/[ \t]+/g, " ")
+            .trim();
+
+        if (!text) continue;
+
+        const el = document.createElement("div");
+        el.className = "reader-block";
+
+        if (
+            /^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) ||
+            (text.length < 90 && !/[.!?]$/.test(text))
+        ) {
+            el.classList.add("reader-heading");
+        }
+
+        el.textContent = text;
+        fragment.appendChild(el);
+    }
+
+    readerText.appendChild(fragment);
+}
+
 async function openReader(modeOverride) {
 
     stopReaderAnimation();
@@ -3261,7 +2969,11 @@ async function openReader(modeOverride) {
 
 
     readerSeconds =
-        TARGET_READING_SECONDS;
+        isFullBook && currentBook.fullText
+            ? calculateFullReadingSeconds(currentBook.fullText)
+            : TARGET_READING_SECONDS;
+
+    fullReaderSeconds = readerSeconds;
 
 
     /*
@@ -3488,12 +3200,20 @@ async function openReader(modeOverride) {
         return;
     }
 
-    readerText.textContent =
+    const activeReaderSource =
         isFullBook
-            ? (
-                currentBook.fullText
-            )
+            ? currentBook.fullText
             : currentBook.fifteenMinuteText;
+
+    if (!String(activeReaderSource || "").trim()) {
+        readerModeNote.textContent =
+            isFullBook
+                ? "FULL BOOK NOT YET AVAILABLE FOR THIS EDITION"
+                : "15-MINUTE SOURCE TEXT NOT YET AVAILABLE FOR THIS EDITION";
+        return;
+    }
+
+    renderReaderText(activeReaderSource);
 
     readerScrollPosition = loadReaderPosition();
 
@@ -3526,16 +3246,13 @@ async function openReader(modeOverride) {
     modeFull.classList.toggle("active", readingMode === "full");
     modeFull.disabled = !fullAvailable;
     document.getElementById("readerTimer").textContent =
-        isFullBook && fullAvailable
-            ? "FULL"
-            : formatTime(readerSeconds);
+        formatTime(readerSeconds);
 
-    readerPause.style.display = isFullBook ? "none" : "";
+    readerPause.style.display = "";
     readerPause.textContent = "PAUSE";
 
 
-    readerStatus.textContent =
-        isFullBook && fullAvailable ? "FULL BOOK" : "AUTO-READING";
+    readerStatus.textContent = "AUTO-READING";
 
 
     reader.classList.add(
@@ -3576,12 +3293,10 @@ async function openReader(modeOverride) {
             updateReaderUI();
 
 
-            if (!isFullBook) {
-                readerAnimation =
-                    requestAnimationFrame(
-                        fluidAutoReader
-                    );
-            }
+            readerAnimation =
+                requestAnimationFrame(
+                    fluidAutoReader
+                );
         }
     );
 }
@@ -3666,9 +3381,14 @@ function fluidAutoReader(now) {
         15-minute target duration.
     */
 
+    const activeReadingSeconds =
+        readingMode === "full"
+            ? fullReaderSeconds
+            : TARGET_READING_SECONDS;
+
     const pixelsPerSecond =
         maxScroll /
-        TARGET_READING_SECONDS;
+        activeReadingSeconds;
 
 
     readerScrollPosition +=
@@ -3707,10 +3427,8 @@ function fluidAutoReader(now) {
     readerSeconds =
         Math.max(
             0,
-            (
-                TARGET_READING_SECONDS *
-                (1 - progress)
-            )
+            activeReadingSeconds *
+            (1 - progress)
         );
 
 
@@ -3898,7 +3616,10 @@ readerText.addEventListener("scroll", function() {
     readerScrollPosition = readerText.scrollTop;
     updateReaderUI();
     const maxScroll = Math.max(0, readerText.scrollHeight - readerText.clientHeight);
-    readerStatus.textContent = maxScroll > 0 && readerScrollPosition >= maxScroll - 2 ? "COMPLETE" : "FULL BOOK";
+    readerStatus.textContent =
+        maxScroll > 0 && readerScrollPosition >= maxScroll - 2
+            ? "COMPLETE"
+            : (readerPaused ? "PAUSED" : "AUTO-READING");
     const now = performance.now();
     if (now - lastReaderSaveTime > 700) saveReaderPosition(now);
 });
@@ -4678,44 +4399,6 @@ selectedOne =
     );
 
 
-/*
-    Book-specific visuals are optional layers.
-    Failure here must never disable the canonical game.
-*/
-try {
-
-    if (DHAMMAPADA_MODE) {
-
-        createDhammapadaThoughts();
-
-        dhammaLastX =
-            selectedOne.x;
-
-        dhammaLastY =
-            selectedOne.y;
-    }
-
-    if (TAO_MODE) {
-
-        createTaoFlows();
-
-        taoLastX =
-            selectedOne.x;
-
-        taoLastY =
-            selectedOne.y;
-    }
-
-} catch (bookExperienceError) {
-
-    console.error(
-        "CICAN book-specific setup error:",
-        bookExperienceError
-    );
-
-}
-
-
 /* =================================================
    MAIN LOOP
 ================================================= */
@@ -4812,32 +4495,6 @@ function animate() {
     */
 
     checkForMerges();
-
-
-    /*
-        BOOK-SPECIFIC EXPERIENCE IS VISUAL ONLY.
-        It is deliberately isolated from the canonical
-        CICAN game engine. A book effect may never stop
-        movement, growth, split, merge, or READ.
-    */
-    try {
-
-        if (DHAMMAPADA_MODE) {
-            updateDhammapadaExperience();
-        }
-
-        if (TAO_MODE) {
-            updateTaoExperience();
-        }
-
-    } catch (bookExperienceError) {
-
-        console.error(
-            "CICAN book-specific experience error:",
-            bookExperienceError
-        );
-
-    }
 
 
     /*
