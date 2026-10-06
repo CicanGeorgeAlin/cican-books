@@ -27,9 +27,8 @@ function loadBook(root, record) {
   const code = fs.readFileSync(filename, "utf8");
   const window = {};
   vm.runInNewContext(code, { window }, { filename });
-  if (!window.BOOK_READ || typeof window.BOOK_READ.fullText !== "string") {
-    throw new Error("BOOK_READ.fullText missing: " + record.id);
-  }
+  if (!window.BOOK_READ || typeof window.BOOK_READ !== "object") throw new Error("BOOK_READ missing: " + record.id);
+  if (!window.BOOK_READ.fullText && !window.BOOK_READ.fullTextUrl) throw new Error("No complete source asset or source URL: " + record.id);
   return window.BOOK_READ;
 }
 
@@ -56,8 +55,13 @@ export async function verifySourceIntegrity({ root, record }) {
   });
   if (!response.ok) throw new Error("Authoritative source HTTP " + response.status + ": " + url);
 
+  const remoteText = await response.text();
+  if (!book.fullText && book.fullTextUrl === url) {
+    const sourceText = normalizeSourceText(remoteText);
+    return { url, sha256: sha256(sourceText), characters: sourceText.length, mode: "DIRECT_AUTHORITATIVE_SOURCE" };
+  }
   const localText = normalizeSourceText(book.fullText);
-  const sourceText = normalizeSourceText(await response.text());
+  const sourceText = normalizeSourceText(remoteText);
   const localHash = sha256(localText);
   const sourceHash = sha256(sourceText);
 
