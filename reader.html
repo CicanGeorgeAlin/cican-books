@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#000000"><title>CICAN BOOKS — Reader</title><style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#000000"><title>CICAN BOOKS — Reader</title><meta name="cican-reader-ui" content="v18.33-fixed-controls"><style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif}
 body{position:relative}
@@ -32,58 +32,8 @@ body{position:relative}
 }
 
 /* =================================================
-   TEXT-ONLY FULLSCREEN READING MODE
+   PURE FULLSCREEN READING MODE
 ================================================= */
-
-.reader-panel {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding:
-        max(18px, env(safe-area-inset-top))
-        max(12px, env(safe-area-inset-right))
-        max(18px, env(safe-area-inset-bottom))
-        max(12px, env(safe-area-inset-left));
-}
-
-#reader.text-only-fullscreen #readerLabel,
-#reader.text-only-fullscreen #readerClose,
-#reader.text-only-fullscreen #readerTitle,
-#reader.text-only-fullscreen .reader-modebar,
-#reader.text-only-fullscreen #readerModeNote,
-#reader.text-only-fullscreen #readerProgress,
-#reader.text-only-fullscreen #readerHUD,
-#reader.text-only-fullscreen .reader-controls,
-#reader.text-only-fullscreen #readerStatus {
-    display: none !important;
-}
-
-#reader.text-only-fullscreen {
-    background: #000;
-}
-
-#reader.text-only-fullscreen .reader-panel {
-    padding:
-        max(18px, env(safe-area-inset-top))
-        max(12px, env(safe-area-inset-right))
-        max(18px, env(safe-area-inset-bottom))
-        max(12px, env(safe-area-inset-left));
-}
-
-#reader.text-only-fullscreen #readerText {
-    width: 100%;
-    max-width: 72ch;
-    margin: 0 auto;
-    padding:
-        18px
-        6px
-        max(24px, env(safe-area-inset-bottom));
-    font-size: clamp(18px, 2.4vw, 22px);
-    line-height: 1.82;
-}
 
 #reader.reader-viewport-fullscreen {
     position: fixed;
@@ -94,40 +44,59 @@ body{position:relative}
     z-index: 10000;
 }
 
-html.cican-device-fullscreen,
-html.cican-device-fullscreen body {
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: #000;
-}
-html.cican-device-fullscreen #reader {
-    display: flex;
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    padding: 0;
-    z-index: 2147483647;
-    background: #000;
-}
-html.cican-device-fullscreen .reader-header,
-html.cican-device-fullscreen #readerLabel,
-html.cican-device-fullscreen #readerClose,
-html.cican-device-fullscreen #readerTitle,
-html.cican-device-fullscreen .reader-modebar,
-html.cican-device-fullscreen #readerModeNote,
-html.cican-device-fullscreen #readerProgress,
-html.cican-device-fullscreen .reader-controls,
-html.cican-device-fullscreen #readerStatus {
+/*
+    FULLSCREEN IS READING ONLY.
+    The header, clock, fullscreen button, close button,
+    progress rail, mode controls and status are all removed.
+*/
+html.cican-device-fullscreen #reader .reader-header,
+html.cican-device-fullscreen #reader #readerHUD,
+html.cican-device-fullscreen #reader #readerFullscreen,
+html.cican-device-fullscreen #reader #readerClose,
+html.cican-device-fullscreen #reader #readerLabel,
+html.cican-device-fullscreen #reader #readerTitle,
+html.cican-device-fullscreen #reader .reader-modebar,
+html.cican-device-fullscreen #reader #readerModeNote,
+html.cican-device-fullscreen #reader #readerProgress,
+html.cican-device-fullscreen #reader .reader-controls,
+html.cican-device-fullscreen #reader #readerStatus,
+#reader:fullscreen .reader-header,
+#reader:fullscreen #readerHUD,
+#reader:fullscreen #readerFullscreen,
+#reader:fullscreen #readerClose,
+#reader:fullscreen #readerLabel,
+#reader:fullscreen #readerTitle,
+#reader:fullscreen .reader-modebar,
+#reader:fullscreen #readerModeNote,
+#reader:fullscreen #readerProgress,
+#reader:fullscreen .reader-controls,
+#reader:fullscreen #readerStatus,
+#reader:-webkit-full-screen .reader-header,
+#reader:-webkit-full-screen #readerHUD,
+#reader:-webkit-full-screen #readerFullscreen,
+#reader:-webkit-full-screen #readerClose,
+#reader:-webkit-full-screen #readerLabel,
+#reader:-webkit-full-screen #readerTitle,
+#reader:-webkit-full-screen .reader-modebar,
+#reader:-webkit-full-screen #readerModeNote,
+#reader:-webkit-full-screen #readerProgress,
+#reader:-webkit-full-screen .reader-controls,
+#reader:-webkit-full-screen #readerStatus {
     display: none !important;
 }
 
-html.cican-device-fullscreen .reader-panel {
+html.cican-device-fullscreen #reader,
+#reader:fullscreen,
+#reader:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #000;
+}
+
+html.cican-device-fullscreen #reader .reader-panel,
+#reader:fullscreen .reader-panel,
+#reader:-webkit-full-screen .reader-panel {
     width: 100vw;
     height: 100vh;
     height: 100dvh;
@@ -138,7 +107,10 @@ html.cican-device-fullscreen .reader-panel {
         max(18px, env(safe-area-inset-bottom))
         max(12px, env(safe-area-inset-left));
 }
-html.cican-device-fullscreen #readerText {
+
+html.cican-device-fullscreen #readerText,
+#reader:fullscreen #readerText,
+#reader:-webkit-full-screen #readerText {
     width: 100%;
     max-width: 72ch;
     margin: 0 auto;
@@ -153,67 +125,22 @@ html.cican-device-fullscreen #readerText {
     line-height: 1.82;
     scrollbar-width: none;
     -ms-overflow-style: none;
-}
-html.cican-device-fullscreen #readerText::-webkit-scrollbar {
-    display: none;
+    touch-action: pan-y;
 }
 
-#reader:fullscreen,
-#reader:-webkit-full-screen {
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    background: #000;
-}
-
-#reader:fullscreen .reader-header,
-#reader:fullscreen #readerLabel,
-#reader:fullscreen #readerClose,
-#reader:fullscreen #readerTitle,
-#reader:fullscreen .reader-modebar,
-#reader:fullscreen #readerModeNote,
-#reader:fullscreen #readerProgress,
-#reader:fullscreen .reader-controls,
-#reader:fullscreen #readerStatus,
-#reader:-webkit-full-screen .reader-header,
-#reader:-webkit-full-screen #readerLabel,
-#reader:-webkit-full-screen #readerClose,
-#reader:-webkit-full-screen #readerTitle,
-#reader:-webkit-full-screen .reader-modebar,
-#reader:-webkit-full-screen #readerModeNote,
-#reader:-webkit-full-screen #readerProgress,
-#reader:-webkit-full-screen .reader-controls,
-#reader:-webkit-full-screen #readerStatus {
-    display: none !important;
-}
-
-#reader:fullscreen .reader-panel,
-#reader:-webkit-full-screen .reader-panel {
-    padding:
-        max(18px, env(safe-area-inset-top))
-        max(12px, env(safe-area-inset-right))
-        max(18px, env(safe-area-inset-bottom))
-        max(12px, env(safe-area-inset-left));
-}
-
-#reader:fullscreen #readerText,
-#reader:-webkit-full-screen #readerText {
-    width: 100%;
-    max-width: 72ch;
-    margin: 0 auto;
-    padding:
-        18px
-        6px
-        max(24px, env(safe-area-inset-bottom));
-    font-size: clamp(18px, 2.4vw, 22px);
-    line-height: 1.82;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
+html.cican-device-fullscreen #readerText::-webkit-scrollbar,
 #reader:fullscreen #readerText::-webkit-scrollbar,
 #reader:-webkit-full-screen #readerText::-webkit-scrollbar {
     display: none;
+}
+
+#reader.reader-viewport-fullscreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 10000;
 }
 
 .reader-header {
@@ -2264,103 +2191,60 @@ readerText.addEventListener(
 
 
 /* =================================================
-   TEXT-ONLY FULLSCREEN DOUBLE-TAP EXIT
+   FULLSCREEN DOUBLE-TAP EXIT
 ================================================= */
 
 let readerFullscreenLastTapTime = 0;
 let readerFullscreenLastTapX = 0;
 let readerFullscreenLastTapY = 0;
 
-async function exitTextOnlyFullscreen() {
-
-    reader.classList.remove(
-        "text-only-fullscreen"
-    );
+function exitReaderFullscreenByDoubleTap() {
+    if (!isReaderFullscreen()) return;
 
     try {
-
-        if (
-            document.fullscreenElement === reader &&
-            document.exitFullscreen
-        ) {
-            await document.exitFullscreen();
-
-        } else if (
-            document.webkitFullscreenElement === reader &&
-            document.webkitExitFullscreen
-        ) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
         }
-
     } catch (error) {
-
-        console.warn(
-            "CICAN could not exit full screen:",
-            error
-        );
+        console.warn("CICAN could not exit full screen:", error);
     }
-
-    updateReaderFullscreenUI();
 }
 
-readerText.addEventListener(
+/*
+    In fullscreen, a double tap anywhere on the reading surface
+    exits fullscreen. This is intentionally independent of the
+    text scroll handler so it works anywhere on the screen.
+*/
+reader.addEventListener(
     "pointerup",
     function(e) {
-
-        if (
-            !reader.classList.contains(
-                "text-only-fullscreen"
-            ) &&
-            !isReaderFullscreen()
-        ) {
-            return;
-        }
-
-        if (
-            e.pointerType === "mouse" &&
-            e.button !== 0
-        ) {
-            return;
-        }
+        if (!isReaderFullscreen()) return;
+        if (e.pointerType === "mouse" && e.button !== 0) return;
 
         const now = performance.now();
-
-        const distanceX =
-            e.clientX -
-            readerFullscreenLastTapX;
-
-        const distanceY =
-            e.clientY -
-            readerFullscreenLastTapY;
-
-        const distanceSquared =
-            distanceX * distanceX +
-            distanceY * distanceY;
+        const dx = e.clientX - readerFullscreenLastTapX;
+        const dy = e.clientY - readerFullscreenLastTapY;
+        const closeEnough = (dx * dx + dy * dy) <= (36 * 36);
 
         const isDoubleTap =
-            now -
-                readerFullscreenLastTapTime <=
-                350 &&
-            distanceSquared <=
-                24 * 24;
+            now - readerFullscreenLastTapTime <= 350 &&
+            closeEnough;
 
         if (isDoubleTap) {
-
             e.preventDefault();
-
+            e.stopPropagation();
             readerFullscreenLastTapTime = 0;
-
-            exitTextOnlyFullscreen();
-
+            exitReaderFullscreenByDoubleTap();
             return;
         }
 
         readerFullscreenLastTapTime = now;
         readerFullscreenLastTapX = e.clientX;
         readerFullscreenLastTapY = e.clientY;
-
     },
-    { passive: false }
+    { passive: false, capture: true }
 );
 
 readerText.addEventListener("scroll", function() {
@@ -2489,8 +2373,6 @@ function isReaderFullscreen() {
 
 function updateReaderFullscreenUI() {
     const button = document.getElementById("readerFullscreen");
-    if (!button) return;
-
     const active = isReaderFullscreen();
 
     document.documentElement.classList.toggle(
@@ -2498,12 +2380,19 @@ function updateReaderFullscreenUI() {
         active
     );
 
-    button.textContent = active ? "EXIT FULL SCREEN" : "FULL SCREEN";
-    button.setAttribute(
-        "aria-label",
-        active ? "Exit device full screen" : "Enter device full screen"
-    );
+    if (!button) return;
+
+    /*
+        The button exists only in normal reader mode.
+        Fullscreen itself is exited by double-tap.
+    */
+    button.textContent = "FULL SCREEN";
+    button.setAttribute("aria-label", "Enter full screen");
     button.setAttribute("aria-pressed", active ? "true" : "false");
+
+    if (active) {
+        readerFullscreenLastTapTime = 0;
+    }
 }
 
 async function toggleReaderFullscreen() {
@@ -2511,13 +2400,19 @@ async function toggleReaderFullscreen() {
 
     try {
         if (isReaderFullscreen()) {
+            /*
+                Keep this path for keyboard/accessibility escape.
+                Touch users use the intuitive double-tap gesture.
+            */
             if (document.exitFullscreen) {
                 await document.exitFullscreen();
             } else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
             }
         } else if (document.documentElement.requestFullscreen) {
-            await document.documentElement.requestFullscreen({navigationUI: "hide"});
+            await document.documentElement.requestFullscreen({
+                navigationUI: "hide"
+            });
         } else if (document.documentElement.webkitRequestFullscreen) {
             document.documentElement.webkitRequestFullscreen();
         } else {
@@ -2525,7 +2420,10 @@ async function toggleReaderFullscreen() {
         }
     } catch (error) {
         document.documentElement.classList.remove("cican-device-fullscreen");
-        console.warn("CICAN device full-screen request was not available.", error);
+        console.warn(
+            "CICAN device full-screen request was not available.",
+            error
+        );
         return;
     }
 
@@ -2558,7 +2456,10 @@ document.addEventListener("fullscreenerror", function() {
 window.addEventListener("pageshow", updateReaderFullscreenUI);
 
 if (document.webkitFullscreenElement !== undefined) {
-    document.addEventListener("webkitfullscreenchange", updateReaderFullscreenUI);
+    document.addEventListener(
+        "webkitfullscreenchange",
+        updateReaderFullscreenUI
+    );
 }
 
 /* =================================================
