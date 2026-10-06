@@ -71,11 +71,16 @@ for (const record of records) {
 
 if (!/function\s+fluidAutoReader\s*\(/.test(reader)) fail("Fluid auto-reader missing.");
 if (!/READER_WPM\s*=\s*100/.test(reader)) fail("Reader WPM benchmark changed.");
-if (!/function\s+makeReaderControlMovable\s*\(/.test(reader)) fail("Shared control drag helper missing.");
-if (!/makeReaderControlMovable\(\s*readerHUD,\s*saveHUDPosition\s*\)/s.test(reader)) fail("Clock is not using shared drag helper.");
-if (!/makeReaderControlMovable\(\s*readerFullscreen,\s*saveFullscreenButtonPosition/s.test(reader)) fail("Fullscreen button is not using shared drag helper.");
-if (!/function\s+saveHUDPosition\s*\(/.test(reader) || !/function\s+restoreHUDPosition\s*\(/.test(reader)) fail("Clock position persistence functions missing.");
-if (!/function\s+saveFullscreenButtonPosition\s*\(/.test(reader) || !/function\s+restoreFullscreenButtonPosition\s*\(/.test(reader)) fail("Fullscreen position persistence functions missing.");
+if (!/\.reader-header-actions\s*\{[\s\S]*?display:\s*flex/.test(reader)) fail("Reader header control bar missing.");
+else pass("Reader uses the fixed header control bar.");
+if (!/position:\s*static/.test(reader.match(/#readerFullscreen\s*\{[\s\S]*?\}/)?.[0] || "")) fail("Fullscreen button is not fixed in the header.");
+else pass("Fullscreen button is fixed in the header.");
+if (!/position:\s*static/.test(reader.match(/#readerHUD\s*\{[\s\S]*?\}/)?.[0] || "")) fail("Clock is not fixed in the header.");
+else pass("Clock is fixed in the header.");
+if (!/html\.cican-device-fullscreen\s+\.reader-header,/.test(reader) || !/#reader:fullscreen\s+\.reader-header,/.test(reader)) fail("Reader header is not hidden in fullscreen.");
+else pass("Fullscreen hides the entire reader header.");
+if (/makeReaderControlMovable|saveHUDPosition|restoreHUDPosition|saveFullscreenButtonPosition|restoreFullscreenButtonPosition/.test(reader)) fail("Obsolete movable-control logic remains.");
+else pass("Obsolete movable-control logic absent.");
 if (!/const savedPosition = loadReaderPosition\(\)/.test(reader)) fail("Reader does not restore saved reading position.");
 if (/Force the beginning again after layout has settled/.test(reader)) fail("Reader still contains the old forced-reset resume logic.");
 if (!/document\.documentElement\.requestFullscreen/.test(reader)) fail("Device fullscreen API missing.");
@@ -107,7 +112,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v31/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
+if (!/cican-books-v32/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
 else pass("Service worker cache version is current.");
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
