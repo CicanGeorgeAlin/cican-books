@@ -109,6 +109,8 @@ else pass("Book cover rendering is present.");
 if (!/localeCompare\(b\.title\)/.test(index)) fail("Alphabetical book sorting is missing.");
 else pass("Alphabetical book sorting is present.");
 if (!/reader\.html\?book=/.test(index)) fail("Landing-page book navigation is missing.");
+if (!/overflow-x:\s*auto/.test(index) || !/scroll-snap-type:\s*x/.test(index)) fail("Alphabet slider is missing."); else pass("Alphabet touch slider is present.");
+if (!/&autoplay=1/.test(index)) fail("Book cards do not launch reader autoplay."); else pass("Book cards launch reader autoplay.");
 else pass("Landing-page book navigation is present.");
 
 const moduleScript = [...reader.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].at(-1)?.[1];
@@ -136,7 +138,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v37/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
+if (!/cican-books-v38/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
 else pass("Service worker cache version is current.");
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
