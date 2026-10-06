@@ -155,7 +155,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v41/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
+if (!/cican-books-v42/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
 else pass("Service worker cache version is current.");
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
