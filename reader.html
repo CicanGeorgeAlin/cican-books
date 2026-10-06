@@ -2645,6 +2645,17 @@ document.addEventListener(
 
 
 
+function updateBookCanonical(bookId) {
+  if (!bookId) return;
+  const href = new URL("reader.html?book=" + encodeURIComponent(bookId), document.baseURI).href;
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    document.head.appendChild(canonical);
+  }
+  canonical.href = href;
+}
 const standaloneClose = document.getElementById("readerClose");
 standaloneClose.addEventListener("pointerdown", function(e) {
   e.preventDefault(); e.stopPropagation(); location.href = "index.html";
@@ -2659,6 +2670,7 @@ async function initStandalone() {
   }
   try {
     await loadSelectedBook();
+    updateBookCanonical(BOOK_ID);
     document.getElementById("readerTitle").textContent = currentBook.title;
     document.title = "CICAN BOOKS — " + currentBook.title;
     await openReader("15");
