@@ -10,6 +10,11 @@
 html,body{min-height:100%;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif}
 body{min-height:100vh}
 .shell{min-height:100vh;display:flex;flex-direction:column}
+.shell.pseudo-fullscreen{position:fixed;inset:0;width:100vw;height:100dvh;z-index:9999;background:#000}
+.shell.pseudo-fullscreen .top{display:none}
+.shell.pseudo-fullscreen .reader{width:min(100%,920px);padding-top:18px}
+.shell.pseudo-fullscreen .eyebrow,.shell.pseudo-fullscreen h1,.shell.pseudo-fullscreen .modes,.shell.pseudo-fullscreen .status{display:none}
+.shell.pseudo-fullscreen .text{padding-top:10px}
 .top{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
 .brand{color:#fff;text-decoration:none;font-size:16px;font-weight:900;letter-spacing:-.05em}
 .back{color:rgba(255,255,255,.5);text-decoration:none;font-size:9px;font-weight:800;letter-spacing:.18em}
@@ -110,8 +115,9 @@ function start(){
   stop();
   if(!currentText){setStatus("NO TEXT");return;}
   paused=false; started=true; elapsedBeforePause=0; startTime=performance.now();
-  pauseBtn.textContent="PAUSE"; setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK");
-  requestAnimationFrame(tick);
+  pauseBtn.textContent="PAUSE";
+  setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK");
+  requestAnimationFrame(()=>requestAnimationFrame(tick));
 }
 function pause(){
   if(!started){start();return;}
@@ -165,11 +171,28 @@ async function init(){
 pauseBtn.addEventListener("click",pause);
 mode15.addEventListener("click",()=>setMode("15"));
 modeFull.addEventListener("click",()=>setMode("full"));
+const shell=document.querySelector(".shell");
+function syncFullscreenButton(){
+  const active=!!document.fullscreenElement || shell.classList.contains("pseudo-fullscreen");
+  fullscreenBtn.textContent=active?"EXIT FULL SCREEN":"FULL SCREEN";
+}
+document.addEventListener("fullscreenchange",syncFullscreenButton);
 fullscreenBtn.addEventListener("click",async()=>{
   try{
-    if(document.fullscreenElement) await document.exitFullscreen();
-    else await document.documentElement.requestFullscreen();
+    if(document.fullscreenElement){
+      await document.exitFullscreen();
+      return;
+    }
+    if(document.fullscreenEnabled){
+      const target=shell;
+      if(target.requestFullscreen) await target.requestFullscreen();
+      else if(target.webkitRequestFullscreen) target.webkitRequestFullscreen();
+      else throw new Error("Fullscreen API unavailable");
+      return;
+    }
   }catch(_){}
+  shell.classList.toggle("pseudo-fullscreen");
+  syncFullscreenButton();
 });
 textEl.addEventListener("wheel",()=>{ if(!paused){paused=true;stop();pauseBtn.textContent="RESUME";setStatus("MANUAL READING");}},{passive:true});
 textEl.addEventListener("touchstart",()=>{ if(!paused){paused=true;stop();pauseBtn.textContent="RESUME";setStatus("MANUAL READING");}},{passive:true});
