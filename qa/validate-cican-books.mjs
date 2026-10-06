@@ -90,6 +90,7 @@ if (/Force the beginning again after layout has settled/.test(reader)) fail("Rea
 if (!/document\.documentElement\.requestFullscreen/.test(reader)) fail("Device fullscreen API missing.");
 if (!/navigationUI:\s*"hide"/.test(reader)) fail("Fullscreen navigation UI hint missing.");
 if (!/readerWatchdogTimer/.test(reader)) fail("Auto-reader watchdog missing.");
+if (!/readerPlaybackInterval/.test(reader) || !/setInterval\(function\(\) \{\s*fluidAutoReader\(performance\.now\(\)\)/.test(reader)) fail("Deterministic auto-reader playback interval missing."); else pass("Deterministic auto-reader playback interval is present.");
 else pass("Auto-reader watchdog is present.");
 if (!/readerLastFrameTime/.test(reader)) fail("Auto-reader frame heartbeat missing.");
 else pass("Auto-reader frame heartbeat is present.");
@@ -122,7 +123,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v35/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
+if (!/cican-books-v36/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
 else pass("Service worker cache version is current.");
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
