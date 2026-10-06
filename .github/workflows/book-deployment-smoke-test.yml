@@ -57,7 +57,7 @@ jobs:
             for (const book of publicBooks) {
               await page.goto(BASE, { waitUntil: "networkidle", timeout: 60000 });
 
-              const button = page.locator("button.book").filter({ hasText: book.title }).first();
+              const button = page.locator("a.book").filter({ hasText: book.title }).first();
               await button.waitFor({ state: "visible", timeout: 30000 });
               await button.click();
 
@@ -81,7 +81,7 @@ jobs:
               if (!result.title) throw new Error("Reader title did not load for " + book.id);
               if (!result.text) throw new Error("Reader text did not load for " + book.id);
 
-              if (!result.title.toUpperCase().includes(book.title.toUpperCase().replace(/^THE /,"THE "))) throw new Error("Reader title mismatch for " + book.id);\n              console.log("PASS:", book.id, "| catalog click → reader → book text loaded");
+              if (!result.title.toUpperCase().includes(book.title.toUpperCase().replace(/^THE /,"THE "))) throw new Error("Reader title mismatch for " + book.id);\n              console.log("PASS:", book.id, "| catalog link → reader → book text loaded");
             }
 
             console.log("PASS:", publicBooks.length, "PUBLIC books opened successfully in Chromium.");
@@ -108,5 +108,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add smoke-test-result.json
           git diff --cached --quiet && exit 0
-          git commit -m "Record deployment smoke test result"
+          git commit -m "Record deployment smoke test result [skip ci]"
           git push
