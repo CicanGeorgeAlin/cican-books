@@ -63,3 +63,17 @@ After a successful publication batch, create a new baseline branch named locked-
 ## Continue protocol
 When the user says Continue, continue the books-only pipeline from the current checkpoint: select the next strongest candidate, verify it, prepare it without changing the locked engine, run the complete QA gate, publish only if all gates pass, report exactly what was added and verified, then prepare the next candidate.
 The word Continue must never be interpreted as permission to redesign the locked reader or website.
+
+## Mandatory exact-source gate
+Before a book can become PUBLIC, the autopilot must deterministically compare the local complete text against the selected authoritative plain-text source for the exact edition/translation.
+
+The comparison must:
+- retrieve the authoritative text from a stable raw-text endpoint;
+- remove only documented transport wrappers (for example Project Gutenberg's outer envelope and repository-only markers);
+- preserve the actual book's words, punctuation, headings, paragraph breaks, and section order;
+- compare the normalized texts exactly;
+- report the first mismatch and both normalized SHA-256 hashes when they differ;
+- record the authoritative text URL and normalized hash for the verification record;
+- fail closed when an authoritative text endpoint cannot be established.
+
+A title/author/source-page check is not sufficient. A book is not PUBLIC until exact source comparison passes.
