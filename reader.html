@@ -888,6 +888,7 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar,
 
 
 <script type="module">
+import { getEditionPagination } from "./catalog/edition-pagination-v2.js";
 const READER_PARAMS = new URLSearchParams(location.search);
 const BOOK_ID = READER_PARAMS.get("book");
 const FRESH_OPEN = READER_PARAMS.get("fresh") === "1";
@@ -1382,7 +1383,7 @@ async function loadSourceTextForReader(
 
 
 function getReaderPaginationConfig(book) {
-    const p = book && book.pagination;
+    const p = getEditionPagination(book && book.id) || (book && book.pagination);
     if (!p || p.type !== "EDITION") return null;
     const count = Number(p.pageCount);
     if (!Number.isInteger(count) || count < 2) return null;
