@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "Constance Garnett",
     sourceNote: "The 15-minute reader begins at Part I of the verified complete source. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/2554",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/2554/pg2554.txt",
+    fullTextUrl: "fulltext/crime-and-punishment.txt",
     gameMode: "classic",
     gameTitle: "THE WEIGHT OF A CHOICE",
     gameDNA: ["choice","conscience","deduction","morality","consequence","identity","courage"],
