@@ -17,7 +17,7 @@ const serviceWorker = read("service-worker.js");
 const robots = read("robots.txt");
 const sitemap = read("sitemap.xml");
 
-if (!/CATALOG\.filter\(b=>b\.visibility==="PUBLIC"\)/.test(index)) {
+if (!/CATALOG\.filter\(function\(b\)\{return b\.visibility==="PUBLIC";\}\)/.test(index) && !/CATALOG\.filter\(b=>b\.visibility==="PUBLIC"\)/.test(index)) {
   fail("Landing page does not use explicit PUBLIC catalog visibility.");
 } else pass("Landing page uses explicit PUBLIC visibility.");
 
