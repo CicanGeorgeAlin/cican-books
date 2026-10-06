@@ -429,11 +429,11 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar,
         "Times New Roman",
         serif;
 
-    font-size: clamp(16px, 1.72vw, 18px);
+    font-size: clamp(17px, 1.8vw, 19px);
 
     font-weight: 400;
 
-    line-height: 1.72;
+    line-height: 1.78;
 
     letter-spacing: 0;
 
@@ -778,9 +778,9 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar,
 
     #readerText {
 
-        font-size: 16px;
+        font-size: 17px;
 
-        line-height: 1.74;
+        line-height: 1.78;
 
         max-width: none;
 
@@ -1224,6 +1224,12 @@ function normalizeSourceText(sourceText) {
                 )
                 .trim();
     }
+
+    /* Remove repository-only author-text wrappers when present. */
+    normalizedText = normalizedText
+        .replace(/^---BEGIN AUTHOR TEXT---\s*/i, "")
+        .replace(/\s*---END AUTHOR TEXT---\s*$/i, "")
+        .trim();
 
     return normalizedText.trim();
 }
