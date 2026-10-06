@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "",
     sourceNote: "The 15-minute reader begins at Chapter I of the verified complete source. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/11",
-    fullTextUrl: "https://www.gutenberg.org/files/11/11-0.txt",
+    fullTextUrl: "fulltext/alice-adventures-in-wonderland.txt",
     gameMode: "classic",
     gameTitle: "DOWN THE RABBIT-HOLE",
     gameDNA: ["curiosity","identity","wonder","logic","change","courage","imagination"],
