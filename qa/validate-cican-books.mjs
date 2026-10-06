@@ -41,11 +41,11 @@ else pass("Catalog contains 22 records.");
 const publicRecords = records.filter(r => r.visibility === "PUBLIC");
 const draftRecords = records.filter(r => r.visibility === "DRAFT");
 
-if (publicRecords.length !== 16) fail(`Expected 16 PUBLIC records, found ${publicRecords.length}.`);
-else pass("Catalog contains 16 PUBLIC records.");
+if (publicRecords.length !== 17) fail(`Expected 17 PUBLIC records, found ${publicRecords.length}.`);
+else pass("Catalog contains 17 PUBLIC records.");
 
-if (draftRecords.length !== 6) fail(`Expected 6 DRAFT records, found ${draftRecords.length}.`);
-else pass("Catalog contains 6 DRAFT records.");
+if (draftRecords.length !== 5) fail(`Expected 6 DRAFT records, found ${draftRecords.length}.`);
+else pass("Catalog contains 5 DRAFT records.");
 
 const publicSourceChecks = [];
 for (const record of publicRecords) {
