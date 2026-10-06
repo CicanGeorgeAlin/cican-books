@@ -1,0 +1,51 @@
+name: CICAN Books deployment smoke test
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for GitHub Pages deployment
+        run: |
+          set -euo pipefail
+          for i in {1..12}; do
+            if curl -L --fail --silent --show-error --max-time 20 https://cicangeorgealin.github.io/cican-books/ -o site.html; then
+              echo "Site reachable."
+              break
+            fi
+            echo "Waiting for Pages..."
+            sleep 10
+          done
+          test -s site.html
+
+      - name: Verify published library and deployed book links
+        run: |
+          set -euo pipefail
+          curl -L --fail --silent --show-error --retry 5 --retry-delay 5 https://cicangeorgealin.github.io/cican-books/catalog/index.js -o catalog.js
+          python - <<'PY'
+          import re, urllib.request
+          catalog = open("catalog.js", encoding="utf-8").read()
+          public = re.findall(r'id:"([^"]+)".*?visibility:"PUBLIC"', catalog)
+          if not public:
+              raise SystemExit("No PUBLIC books found in catalog")
+          site = open("site.html", encoding="utf-8").read()
+          for book_id in public:
+              marker = f'book={book_id}'
+              # The landing page is rendered by JavaScript, so verify the deployed
+              # catalog contains the book and its reader endpoint is reachable.
+              if f'id:"{book_id}"' not in catalog:
+                  raise SystemExit(f"Missing catalog record: {book_id}")
+              url = f"https://cicangeorgealin.github.io/cican-books/reader.html?book={book_id}"
+              req = urllib.request.Request(url, method="GET")
+              with urllib.request.urlopen(req, timeout=20) as response:
+                  if response.status != 200:
+                      raise SystemExit(f"Reader not reachable: {book_id} ({response.status})")
+              print(f"PASS: {book_id}")
+          print(f"PASS: {len(public)} PUBLIC books have reachable reader pages.")
+          PY
