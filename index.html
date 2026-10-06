@@ -1,77 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CICAN BOOKS</title>
-<meta name="description" content="CICAN BOOKS — choose a book and enter a focused reading experience.">
-<meta name="theme-color" content="#000000">
-<meta name="robots" content="index,follow">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CICAN BOOKS</title><meta name="description" content="CICAN BOOKS — a visual library of focused reading experiences.">
+<meta name="theme-color" content="#000000"><meta name="robots" content="index,follow">
 <link rel="canonical" href="https://cicangeorgealin.github.io/cican-books/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="CICAN BOOKS">
-<meta property="og:description" content="Choose a book and enter a focused reading experience.">
-<meta property="og:url" content="https://cicangeorgealin.github.io/cican-books/">
-<meta property="og:site_name" content="CICAN BOOKS">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif}
-body{min-height:100vh}
-.page{min-height:100vh;padding:22px 16px 36px}
-.shell{width:min(100%,760px);margin:0 auto}
-.top{display:flex;align-items:center;justify-content:space-between}
-.logo{color:#fff;text-decoration:none;font-size:18px;font-weight:900;letter-spacing:-.06em}
-.support{color:rgba(255,255,255,.45);text-decoration:none;font-size:8px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
-.hero{text-align:center;padding:48px 0 30px}
-.cican{margin:0 auto 20px;width:82px;height:82px;border-radius:50%;background:#fff;position:relative;box-shadow:0 0 16px #fff,0 0 38px rgba(255,255,255,.7),0 0 70px rgba(255,255,255,.28)}
-.eye{position:absolute;width:11px;height:17px;top:32px;background:#000;border-radius:50%}.eye.left{left:25px}.eye.right{right:25px}
-h1{font-size:clamp(34px,10vw,58px);line-height:.95;letter-spacing:-.07em}
-.subtitle{margin-top:10px;color:rgba(255,255,255,.42);font-size:10px;font-weight:800;letter-spacing:.32em;text-transform:uppercase}
-.search{margin:4px 0 14px}
-.search input{width:100%;height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.13);border-radius:14px;background:#080808;color:#fff;outline:none;font-size:14px}
-.search input:focus{border-color:rgba(255,255,255,.42)}
-.search input::placeholder{color:rgba(255,255,255,.24)}
-.count{margin:0 2px 10px;color:rgba(255,255,255,.24);font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
-.books{display:flex;flex-direction:column;gap:7px}
-.book{width:100%;display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:10px;min-height:70px;padding:9px 12px;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:#050505;color:#fff;text-align:left;cursor:pointer}
-.book:hover{border-color:rgba(255,255,255,.28);background:#0a0a0a}
-.number{color:rgba(255,255,255,.25);font-size:9px;font-weight:800;text-align:center}
-.title{font-size:14px;font-weight:800;line-height:1.25}
-.meta{margin-top:4px;color:rgba(255,255,255,.32);font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.time{color:rgba(255,255,255,.38);font-size:8px;font-weight:800;letter-spacing:.08em}
-.empty{text-align:center;padding:30px;color:rgba(255,255,255,.25);font-size:9px;letter-spacing:.15em}
-@media(max-width:500px){.hero{padding:38px 0 24px}.cican{width:72px;height:72px}.eye{top:28px;width:10px;height:15px}.eye.left{left:22px}.eye.right{right:22px}.book{grid-template-columns:30px 1fr auto;min-height:66px}.title{font-size:13px}}
-</style>
-<link rel="manifest" href="manifest.webmanifest">
+*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif}body{min-height:100vh}
+.page{min-height:100vh;padding:22px 16px 40px}.shell{width:min(100%,920px);margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between}
+.logo{color:#fff;text-decoration:none;font-size:18px;font-weight:900;letter-spacing:-.06em}.support{color:rgba(255,255,255,.45);text-decoration:none;font-size:8px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+.hero{text-align:center;padding:46px 0 28px}.cican{margin:0 auto 20px;width:78px;height:78px;border-radius:50%;background:#fff;position:relative;box-shadow:0 0 16px #fff,0 0 38px rgba(255,255,255,.7),0 0 70px rgba(255,255,255,.28)}
+.eye{position:absolute;width:10px;height:16px;top:31px;background:#000;border-radius:50%}.eye.left{left:24px}.eye.right{right:24px}h1{font-size:clamp(34px,10vw,58px);line-height:.95;letter-spacing:-.07em}.subtitle{margin-top:10px;color:rgba(255,255,255,.42);font-size:10px;font-weight:800;letter-spacing:.32em;text-transform:uppercase}
+.search{margin:2px 0 12px}.search input{width:100%;height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.13);border-radius:14px;background:#080808;color:#fff;outline:none;font-size:14px}.search input:focus{border-color:rgba(255,255,255,.42)}.search input::placeholder{color:rgba(255,255,255,.24)}
+.alphabet{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 16px}.letter{flex:1 0 30px;min-width:30px;height:32px;border:1px solid rgba(255,255,255,.11);border-radius:9px;background:#050505;color:rgba(255,255,255,.65);font-size:10px;font-weight:900;cursor:pointer}.letter:hover,.letter.active{background:#fff;color:#000;border-color:#fff}
+.library-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px}.count{color:rgba(255,255,255,.28);font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.mode{color:rgba(255,255,255,.2);font-size:8px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.book{width:100%;display:grid;grid-template-columns:76px 1fr;gap:11px;align-items:center;min-height:104px;padding:9px;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:#050505;color:#fff;text-align:left;cursor:pointer}.book:hover{border-color:rgba(255,255,255,.28);background:#0a0a0a}
+.cover{width:76px;height:88px;border-radius:7px;object-fit:cover;background:#111;border:1px solid rgba(255,255,255,.12)}.cover-fallback{display:flex;align-items:center;justify-content:center;text-align:center;padding:7px;color:#fff;font-size:9px;font-weight:900;line-height:1.08;background:linear-gradient(145deg,#202020,#050505)}
+.title{font-size:13px;font-weight:900;line-height:1.18}.meta{margin-top:6px;color:rgba(255,255,255,.34);font-size:8px;font-weight:700;line-height:1.35;letter-spacing:.05em;text-transform:uppercase}.enter{margin-top:8px;color:rgba(255,255,255,.52);font-size:7px;font-weight:900;letter-spacing:.12em}.empty{text-align:center;padding:34px;color:rgba(255,255,255,.25);font-size:9px;letter-spacing:.15em}
+@media(max-width:620px){.page{padding-left:12px;padding-right:12px}.hero{padding:38px 0 24px}.books{grid-template-columns:1fr}.book{grid-template-columns:82px 1fr}.cover{width:82px;height:96px}}
+</style><link rel="manifest" href="manifest.webmanifest">
 </head>
-<body>
-<main class="page"><div class="shell">
+<body><main class="page"><div class="shell">
 <header class="top"><a class="logo" href="index.html" aria-label="CICAN Books home">CICAN</a><a class="support" href="https://buymeacoffee.com/cican" target="_blank" rel="noopener noreferrer">BUY CICAN A COFFEE ☕</a></header>
 <section class="hero"><div class="cican" aria-hidden="true"><div class="eye left"></div><div class="eye right"></div></div><h1>CICAN</h1><div class="subtitle">BOOKS · ENTER</div></section>
 <div class="search"><input id="search" type="search" placeholder="Search books, authors, subjects…" aria-label="Search books"></div>
-<div id="count" class="count"></div>
+<nav id="alphabet" class="alphabet" aria-label="Browse books A to Z"></nav>
+<div class="library-head"><div id="count" class="count"></div><div id="mode" class="mode">ALL BOOKS</div></div>
 <div id="books" class="books" role="list"></div>
 </div></main>
 <script type="module">
 import { CATALOG } from "./catalog/index.js";
-const books=CATALOG.filter(b=>b.visibility==="PUBLIC");
-const list=document.getElementById("books"), search=document.getElementById("search"), count=document.getElementById("count");
-function render(q=""){
- const term=q.trim().toLowerCase();
- const results=books.filter(b=>[b.title,b.author,b.category,b.translator].filter(Boolean).join(" ").toLowerCase().includes(term));
- count.textContent=results.length+" "+(results.length===1?"BOOK":"BOOKS");
- list.innerHTML="";
- if(!results.length){list.innerHTML='<div class="empty">NO BOOKS FOUND</div>';return;}
- results.forEach((b,i)=>{
-  const button=document.createElement("button");button.className="book";button.type="button";
-  const n=String(books.indexOf(b)+1).padStart(2,"0");
-  button.innerHTML='<span class="number">'+n+'</span><span><span class="title">'+b.title+'</span><span class="meta">'+b.category+' · '+b.author+(b.translator?" · "+b.translator:"")+'</span></span><span class="time">ENTER BOOK</span>';
-  button.addEventListener("click",()=>location.href="reader.html?book="+encodeURIComponent(b.id));
-  list.appendChild(button);
- });
-}
-search.addEventListener("input",()=>render(search.value));render();
-if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js").catch(()=>{}));
-</script>
-</body>
-</html>
+const books=CATALOG.filter(function(b){return b.visibility==="PUBLIC";}).slice().sort(function(a,b){return a.title.localeCompare(b.title);});
+const list=document.getElementById("books"),search=document.getElementById("search"),count=document.getElementById("count"),mode=document.getElementById("mode"),alphabet=document.getElementById("alphabet");
+let letter="ALL";
+["ALL"].concat("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")).forEach(function(l){const b=document.createElement("button");b.className="letter"+(l==="ALL"?" active":"");b.type="button";b.textContent=l;b.setAttribute("aria-label",l==="ALL"?"Show all books":"Show books beginning with "+l);b.addEventListener("click",function(){letter=l;search.value="";document.querySelectorAll(".letter").forEach(function(x){x.classList.toggle("active",x===b);});render();});alphabet.appendChild(b);});
+function coverFor(b){const id=String(b.sourceEbookId||"").match(/^\d+$/);return id?"https://www.gutenberg.org/cache/epub/"+id[0]+"/pg"+id[0]+".cover.medium.jpg":"";}
+function render(){const term=search.value.trim().toLowerCase();const results=books.filter(function(b){const starts=letter==="ALL"||b.title.trim().toUpperCase().startsWith(letter);const text=[b.title,b.author,b.category,b.translator].filter(Boolean).join(" ").toLowerCase();return starts&&text.includes(term);});
+count.textContent=results.length+" "+(results.length===1?"BOOK":"BOOKS");mode.textContent=term?"SEARCH":letter==="ALL"?"ALL BOOKS":letter+" · BOOKS";list.innerHTML="";
+if(!results.length){list.innerHTML='<div class="empty">NO BOOKS FOUND</div>';return;}
+results.forEach(function(b){const button=document.createElement("button");button.className="book";button.type="button";const src=coverFor(b);const cover=src?'<img class="cover" src="'+src+'" alt="" loading="lazy">':'<span class="cover cover-fallback">'+b.title+'</span>';button.innerHTML=cover+'<span><span class="title">'+b.title+'</span><span class="meta">'+b.author+(b.category?" · "+b.category:"")+'</span><span class="enter">ENTER BOOK →</span></span>';button.addEventListener("click",function(){location.href="reader.html?book="+encodeURIComponent(b.id);});list.appendChild(button);});}
+search.addEventListener("input",function(){letter="ALL";document.querySelectorAll(".letter").forEach(function(x){x.classList.toggle("active",x.textContent==="ALL");});render();});render();
+if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("service-worker.js").catch(function(){});});
+</script></body></html>
