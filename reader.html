@@ -2543,67 +2543,39 @@ readerPause.addEventListener(
    READER FULL SCREEN
 ================================================= */
 
-let fullscreenButtonDragging = false;
-let fullscreenButtonPointerId = null;
-let fullscreenButtonMoved = false;
-let fullscreenButtonOffsetX = 0;
-let fullscreenButtonOffsetY = 0;
+function makeReaderControlMovable(element, savePosition, onTap) {
+    let dragging = false;
+    let pointerId = null;
+    let moved = false;
+    let offsetX = 0;
+    let offsetY = 0;
+    let startPointerX = 0;
+    let startPointerY = 0;
+    let startLeft = 0;
+    let startTop = 0;
 
-function saveFullscreenButtonPosition() {
-    if (!window.CICAN_ACTIVE_BOOK_ID) return;
-    if (!readerFullscreen.style.left || !readerFullscreen.style.top) return;
+    function clampPosition(left, top) {
+        const panelRect = readerPanel.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        const padding = 6;
 
-    try {
-        localStorage.setItem(
-            "cican_reader_fullscreen_button:aligned-v1:" +
-            window.CICAN_ACTIVE_BOOK_ID,
-            JSON.stringify({
-                left: readerFullscreen.style.left,
-                top: readerFullscreen.style.top
-            })
-        );
-    } catch (_) {}
-}
-
-function restoreFullscreenButtonPosition() {
-    if (!window.CICAN_ACTIVE_BOOK_ID) return;
-
-    try {
-        const saved = localStorage.getItem(
-            "cican_reader_fullscreen_button:aligned-v1:" +
-            window.CICAN_ACTIVE_BOOK_ID
+        const maxLeft = Math.max(
+            padding,
+            panelRect.width - elementRect.width - padding
         );
 
-        if (!saved) return;
+        const maxTop = Math.max(
+            padding,
+            panelRect.height - elementRect.height - padding
+        );
 
-        const position = JSON.parse(saved);
-
-        if (
-            position &&
-            position.left &&
-            position.top
-        ) {
-            readerFullscreen.style.left = position.left;
-            readerFullscreen.style.top = position.top;
-            readerFullscreen.style.right = "auto";
-            readerFullscreen.style.bottom = "auto";
-        }
-    } catch (_) {}
-}
-
-readerFullscreen.addEventListener(
-    "keydown",
-    function(e) {
-        if (e.key !== "Enter" && e.key !== " ") return;
-        e.preventDefault();
-        toggleReaderFullscreen();
+        return {
+            left: Math.max(padding, Math.min(maxLeft, left)),
+            top: Math.max(padding, Math.min(maxTop, top))
+        };
     }
-);
 
-readerFullscreen.addEventListener(
-    "pointerdown",
-    function(e) {
-
+    element.addEventListener("pointerdown", function(e) {
         if (
             e.pointerType === "mouse" &&
             e.button !== 0
@@ -2614,194 +2586,121 @@ readerFullscreen.addEventListener(
         e.preventDefault();
         e.stopPropagation();
 
-        fullscreenButtonDragging = true;
-        fullscreenButtonMoved = false;
-        fullscreenButtonPointerId = e.pointerId;
+        const rect = element.getBoundingClientRect();
+        const panelRect = readerPanel.getBoundingClientRect();
 
-        const rect =
-            readerFullscreen.getBoundingClientRect();
+        dragging = true;
+        moved = false;
+        pointerId = e.pointerId;
 
-        fullscreenButtonOffsetX =
-            e.clientX - rect.left;
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
 
-        fullscreenButtonOffsetY =
-            e.clientY - rect.top;
+        startPointerX = e.clientX;
+        startPointerY = e.clientY;
 
-        readerFullscreen.classList.add(
-            "dragging"
-        );
+        startLeft = rect.left - panelRect.left;
+        startTop = rect.top - panelRect.top;
+
+        element.classList.add("dragging");
 
         try {
-            readerFullscreen.setPointerCapture(
-                e.pointerId
-            );
+            element.setPointerCapture(e.pointerId);
         } catch (_) {}
-    },
-    { passive: false }
-);
+    }, { passive: false });
 
-readerFullscreen.addEventListener(
-    "pointermove",
-    function(e) {
-
-        if (
-            !fullscreenButtonDragging ||
-            e.pointerId !== fullscreenButtonPointerId
-        ) {
+    element.addEventListener("pointermove", function(e) {
+        if (!dragging || e.pointerId !== pointerId) {
             return;
         }
 
-        const dx =
-            e.clientX -
-            (
-                readerFullscreen.getBoundingClientRect().left +
-                fullscreenButtonOffsetX
-            );
-
-        const dy =
-            e.clientY -
-            (
-                readerFullscreen.getBoundingClientRect().top +
-                fullscreenButtonOffsetY
-            );
+        const dx = e.clientX - startPointerX;
+        const dy = e.clientY - startPointerY;
 
         if (
             Math.abs(dx) > 5 ||
             Math.abs(dy) > 5
         ) {
-            fullscreenButtonMoved = true;
+            moved = true;
         }
 
-        if (!fullscreenButtonMoved) return;
+        if (!moved) {
+            return;
+        }
 
         e.preventDefault();
         e.stopPropagation();
 
-        const panelRect =
-            readerPanel.getBoundingClientRect();
-
-        const buttonRect =
-            readerFullscreen.getBoundingClientRect();
-
-        const padding = 6;
-
-        let left =
-            e.clientX -
-            panelRect.left -
-            fullscreenButtonOffsetX;
-
-        let top =
-            e.clientY -
-            panelRect.top -
-            fullscreenButtonOffsetY;
-
-        const maxLeft =
-            Math.max(
-                padding,
-                panelRect.width -
-                buttonRect.width -
-                padding
-            );
-
-        const maxTop =
-            Math.max(
-                padding,
-                panelRect.height -
-                buttonRect.height -
-                padding
-            );
-
-        left =
-            Math.max(
-                padding,
-                Math.min(
-                    maxLeft,
-                    left
-                )
-            );
-
-        top =
-            Math.max(
-                padding,
-                Math.min(
-                    maxTop,
-                    top
-                )
-            );
-
-        readerFullscreen.style.left =
-            left + "px";
-
-        readerFullscreen.style.top =
-            top + "px";
-
-        readerFullscreen.style.right =
-            "auto";
-
-        readerFullscreen.style.bottom =
-            "auto";
-    },
-    { passive: false }
-);
-
-function endFullscreenButtonDrag(e) {
-
-    if (!fullscreenButtonDragging) return;
-
-    if (
-        e &&
-        e.pointerId !== fullscreenButtonPointerId
-    ) {
-        return;
-    }
-
-    const shouldActivate =
-        !fullscreenButtonMoved;
-
-    if (e && fullscreenButtonMoved) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    fullscreenButtonDragging = false;
-
-    readerFullscreen.classList.remove(
-        "dragging"
-    );
-
-    if (fullscreenButtonMoved) {
-        saveFullscreenButtonPosition();
-    }
-
-    try {
-        readerFullscreen.releasePointerCapture(
-            fullscreenButtonPointerId
+        const position = clampPosition(
+            startLeft + dx,
+            startTop + dy
         );
-    } catch (_) {}
 
-    fullscreenButtonPointerId = null;
+        element.style.left = position.left + "px";
+        element.style.top = position.top + "px";
+        element.style.right = "auto";
+        element.style.bottom = "auto";
+    }, { passive: false });
 
-    if (shouldActivate) {
-        toggleReaderFullscreen();
+    function end(e) {
+        if (!dragging) {
+            return;
+        }
+
+        if (
+            e &&
+            e.pointerId !== pointerId
+        ) {
+            return;
+        }
+
+        const wasMoved = moved;
+
+        if (e && wasMoved) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        dragging = false;
+        element.classList.remove("dragging");
+
+        try {
+            element.releasePointerCapture(pointerId);
+        } catch (_) {}
+
+        pointerId = null;
+
+        if (wasMoved) {
+            savePosition();
+        } else if (typeof onTap === "function") {
+            onTap();
+        }
     }
+
+    element.addEventListener("pointerup", end, { passive: false });
+    element.addEventListener("pointercancel", end, { passive: false });
 }
 
-readerFullscreen.addEventListener(
-    "pointerup",
-    endFullscreenButtonDrag,
-    { passive: false }
+makeReaderControlMovable(
+    readerFullscreen,
+    saveFullscreenButtonPosition,
+    function() {
+        toggleReaderFullscreen();
+    }
 );
 
 readerFullscreen.addEventListener(
-    "pointercancel",
-    endFullscreenButtonDrag,
-    { passive: false }
+    "keydown",
+    function(e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        toggleReaderFullscreen();
+    }
 );
 
 window.addEventListener(
     "resize",
     function() {
-
         if (
             !readerFullscreen.style.left ||
             !readerFullscreen.style.top
@@ -2809,23 +2708,12 @@ window.addEventListener(
             return;
         }
 
-        const panelRect =
-            readerPanel.getBoundingClientRect();
-
-        const buttonRect =
-            readerFullscreen.getBoundingClientRect();
-
+        const panelRect = readerPanel.getBoundingClientRect();
+        const buttonRect = readerFullscreen.getBoundingClientRect();
         const padding = 6;
 
-        let left =
-            parseFloat(
-                readerFullscreen.style.left
-            );
-
-        let top =
-            parseFloat(
-                readerFullscreen.style.top
-            );
+        let left = parseFloat(readerFullscreen.style.left);
+        let top = parseFloat(readerFullscreen.style.top);
 
         if (!Number.isFinite(left)) left = padding;
         if (!Number.isFinite(top)) top = padding;
@@ -2833,9 +2721,10 @@ window.addEventListener(
         left = Math.max(
             padding,
             Math.min(
-                panelRect.width -
-                    buttonRect.width -
+                Math.max(
                     padding,
+                    panelRect.width - buttonRect.width - padding
+                ),
                 left
             )
         );
@@ -2843,18 +2732,16 @@ window.addEventListener(
         top = Math.max(
             padding,
             Math.min(
-                panelRect.height -
-                    buttonRect.height -
+                Math.max(
                     padding,
+                    panelRect.height - buttonRect.height - padding
+                ),
                 top
             )
         );
 
-        readerFullscreen.style.left =
-            left + "px";
-
-        readerFullscreen.style.top =
-            top + "px";
+        readerFullscreen.style.left = left + "px";
+        readerFullscreen.style.top = top + "px";
     }
 );
 
@@ -3092,258 +2979,9 @@ const readerPanel =
         ".reader-panel"
     );
 
-let hudDragging = false;
-
-let hudPointerId = null;
-
-let hudOffsetX = 0;
-
-let hudOffsetY = 0;
-
-
-readerHUD.addEventListener(
-    "pointerdown",
-    function(e) {
-
-        e.preventDefault();
-
-        e.stopPropagation();
-
-
-        hudDragging = true;
-
-        hudPointerId =
-            e.pointerId;
-
-
-        const hudRect =
-            readerHUD.getBoundingClientRect();
-
-
-        hudOffsetX =
-            e.clientX -
-            hudRect.left;
-
-
-        hudOffsetY =
-            e.clientY -
-            hudRect.top;
-
-
-        readerHUD.classList.add(
-            "dragging"
-        );
-
-
-        try {
-
-            readerHUD.setPointerCapture(
-                e.pointerId
-            );
-
-        } catch (_) {}
-    },
-    {
-        passive: false
-    }
-);
-
-
-readerHUD.addEventListener(
-    "pointermove",
-    function(e) {
-
-        if (
-            !hudDragging ||
-            e.pointerId !== hudPointerId
-        ) {
-            return;
-        }
-
-
-        e.preventDefault();
-
-        e.stopPropagation();
-
-
-        const panelRect =
-            readerPanel.getBoundingClientRect();
-
-        const hudRect =
-            readerHUD.getBoundingClientRect();
-
-
-        const padding =
-            6;
-
-
-        let left =
-            e.clientX -
-            panelRect.left -
-            hudOffsetX;
-
-
-        let top =
-            e.clientY -
-            panelRect.top -
-            hudOffsetY;
-
-
-        const maxLeft =
-            Math.max(
-                padding,
-                panelRect.width -
-                hudRect.width -
-                padding
-            );
-
-
-        const maxTop =
-            Math.max(
-                padding,
-                panelRect.height -
-                hudRect.height -
-                padding
-            );
-
-
-        left =
-            Math.max(
-                padding,
-                Math.min(
-                    maxLeft,
-                    left
-                )
-            );
-
-
-        top =
-            Math.max(
-                padding,
-                Math.min(
-                    maxTop,
-                    top
-                )
-            );
-
-
-        readerHUD.style.left =
-            left + "px";
-
-
-        readerHUD.style.top =
-            top + "px";
-
-
-        readerHUD.style.right =
-            "auto";
-
-
-        readerHUD.style.bottom =
-            "auto";
-    },
-    {
-        passive: false
-    }
-);
-
-
-function saveHUDPosition() {
-    if (!window.CICAN_ACTIVE_BOOK_ID) return;
-    if (!readerHUD.style.left || !readerHUD.style.top) return;
-    try {
-        localStorage.setItem(
-            "cican_reader_hud:aligned-v1:" + window.CICAN_ACTIVE_BOOK_ID,
-            JSON.stringify({
-                left: readerHUD.style.left,
-                top: readerHUD.style.top
-            })
-        );
-    } catch (_) {}
-}
-
-
-function restoreHUDPosition() {
-    if (!window.CICAN_ACTIVE_BOOK_ID) return;
-    try {
-        const saved = localStorage.getItem(
-            "cican_reader_hud:aligned-v1:" + window.CICAN_ACTIVE_BOOK_ID
-        );
-        if (!saved) return;
-        const position = JSON.parse(saved);
-        if (position && position.left && position.top) {
-            readerHUD.style.left = position.left;
-            readerHUD.style.top = position.top;
-            readerHUD.style.right = "auto";
-            readerHUD.style.bottom = "auto";
-        }
-    } catch (_) {}
-}
-
-
-function endHUDDrag(e) {
-
-    if (!hudDragging) {
-        return;
-    }
-
-
-    if (
-        e &&
-        e.pointerId !== hudPointerId
-    ) {
-        return;
-    }
-
-
-    if (e) {
-
-        e.preventDefault();
-
-        e.stopPropagation();
-    }
-
-
-    hudDragging =
-        false;
-
-
-    readerHUD.classList.remove(
-        "dragging"
-    );
-
-    saveHUDPosition();
-
-
-    try {
-
-        readerHUD.releasePointerCapture(
-            hudPointerId
-        );
-
-    } catch (_) {}
-
-
-    hudPointerId =
-        null;
-}
-
-
-readerHUD.addEventListener(
-    "pointerup",
-    endHUDDrag,
-    {
-        passive: false
-    }
-);
-
-
-readerHUD.addEventListener(
-    "pointercancel",
-    endHUDDrag,
-    {
-        passive: false
-    }
+makeReaderControlMovable(
+    readerHUD,
+    saveHUDPosition
 );
 
 
