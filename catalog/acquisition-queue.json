@@ -3,22 +3,6 @@
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
   "candidates": [
     {
-      "id": "alice-adventures-in-wonderland",
-      "title": "Alice's Adventures in Wonderland",
-      "author": "Lewis Carroll",
-      "language": "en",
-      "originalPublicationYear": 1865,
-      "sourceRepo": "Project Gutenberg + Standard Ebooks",
-      "sourceEbookId": "11",
-      "sourceUrl": "https://www.gutenberg.org/ebooks/11",
-      "alternativeSourceUrl": "https://standardebooks.org/ebooks/lewis-carroll/alices-adventures-in-wonderland/john-tenniel",
-      "sourceStatus": "SOURCE_VERIFIED",
-      "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Acquire and normalize full text; verify territorial distribution status.",
-      "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 3
-    },
-    {
       "id": "adventures-of-sherlock-holmes",
       "title": "The Adventures of Sherlock Holmes",
       "author": "Arthur Conan Doyle",
@@ -47,6 +31,14 @@
       "nextStep": "Verify exact source edition and acquire full text.",
       "queueStage": "SOURCE_VERIFICATION",
       "priority": 5
+    }
+  ],
+  "completedAcquisitions": [
+    {
+      "id": "alice-adventures-in-wonderland",
+      "sourceEbookId": "11",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary source verified at Project Gutenberg; territorial review remains required before publication."
     }
   ]
 }
