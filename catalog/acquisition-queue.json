@@ -3,19 +3,19 @@
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
   "candidates": [
     {
-      "id": "little-women",
-      "title": "Little Women",
-      "author": "Louisa May Alcott",
+      "id": "the-secret-garden",
+      "title": "The Secret Garden",
+      "author": "Frances Hodgson Burnett",
       "language": "en",
-      "originalPublicationYear": 1868,
+      "originalPublicationYear": 1911,
       "sourceRepo": "Project Gutenberg",
-      "sourceEbookId": "37106",
-      "sourceUrl": "https://www.gutenberg.org/ebooks/37106",
+      "sourceEbookId": "17396",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/17396",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
       "nextStep": "Use a verified source edition and review territorial status before publication.",
       "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 11
+      "priority": 12
     }
   ],
   "completedAcquisitions": [
@@ -70,6 +70,12 @@
     {
       "id": "the-adventures-of-huckleberry-finn",
       "sourceEbookId": "76",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "little-women",
+      "sourceEbookId": "37106",
       "status": "ACQUIRED_SOURCE_READY",
       "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
     }
