@@ -126,15 +126,6 @@ html.cican-device-fullscreen #readerStatus {
     display: none !important;
 }
 
-html.cican-device-fullscreen #readerHUD {
-    display: flex !important;
-    position: fixed;
-    height: auto !important;
-    min-height: 0 !important;
-    width: auto !important;
-    max-height: 64px;
-    z-index: 2147483646;
-}
 html.cican-device-fullscreen .reader-panel {
     width: 100vw;
     height: 100vh;
@@ -1135,7 +1126,7 @@ function updateReaderUI() {
 
 
     /*
-       The movable reader HUD remains the primary
+       The fixed header HUD remains the primary
        information display. The rail is a quiet
        visual orientation aid only.
     */
