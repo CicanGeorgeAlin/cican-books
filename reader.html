@@ -1443,7 +1443,14 @@ function renderReaderText(sourceText) {
     }
 
     for (const text of blockTexts) {
+        /*
+            V2 PREVIEW PLACEMENT:
+            Evaluate the page boundary before each natural text block.
+            The marker therefore lives directly between two text blocks,
+            which is how the final edition-aware pagination will behave.
+        */
         if (pageCount > 1 && nextPage <= pageCount &&
+            seenChars > 0 &&
             seenChars >= (totalChars * (nextPage - 1) / pageCount)) {
             appendPageMarker(nextPage);
             nextPage += 1;
