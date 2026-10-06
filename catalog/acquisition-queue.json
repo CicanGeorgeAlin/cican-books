@@ -3,19 +3,19 @@
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
   "candidates": [
     {
-      "id": "the-adventures-of-tom-sawyer",
-      "title": "The Adventures of Tom Sawyer",
+      "id": "the-adventures-of-huckleberry-finn",
+      "title": "The Adventures of Huckleberry Finn",
       "author": "Mark Twain",
       "language": "en",
-      "originalPublicationYear": 1876,
+      "originalPublicationYear": 1884,
       "sourceRepo": "Project Gutenberg",
-      "sourceEbookId": "74",
-      "sourceUrl": "https://www.gutenberg.org/ebooks/74",
+      "sourceEbookId": "76",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/76",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
       "nextStep": "Use a verified source edition and review territorial status before publication.",
       "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 9
+      "priority": 10
     }
   ],
   "completedAcquisitions": [
@@ -58,6 +58,12 @@
     {
       "id": "the-three-musketeers",
       "sourceEbookId": "1257",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "the-adventures-of-tom-sawyer",
+      "sourceEbookId": "74",
       "status": "ACQUIRED_SOURCE_READY",
       "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
     }
