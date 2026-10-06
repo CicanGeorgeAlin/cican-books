@@ -70,6 +70,8 @@ for (const record of records) {
 }
 
 if (!/function\s+fluidAutoReader\s*\(/.test(reader)) fail("Fluid auto-reader missing.");
+if (!/\.reader-panel\s*\{[\s\S]*?display:\s*flex[\s\S]*?flex-direction:\s*column[\s\S]*?height:\s*100%[\s\S]*?min-height:\s*0/.test(reader)) fail("Reader panel is not a constrained vertical flex container.");
+else pass("Reader panel has the required constrained flex layout.");
 if (!/READER_WPM\s*=\s*100/.test(reader)) fail("Reader WPM benchmark changed.");
 if (!/\.reader-header-actions\s*\{[\s\S]*?display:\s*flex/.test(reader)) fail("Reader header control bar missing.");
 else pass("Reader uses the fixed header control bar.");
@@ -120,7 +122,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v34/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
+if (!/cican-books-v35/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
 else pass("Service worker cache version is current.");
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
