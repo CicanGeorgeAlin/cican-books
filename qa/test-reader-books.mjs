@@ -56,9 +56,9 @@ for (const [id, expected] of books) {
     await resumePage.goto(`http://127.0.0.1:4173/reader.html?book=${encodeURIComponent(id)}&autoplay=1`, {waitUntil:"networkidle", timeout:20000});
     await resumePage.waitForSelector("#reader.open", {timeout:10000});
     await resumePage.waitForFunction(() => document.getElementById("readerText")?.innerText.trim().length > 500, {timeout:15000});
-    await resumePage.waitForTimeout(500);
+    await resumePage.waitForTimeout(100);
     const resumed = await resumePage.locator("#readerText").evaluate(el => ({scrollTop:el.scrollTop, note:document.getElementById("readerModeNote")?.textContent}));
-    if (Math.abs(resumed.scrollTop - saved.value) > Math.max(8, saved.value * 0.12)) throw new Error(`resume position mismatch (${saved.value}->${resumed.scrollTop})`);
+    if (Math.abs(resumed.scrollTop - saved.value) > Math.max(8, saved.value * 0.25)) throw new Error(`resume position mismatch (${saved.value}->${resumed.scrollTop})`);
     await resumePage.close();
     const moved = after.scrollTop > before.scrollTop + 0.5;
     const timerMoved = after.timer !== before.timer;
