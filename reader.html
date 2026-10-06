@@ -95,6 +95,70 @@ body{position:relative}
     z-index: 10000;
 }
 
+html.cican-device-fullscreen,
+html.cican-device-fullscreen body {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+}
+html.cican-device-fullscreen #reader {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    z-index: 2147483647;
+    background: #000;
+}
+html.cican-device-fullscreen #readerLabel,
+html.cican-device-fullscreen #readerClose,
+html.cican-device-fullscreen #readerTitle,
+html.cican-device-fullscreen .reader-modebar,
+html.cican-device-fullscreen #readerModeNote,
+html.cican-device-fullscreen #readerProgress,
+html.cican-device-fullscreen #readerHUD,
+html.cican-device-fullscreen .reader-controls,
+html.cican-device-fullscreen #readerStatus,
+html.cican-device-fullscreen #readerFullscreen {
+    display: none !important;
+}
+html.cican-device-fullscreen .reader-panel {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+}
+html.cican-device-fullscreen #readerText {
+    width: 100%;
+    max-width: 72ch;
+    margin: 0 auto;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding:
+        18px
+        6px
+        max(24px, env(safe-area-inset-bottom));
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.82;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+html.cican-device-fullscreen #readerText::-webkit-scrollbar {
+    display: none;
+}
+
 #reader:fullscreen,
 #reader:-webkit-full-screen {
     width: 100vw;
@@ -2647,13 +2711,13 @@ function endFullscreenButtonDrag(e) {
         return;
     }
 
-    if (e) {
+    const shouldActivate =
+        !fullscreenButtonMoved;
+
+    if (e && fullscreenButtonMoved) {
         e.preventDefault();
         e.stopPropagation();
     }
-
-    const shouldActivate =
-        !fullscreenButtonMoved;
 
     fullscreenButtonDragging = false;
 
@@ -2752,8 +2816,8 @@ window.addEventListener(
 
 function isReaderFullscreen() {
     return (
-        document.fullscreenElement === reader ||
-        document.webkitFullscreenElement === reader
+        document.fullscreenElement === document.documentElement ||
+        document.webkitFullscreenElement === document.documentElement
     );
 }
 
@@ -2763,8 +2827,8 @@ function updateReaderFullscreenUI() {
 
     const active = isReaderFullscreen();
 
-    reader.classList.toggle(
-        "text-only-fullscreen",
+    document.documentElement.classList.toggle(
+        "cican-device-fullscreen",
         active
     );
 
@@ -2775,8 +2839,8 @@ function updateReaderFullscreenUI() {
     button.setAttribute(
         "aria-label",
         active
-            ? "Exit text-only full screen"
-            : "Enter text-only full screen"
+            ? "Exit device full screen"
+            : "Enter device full screen"
     );
 
     button.setAttribute(
@@ -2795,31 +2859,34 @@ async function toggleReaderFullscreen() {
             } else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
             }
-        } else if (reader.requestFullscreen) {
-            await reader.requestFullscreen({
+        } else if (document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen({
                 navigationUI: "hide"
             });
-        } else if (reader.webkitRequestFullscreen) {
-            reader.webkitRequestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen();
         } else {
-            reader.classList.add("text-only-fullscreen");
+            throw new Error("Device fullscreen API unavailable");
         }
     } catch (error) {
-        reader.classList.add("text-only-fullscreen");
-        console.warn("CICAN full-screen request was not available.", error);
+        document.documentElement.classList.remove("cican-device-fullscreen");
+        console.warn("CICAN device full-screen request was not available.", error);
+        return;
     }
 
     updateReaderFullscreenUI();
 }
 
 document.addEventListener("fullscreenchange", updateReaderFullscreenUI);
-
+document.addEventListener("fullscreenerror", function() {
+    document.documentElement.classList.remove("cican-device-fullscreen");
+    updateReaderFullscreenUI();
+});
 window.addEventListener("pageshow", updateReaderFullscreenUI);
 
 if (document.webkitFullscreenElement !== undefined) {
     document.addEventListener("webkitfullscreenchange", updateReaderFullscreenUI);
 }
-
 
 /* =================================================
    CLOSE READER
@@ -2828,6 +2895,7 @@ if (document.webkitFullscreenElement !== undefined) {
 function closeReader() {
 
     reader.classList.remove("text-only-fullscreen");
+    document.documentElement.classList.remove("cican-device-fullscreen");
 
     if (isReaderFullscreen()) {
         try {
