@@ -5,6 +5,7 @@ const root = process.cwd();
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
 const fail = message => { console.error("FAIL:", message); process.exitCode = 1; };
 const pass = message => console.log("PASS:", message);
+// Exact authoritative-source comparison is a hard PUBLIC-book gate.
 const catalog = read("catalog/index.js");
 const reader = read("reader.html");
 const index = read("index.html");
