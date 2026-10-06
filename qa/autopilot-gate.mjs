@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { verifySourceIntegrity } from "./source-integrity.mjs";
 const root = process.cwd();
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
 const fail = message => { console.error("FAIL:", message); process.exitCode = 1; };
@@ -39,6 +40,12 @@ for (const b of records.filter(x => x.visibility === "PUBLIC")) {
   for (const required of ["BOOK_READ", "title", "author", "sourceUrl", "targetWords"]) if (!source.includes(required)) fail(`PUBLIC source missing ${required}: ${b.id}`);
   if (source.replace(/\s+/g, " ").trim().length < 10000) fail(`PUBLIC source appears suspiciously short: ${b.id}`);
   if (/---BEGIN AUTHOR TEXT---|---END AUTHOR TEXT---/.test(source)) fail(`Repository wrapper remains in source: ${b.id}`);
+  try {
+    const result = await verifySourceIntegrity({ root, record: b });
+    pass(`Exact authoritative source verified: ${b.id} (${result.sha256})`);
+  } catch (error) {
+    fail(error.message);
+  }
 }
 if (/\bblink\b/i.test(catalog + reader + index)) fail("Forbidden project wording found."); else pass("Forbidden project wording absent.");
 const invariants = [[
