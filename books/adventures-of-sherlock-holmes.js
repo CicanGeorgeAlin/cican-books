@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "",
     sourceNote: "The 15-minute reader begins at Adventure I, A Scandal in Bohemia, in the verified complete source. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/48320",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/48320/pg48320.txt",
+    fullTextUrl: "fulltext/adventures-of-sherlock-holmes.txt",
     gameMode: "classic",
     gameTitle: "THE ART OF DEDUCTION",
     gameDNA: ["observation","deduction","logic","evidence","mystery","reasoning","courage"],
