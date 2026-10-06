@@ -2,16 +2,6 @@ name: CICAN Books Autopilot Gate
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "catalog/**"
-      - "books/**"
-      - "qa/autopilot-gate.mjs"
-      - "qa/source-integrity.mjs"
-      - "reader.html"
-      - "index.html"
-      - "sitemap.xml"
-      - "qa/validate-cican-books.mjs"
 
 permissions:
   contents: read
