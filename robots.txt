@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://cicangeorgealin.github.io/cican-play-the-book/sitemap.xml
+Sitemap: https://cicangeorgealin.github.io/cican-books/sitemap.xml
