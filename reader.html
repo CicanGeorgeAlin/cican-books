@@ -87,6 +87,7 @@ let autoReaderReady = false;
 const FULL_READING_WPM = 100;
 const MIN_READER_SECONDS = 60;
 const LAYOUT_SETTLE_MS = 80;
+const RAF_WARMUP_FRAMES = 2;
 
 function wordCount(text){ return (String(text||"").trim().match(/\S+/g)||[]).length; }
 function fullSeconds(text){ return Math.max(900, Math.ceil(wordCount(text)/FULL_READING_WPM*60)); }
@@ -137,7 +138,24 @@ function start(reset=true){
   paused=false; started=true; autoReaderReady=false; startTime=performance.now();
   pauseBtn.textContent="PAUSE";
   setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK");
-  setTimeout(()=>{ if(started && !paused) animationFrame=requestAnimationFrame(tick); },LAYOUT_SETTLE_MS);
+  const warmup=()=>{
+    if(!started || paused) return;
+    let frames=0;
+    const ready=()=>{
+      if(!started || paused) return;
+      frames++;
+      if(frames < RAF_WARMUP_FRAMES){ requestAnimationFrame(ready); return; }
+      const max=maxScroll();
+      if(max <= 0){
+        setStatus("READER LAYOUT ERROR");
+        return;
+      }
+      autoReaderReady=true;
+      animationFrame=requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(ready);
+  };
+  setTimeout(warmup,LAYOUT_SETTLE_MS);
 }
 function pause(){
   if(!started){start();return;}
@@ -149,7 +167,19 @@ function pause(){
     paused=false; started=true; autoReaderReady=false; startTime=performance.now();
     pauseBtn.textContent="PAUSE";
     setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK");
-    setTimeout(()=>{if(started&&!paused)animationFrame=requestAnimationFrame(tick);},LAYOUT_SETTLE_MS);
+    const warmup=()=>{
+      if(!started || paused) return;
+      let frames=0;
+      const ready=()=>{
+        if(!started || paused) return;
+        frames++;
+        if(frames < RAF_WARMUP_FRAMES){ requestAnimationFrame(ready); return; }
+        autoReaderReady=true;
+        animationFrame=requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(ready);
+    };
+    setTimeout(warmup,LAYOUT_SETTLE_MS);
   }
 }
 async function setMode(next){
