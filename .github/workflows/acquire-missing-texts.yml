@@ -20,14 +20,16 @@ jobs:
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/11/pg11.txt -o fulltext/alice-adventures-in-wonderland.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/48320/pg48320.txt -o fulltext/adventures-of-sherlock-holmes.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/2554/pg2554.txt -o fulltext/crime-and-punishment.txt
+          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/98/pg98.txt -o fulltext/a-tale-of-two-cities.txt
           test $(wc -c < fulltext/alice-adventures-in-wonderland.txt) -gt 10000
           test $(wc -c < fulltext/adventures-of-sherlock-holmes.txt) -gt 10000
           test $(wc -c < fulltext/crime-and-punishment.txt) -gt 10000
+          test $(wc -c < fulltext/a-tale-of-two-cities.txt) -gt 10000
       - name: Commit mirrored sources
         run: |
           git config user.name "CICAN Books Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add fulltext/alice-adventures-in-wonderland.txt fulltext/adventures-of-sherlock-holmes.txt fulltext/crime-and-punishment.txt
+          git add fulltext/alice-adventures-in-wonderland.txt fulltext/adventures-of-sherlock-holmes.txt fulltext/crime-and-punishment.txt fulltext/a-tale-of-two-cities.txt
           git diff --cached --quiet && exit 0
           git commit -m "Mirror missing complete public-domain texts"
           git push
