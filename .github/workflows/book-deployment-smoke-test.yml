@@ -81,7 +81,8 @@ jobs:
               if (!result.title) throw new Error("Reader title did not load for " + book.id);
               if (!result.text) throw new Error("Reader text did not load for " + book.id);
 
-              if (!result.title.toUpperCase().includes(book.title.toUpperCase().replace(/^THE /,"THE "))) throw new Error("Reader title mismatch for " + book.id);\n              console.log("PASS:", book.id, "| catalog link → reader → book text loaded");
+              if (!result.title.toUpperCase().includes(book.title.toUpperCase().replace(/^THE /,"THE "))) throw new Error("Reader title mismatch for " + book.id);
+              console.log("PASS:", book.id, "| catalog link → reader → book text loaded");
             }
 
             console.log("PASS:", publicBooks.length, "PUBLIC books opened successfully in Chromium.");
