@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#000000"><title>CICAN BOOKS — Reader</title><meta name="cican-reader-ui" content="v18.34-autoreader-clock-fixed"><style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#000000"><title>CICAN BOOKS — Reader</title><meta name="cican-reader-ui" content="v18.35-autoreader-clock-layout-fixed"><style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif}
 body{position:relative}
@@ -42,6 +42,31 @@ body{position:relative}
     height: 100vh;
     height: 100dvh;
     z-index: 10000;
+}
+
+/*
+    READER PANEL LAYOUT CONTRACT
+
+    The reader text must live inside a constrained vertical flex
+    container. Without this, #readerText's flex:1 has no usable
+    height, scrollHeight and clientHeight can collapse to the same
+    value, and the auto-reader can incorrectly conclude that the
+    book has no scrollable content.
+*/
+.reader-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding:
+        max(14px, env(safe-area-inset-top))
+        max(14px, env(safe-area-inset-right))
+        max(14px, env(safe-area-inset-bottom))
+        max(14px, env(safe-area-inset-left));
 }
 
 /*
@@ -881,7 +906,7 @@ function calculateFullReadingSeconds(text) {
 const READER_STATE_PREFIX = "cican_reader_position:";
 const READER_MODE_PREFIX = "cican_reader_mode:";
 async function loadSelectedBook() {
-  const mod = await import("./engine/book-loader.js?v=18.34");
+  const mod = await import("./engine/book-loader.js?v=18.35");
   currentBook = await mod.loadBook(BOOK_ID);
   window.CICAN_ACTIVE_BOOK_ID = BOOK_ID;
   window.CICAN_ACTIVE_BOOK = currentBook;
@@ -1093,6 +1118,14 @@ function stopReaderAnimation() {
         readerAnimation =
             null;
     }
+
+    if (readerWatchdogTimer !== null) {
+        clearInterval(readerWatchdogTimer);
+        readerWatchdogTimer = null;
+    }
+
+    readerLastFrameTime = 0;
+    readerLayoutAttempts = 0;
 }
 
 function startReaderAnimation(delayMs = 0, openToken = readerOpenToken) {
