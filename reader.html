@@ -153,7 +153,7 @@ function start(reset=true){
   stop();
   if(!currentText){setStatus("NO TEXT");return;}
   if(reset){elapsedBeforePause=0;readerComplete=false;readerScrollPosition=0;textEl.scrollTop=0;}
-  paused=false; started=true; autoReaderReady=false; readerComplete=false; readerScrollPosition=reset?0:Math.min(maxScroll(),loadSavedPosition()); textEl.scrollTop=readerScrollPosition; updateReaderUI(); readerLastTime=performance.now(); startTime=performance.now();
+  paused=false; started=true; autoReaderReady=false; readerComplete=false; readerScrollPosition=reset?0:Math.min(maxScroll(),textEl.scrollTop||readerScrollPosition||loadSavedPosition()); textEl.scrollTop=readerScrollPosition; updateReaderUI(); readerLastTime=performance.now(); startTime=performance.now();
   pauseBtn.textContent="PAUSE";
   setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK");
   const warmup=()=>{
