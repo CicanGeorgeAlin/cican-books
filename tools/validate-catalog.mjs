@@ -68,8 +68,9 @@ for (const book of catalog) {
       } else if (fullTextMatch) {
         if (/^https?:\/\//i.test(fullTextMatch[1])) {
           const verifiedExternal =
-            book.fullTextSourceType === "COMPLETE_EXTERNAL_SOURCE_ASSET" &&
-            book.fullTextSourceVerified === true;
+            !!bookSource &&
+            /fullTextSourceType\s*:\s*["']COMPLETE_EXTERNAL_SOURCE_ASSET["']/.test(bookSource) &&
+            /fullTextSourceVerified\s*:\s*true/.test(bookSource);
           if (verifiedExternal) {
             warnings.push(book.id + ": FULL BOOK source is a verified external asset; local mirroring is deferred.");
           } else {
@@ -98,8 +99,9 @@ for (const book of catalog) {
       } else if (fullTextMatch) {
         if (/^https?:\/\//i.test(fullTextMatch[1])) {
           const verifiedExternal =
-            book.fullTextSourceType === "COMPLETE_EXTERNAL_SOURCE_ASSET" &&
-            book.fullTextSourceVerified === true;
+            !!bookSource &&
+            /fullTextSourceType\s*:\s*["']COMPLETE_EXTERNAL_SOURCE_ASSET["']/.test(bookSource) &&
+            /fullTextSourceVerified\s*:\s*true/.test(bookSource);
           if (verifiedExternal) {
             warnings.push(book.id + ": review-stage FULL BOOK source is a verified external asset; local mirroring is deferred.");
           } else {
