@@ -52,10 +52,16 @@ jobs:
             if (!publicBooks.length) throw new Error("No PUBLIC books found.");
 
             for (const book of publicBooks) {
-              await page.goto(BASE + "reader.html?book=" + encodeURIComponent(book.id), {
-                waitUntil: "networkidle",
-                timeout: 60000
-              });
+              await page.goto(BASE, { waitUntil: "networkidle", timeout: 60000 });
+
+              const button = page.locator("button.book").filter({ hasText: book.title }).first();
+              await button.waitFor({ state: "visible", timeout: 30000 });
+              await button.click();
+
+              await page.waitForURL(
+                url => url.searchParams.get("book") === book.id,
+                { timeout: 30000 }
+              );
 
               await page.waitForFunction(
                 () => document.querySelector("#reader")?.classList.contains("open"),
@@ -72,7 +78,7 @@ jobs:
               if (!result.title) throw new Error("Reader title did not load for " + book.id);
               if (!result.text) throw new Error("Reader text did not load for " + book.id);
 
-              console.log("PASS:", book.id, "|", result.title, "| text loaded");
+              if (!result.title.toUpperCase().includes(book.title.toUpperCase().replace(/^THE /,"THE "))) throw new Error("Reader title mismatch for " + book.id);\n              console.log("PASS:", book.id, "| catalog click → reader → book text loaded");
             }
 
             console.log("PASS:", publicBooks.length, "PUBLIC books opened successfully in Chromium.");
