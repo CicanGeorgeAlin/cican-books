@@ -143,7 +143,14 @@ if (!moduleScript) {
   fail("Reader module script could not be extracted.");
 } else {
   try {
-    new Function(moduleScript);
+    /*
+      reader.html is an ES module. The static syntax check should validate
+      the module body without executing it or resolving browser imports.
+    */
+    const syntaxScript = moduleScript
+      .replace(/^\\s*import[ \\s\\S]*?from[ \\s]+["'][^"']+["'];?\\s*$/gm, "")
+      .replace(/^\\s*import[ \\s\\S]*?;\\s*$/gm, "");
+    new Function(syntaxScript);
     pass("Reader module passes JavaScript syntax parsing.");
   } catch (error) {
     fail("Reader JavaScript syntax error: " + error.message);
