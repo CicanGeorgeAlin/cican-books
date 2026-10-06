@@ -8,8 +8,8 @@
 body{display:flex;align-items:center;justify-content:center;overflow:hidden}#app{width:min(900px,100vw);height:100dvh;display:flex;flex-direction:column}
 .top{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:700 11px Arial,sans-serif;letter-spacing:.18em}
 #book{position:relative;flex:1;min-height:0;padding:10px 12px 24px;perspective:1400px}
-.page{position:absolute;inset:10px 12px 24px;background:#050505;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 60px rgba(0,0,0,.65);overflow:hidden;transform-origin:left center;backface-visibility:hidden;transition:transform .55s cubic-bezier(.22,.72,.2,1),opacity .55s ease}
-.page.next{transform:rotateY(0);z-index:2}.page.turn-next{transform:rotateY(-178deg);opacity:.18}.page.prev{transform:rotateY(0);z-index:1}.page.turn-prev{transform-origin:right center;transform:rotateY(178deg);opacity:.18}
+.page{position:absolute;inset:10px 12px 24px;background:#050505;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 60px rgba(0,0,0,.65);overflow:hidden;transform-origin:left center;backface-visibility:hidden;transform-style:preserve-3d;will-change:transform;transition:transform .72s cubic-bezier(.18,.72,.16,1),opacity .72s ease}
+.page.next{transform:rotateY(0);z-index:2}.page.turn-next{transform:rotateY(-178deg);opacity:.08}.page.prev{transform:rotateY(0);z-index:1}.page.turn-prev{transform-origin:right center;transform:rotateY(178deg);opacity:.08}.page.turn-next::after,.page.turn-prev::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,0) 18%,rgba(0,0,0,.35) 55%,rgba(0,0,0,0));opacity:.75}.page.turn-prev::after{transform:scaleX(-1)}
 .paper{height:100%;overflow:auto;padding:clamp(30px,6vw,70px) clamp(24px,8vw,90px);scrollbar-width:none}.paper::-webkit-scrollbar{display:none}
 .paper h1{font-size:clamp(20px,4vw,34px);font-weight:400;line-height:1.25;margin:0 0 28px}.paper p{font-size:clamp(18px,2.8vw,25px);line-height:1.72;margin:0 0 1.15em}
 .pageNo{position:absolute;bottom:12px;left:0;right:0;text-align:center;font:700 9px Arial,sans-serif;letter-spacing:.2em;color:rgba(255,255,255,.38)}
@@ -39,10 +39,22 @@ function fill(el,i){const p=pages[i];el.querySelector(".paper").innerHTML=p?"<h1
 function render(){fill(A,index);fill(B,index);A.className="page next";B.className="page prev";status.textContent="PAGE "+(index+1)+" / "+pages.length;}
 function turn(dir){
  if(turning||dir>0&&index>=pages.length-1||dir<0&&index<=0)return;
- turning=true;const outgoing=dir>0?A:B,incoming=dir>0?B:A,next=index+dir;
- fill(incoming,next);incoming.style.zIndex=dir>0?"1":"2";outgoing.style.zIndex=dir>0?"2":"1";
- requestAnimationFrame(()=>outgoing.classList.add(dir>0?"turn-next":"turn-prev"));
- setTimeout(()=>{index=next;render();turning=false},570);
+ turning=true;
+ const outgoing=dir>0?A:B,incoming=dir>0?B:A,next=index+dir;
+ fill(incoming,next);
+ incoming.style.zIndex=dir>0?"1":"2";
+ outgoing.style.zIndex=dir>0?"2":"1";
+ outgoing.style.transitionTimingFunction="cubic-bezier(.18,.72,.16,1)";
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{
+   outgoing.classList.add(dir>0?"turn-next":"turn-prev");
+ }));
+ setTimeout(()=>{
+   index=next;
+   outgoing.style.transition="none";
+   render();
+   requestAnimationFrame(()=>{outgoing.style.transition="";});
+   turning=false;
+ },760);
 }
 book.addEventListener("pointerdown",e=>{startX=e.clientX;startY=e.clientY;moved=false});
 book.addEventListener("pointermove",e=>{if(Math.hypot(e.clientX-startX,e.clientY-startY)>12)moved=true});
