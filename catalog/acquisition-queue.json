@@ -1,7 +1,23 @@
 {
   "version": 2,
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
-  "candidates": [],
+  "candidates": [
+    {
+      "id": "a-tale-of-two-cities",
+      "title": "A Tale of Two Cities",
+      "author": "Charles Dickens",
+      "language": "en",
+      "originalPublicationYear": 1859,
+      "sourceRepo": "Project Gutenberg",
+      "sourceEbookId": "98",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/98",
+      "sourceStatus": "SOURCE_VERIFIED",
+      "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
+      "nextStep": "Use verified source text and review territorial status before publication.",
+      "queueStage": "READY_FOR_ACQUISITION",
+      "priority": 6
+    }
+  ],
   "completedAcquisitions": [
     {
       "id": "alice-adventures-in-wonderland",
@@ -20,6 +36,12 @@
       "sourceEbookId": "2554",
       "status": "ACQUIRED_SOURCE_READY",
       "notes": "Primary source verified at Project Gutenberg; Constance Garnett translation; territorial review remains required before publication."
+    },
+    {
+      "id": "the-picture-of-dorian-gray",
+      "sourceEbookId": "174",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary source verified at Project Gutenberg; complete text available; territorial review remains required before publication."
     }
   ]
 }
