@@ -10,6 +10,8 @@ on:
       - "qa/source-integrity.mjs"
       - "reader.html"
       - "index.html"
+      - "sitemap.xml"
+      - "qa/validate-cican-books.mjs"
 
 permissions:
   contents: read
