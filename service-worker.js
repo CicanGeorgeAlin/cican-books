@@ -1,4 +1,4 @@
-const CACHE_NAME = "cican-shell-v24";
+const CACHE_NAME = "cican-shell-v25";
 
 const SHELL = [
   "./",
