@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "",
     sourceNote: "The 15-minute reader begins at Chapter I after the author's preface. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/1257",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/1257/pg1257.txt",
+    fullTextUrl: "./fulltext/the-three-musketeers.txt",
     gameMode: "classic",
     gameTitle: "THE THREE",
     gameDNA: ["friendship","courage","loyalty","duel","adventure","honor","strategy"],
