@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "",
     sourceNote: "The 15-minute reader begins at Chapter One of the verified complete source. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/37106",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/37106/pg37106.txt",
+    fullTextUrl: "./fulltext/little-women.txt",
     gameMode: "classic",
     gameTitle: "FOUR SISTERS",
     gameDNA: ["family","sisterhood","ambition","kindness","growth","courage","love"],
