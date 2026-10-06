@@ -5,7 +5,7 @@ const SHELL = [
   "./index.html",
   "./library.html",
   "./understand.html",
-  "./play-v17.html",
+  "./play-v18-working.html",
   "./manifest.webmanifest",
   "./cican-preview.png",
   "./icons/icon-192.svg",
