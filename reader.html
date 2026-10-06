@@ -1717,14 +1717,17 @@ async function openReader(modeOverride) {
         readerText.scrollHeight - readerText.clientHeight
     );
 
-    readerScrollPosition = Math.min(
-        Math.max(0, savedPosition),
-        availableScrollBeforeStart
-    );
+    /*
+        The reader is still hidden at this point. On some browsers,
+        especially mobile Chromium, its scroll metrics can be zero
+        until #reader is opened and layout has run. Do not clamp the
+        saved position against hidden-layout metrics here.
+    */
+    readerScrollPosition = Math.max(0, savedPosition);
 
     const savedProgress =
         availableScrollBeforeStart > 0
-            ? readerScrollPosition / availableScrollBeforeStart
+            ? Math.min(1, readerScrollPosition / availableScrollBeforeStart)
             : 0;
 
     readerModeNote.textContent =
@@ -1783,6 +1786,22 @@ async function openReader(modeOverride) {
                     Math.max(0, readerScrollPosition),
                     availableScroll
                 );
+
+            const restoredProgress =
+                availableScroll > 0
+                    ? readerScrollPosition / availableScroll
+                    : 0;
+
+            readerModeNote.textContent =
+                restoredProgress > 0.01
+                    ? "CONTINUING FROM " +
+                      Math.floor(restoredProgress * 100) +
+                      "%"
+                    : (
+                        isFullBook
+                            ? "FULL SOURCE TEXT"
+                            : "15-MINUTE SOURCE TEXT"
+                    );
 
             readerProgrammaticScroll = true;
             readerText.scrollTop =
