@@ -1,7 +1,7 @@
 {
-  "name": "CICAN — PLAY THE BOOK",
+  "name": "CICAN BOOKS",
   "short_name": "CICAN",
-  "description": "Experience, understand, and read books.",
+  "description": "Discover and read books.",
   "lang": "en-GB",
   "dir": "ltr",
   "start_url": "./",
