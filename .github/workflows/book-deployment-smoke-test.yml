@@ -11,41 +11,73 @@ jobs:
   smoke-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for GitHub Pages deployment
+      - name: Wait for GitHub Pages to serve this deployment
         run: |
           set -euo pipefail
-          for i in {1..12}; do
+          for i in {1..18}; do
             if curl -L --fail --silent --show-error --max-time 20 https://cicangeorgealin.github.io/cican-books/ -o site.html; then
-              echo "Site reachable."
+              echo "CICAN BOOKS is reachable."
               break
             fi
-            echo "Waiting for Pages..."
+            echo "Waiting for GitHub Pages..."
             sleep 10
           done
           test -s site.html
 
-      - name: Verify published library and deployed book links
+      - name: Install Chromium
+        run: |
+          npx --yes playwright@1.55.0 install --with-deps chromium
+
+      - name: Test the live library and every PUBLIC book
         run: |
           set -euo pipefail
-          curl -L --fail --silent --show-error --retry 5 --retry-delay 5 https://cicangeorgealin.github.io/cican-books/catalog/index.js -o catalog.js
-          python - <<'PY'
-          import re, urllib.request
-          catalog = open("catalog.js", encoding="utf-8").read()
-          public = re.findall(r'id:"([^"]+)".*?visibility:"PUBLIC"', catalog)
-          if not public:
-              raise SystemExit("No PUBLIC books found in catalog")
-          site = open("site.html", encoding="utf-8").read()
-          for book_id in public:
-              marker = f'book={book_id}'
-              # The landing page is rendered by JavaScript, so verify the deployed
-              # catalog contains the book and its reader endpoint is reachable.
-              if f'id:"{book_id}"' not in catalog:
-                  raise SystemExit(f"Missing catalog record: {book_id}")
-              url = f"https://cicangeorgealin.github.io/cican-books/reader.html?book={book_id}"
-              req = urllib.request.Request(url, method="GET")
-              with urllib.request.urlopen(req, timeout=20) as response:
-                  if response.status != 200:
-                      raise SystemExit(f"Reader not reachable: {book_id} ({response.status})")
-              print(f"PASS: {book_id}")
-          print(f"PASS: {len(public)} PUBLIC books have reachable reader pages.")
-          PY
+          cat > smoke-test.mjs <<'JS'
+          import { chromium } from "playwright";
+
+          const BASE = "https://cicangeorgealin.github.io/cican-books/";
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage();
+
+          try {
+            await page.goto(BASE, { waitUntil: "networkidle", timeout: 60000 });
+
+            const publicBooks = await page.evaluate(async () => {
+              const mod = await import("./catalog/index.js?smoke=" + Date.now());
+              return mod.CATALOG.filter(b => b.visibility === "PUBLIC").map(b => ({
+                id: b.id,
+                title: b.title
+              }));
+            });
+
+            if (!publicBooks.length) throw new Error("No PUBLIC books found.");
+
+            for (const book of publicBooks) {
+              await page.goto(BASE + "reader.html?book=" + encodeURIComponent(book.id), {
+                waitUntil: "networkidle",
+                timeout: 60000
+              });
+
+              await page.waitForFunction(
+                () => document.querySelector("#reader")?.classList.contains("open"),
+                null,
+                { timeout: 30000 }
+              );
+
+              const result = await page.evaluate(() => ({
+                title: document.querySelector("#readerTitle")?.textContent?.trim() || "",
+                text: document.querySelector("#readerText")?.textContent?.trim() || "",
+                status: document.querySelector("#readerStatus")?.textContent?.trim() || ""
+              }));
+
+              if (!result.title) throw new Error("Reader title did not load for " + book.id);
+              if (!result.text) throw new Error("Reader text did not load for " + book.id);
+
+              console.log("PASS:", book.id, "|", result.title, "| text loaded");
+            }
+
+            console.log("PASS:", publicBooks.length, "PUBLIC books opened successfully in Chromium.");
+          } finally {
+            await browser.close();
+          }
+          JS
+          npx --yes -p playwright@1.55.0 node smoke-test.mjs
