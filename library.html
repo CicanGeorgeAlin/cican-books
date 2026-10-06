@@ -135,7 +135,7 @@ function render(query = "") {
       '<span class="meta">' + book.category + ' · ' + book.author + translator + '</span></span>' +
       '<span class="time">' + book.targetMinutes + ' MIN</span>';
     button.addEventListener("click", () => {
-      window.location.href = "play-v18-working.html?v=18.17&book=" + encodeURIComponent(book.id);
+      window.location.href = "play-v18-working.html?v=18.18&book=" + encodeURIComponent(book.id);
     });
     list.appendChild(button);
   });
