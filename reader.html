@@ -82,17 +82,21 @@ let duration = 900;
 let animationFrame = 0;
 let sourceText = "";
 let currentText = "";
+let autoReaderReady = false;
 
-const WPM = 100;
+const FULL_READING_WPM = 100;
+const MIN_READER_SECONDS = 60;
+const LAYOUT_SETTLE_MS = 80;
 
 function wordCount(text){ return (String(text||"").trim().match(/\S+/g)||[]).length; }
-function fullSeconds(text){ return Math.max(900, Math.ceil(wordCount(text)/WPM*60)); }
+function fullSeconds(text){ return Math.max(900, Math.ceil(wordCount(text)/FULL_READING_WPM*60)); }
 function setStatus(s){ statusEl.textContent=s; }
 function setText(text){
   currentText=String(text||"").trim();
   textEl.textContent=currentText;
   textEl.scrollTop=0;
   fillEl.style.width="0%";
+  autoReaderReady=false;
 }
 function stop(){
   cancelAnimationFrame(animationFrame);
@@ -101,23 +105,39 @@ function stop(){
 function elapsed(){
   return elapsedBeforePause + (paused ? 0 : (performance.now()-startTime)/1000);
 }
+function maxScroll(){ return Math.max(0,textEl.scrollHeight-textEl.clientHeight); }
 function tick(now){
   if(!started || paused) return;
+  const max=maxScroll();
+  if(!autoReaderReady){
+    if(max<=0){
+      animationFrame=requestAnimationFrame(tick);
+      return;
+    }
+    autoReaderReady=true;
+  }
   const e=Math.max(0,Math.min(duration,(now-startTime)/1000+elapsedBeforePause));
   const ratio=duration ? e/duration : 0;
-  const max=textEl.scrollHeight-textEl.clientHeight;
-  textEl.scrollTop=Math.max(0,max*ratio);
+  textEl.scrollTop=max*ratio;
   fillEl.style.width=(ratio*100).toFixed(2)+"%";
-  if(e>=duration){ paused=true; pauseBtn.textContent="REPLAY"; setStatus("COMPLETE"); return; }
+  if(e>=duration || textEl.scrollTop>=max-1){
+    paused=true;
+    textEl.scrollTop=max;
+    fillEl.style.width="100%";
+    pauseBtn.textContent="REPLAY";
+    setStatus("COMPLETE");
+    return;
+  }
   animationFrame=requestAnimationFrame(tick);
 }
-function start(){
+function start(reset=true){
   stop();
   if(!currentText){setStatus("NO TEXT");return;}
-  paused=false; started=true; elapsedBeforePause=0; startTime=performance.now();
+  if(reset){elapsedBeforePause=0;textEl.scrollTop=0;}
+  paused=false; started=true; autoReaderReady=false; startTime=performance.now();
   pauseBtn.textContent="PAUSE";
   setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK");
-  requestAnimationFrame(()=>requestAnimationFrame(tick));
+  setTimeout(()=>{ if(started && !paused) animationFrame=requestAnimationFrame(tick); },LAYOUT_SETTLE_MS);
 }
 function pause(){
   if(!started){start();return;}
@@ -125,8 +145,11 @@ function pause(){
     elapsedBeforePause=Math.min(duration,elapsed());
     paused=true; stop(); pauseBtn.textContent="RESUME"; setStatus("PAUSED");
   }else{
-    if(elapsedBeforePause>=duration){textEl.scrollTop=0;fillEl.style.width="0%";elapsedBeforePause=0;}
-    paused=false; startTime=performance.now(); pauseBtn.textContent="PAUSE"; setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK"); requestAnimationFrame(tick);
+    if(elapsedBeforePause>=duration){elapsedBeforePause=0;textEl.scrollTop=0;fillEl.style.width="0%";}
+    paused=false; started=true; autoReaderReady=false; startTime=performance.now();
+    pauseBtn.textContent="PAUSE";
+    setStatus(mode==="15"?"AUTO-READING · 15 MIN":"AUTO-READING · FULL BOOK");
+    setTimeout(()=>{if(started&&!paused)animationFrame=requestAnimationFrame(tick);},LAYOUT_SETTLE_MS);
   }
 }
 async function setMode(next){
@@ -134,10 +157,10 @@ async function setMode(next){
   mode=next;
   mode15.classList.toggle("active",mode==="15");
   modeFull.classList.toggle("active",mode==="full");
-  stop(); paused=false; started=false; elapsedBeforePause=0; textEl.scrollTop=0;
+  stop(); paused=false; started=false; elapsedBeforePause=0; autoReaderReady=false; textEl.scrollTop=0;
   if(mode==="15"){
     sourceText=book.fifteenMinuteText||"";
-    duration=Math.max(60,Number(book.targetMinutes||15)*60);
+    duration=Math.max(MIN_READER_SECONDS,Number(book.targetMinutes||15)*60);
     setText(sourceText); setStatus("15 MINUTES");
   }else{
     setStatus("LOADING FULL BOOK");
