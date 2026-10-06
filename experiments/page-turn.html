@@ -1,27 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>CICAN Books — Page Turn Experiment</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>CICAN Books — Physical Paper Curl Experiment</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family:Georgia,"Times New Roman",serif}
-body{display:flex;align-items:center;justify-content:center;overflow:hidden}#app{width:min(900px,100vw);height:100dvh;display:flex;flex-direction:column}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family:Georgia,"Times New Roman",serif}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+#app{width:min(900px,100vw);height:100dvh;display:flex;flex-direction:column}
 .top{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:700 11px Arial,sans-serif;letter-spacing:.18em}
-#book{position:relative;flex:1;min-height:0;padding:10px 12px 24px;perspective:1400px}
-.page{position:absolute;inset:10px 12px 24px;background:#050505;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 60px rgba(0,0,0,.65);overflow:hidden;transform-origin:left center;backface-visibility:hidden;transform-style:preserve-3d;will-change:transform;transition:transform .72s cubic-bezier(.18,.72,.16,1),opacity .72s ease;touch-action:none}
-.page.next{transform:rotateY(0);z-index:2}.page.turn-next{transform:rotateY(-178deg);opacity:.08}.page.prev{transform:rotateY(0);z-index:1}.page.turn-prev{transform-origin:right center;transform:rotateY(178deg);opacity:.08}.page.dragging{transition:none!important}.page.turn-next::after,.page.turn-prev::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,0) 18%,rgba(0,0,0,.35) 55%,rgba(0,0,0,0));opacity:.75}.page.turn-prev::after{transform:scaleX(-1)}
-.paper{height:100%;overflow:auto;padding:clamp(30px,6vw,70px) clamp(24px,8vw,90px);scrollbar-width:none}.paper::-webkit-scrollbar{display:none}
-.paper h1{font-size:clamp(20px,4vw,34px);font-weight:400;line-height:1.25;margin:0 0 28px}.paper p{font-size:clamp(18px,2.8vw,25px);line-height:1.72;margin:0 0 1.15em}
-.pageNo{position:absolute;bottom:12px;left:0;right:0;text-align:center;font:700 9px Arial,sans-serif;letter-spacing:.2em;color:rgba(255,255,255,.38)}
-.hint{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:10px Arial,sans-serif;letter-spacing:.14em;color:rgba(255,255,255,.34);pointer-events:none}
+#book{position:relative;flex:1;min-height:0;padding:10px 12px 24px;perspective:1800px;touch-action:none;overflow:hidden}
+.paper-layer{position:absolute;inset:10px 12px 24px;overflow:hidden;background:#050505;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 60px rgba(0,0,0,.65)}
+.paper-content{height:100%;overflow:hidden;padding:clamp(30px,6vw,70px) clamp(24px,8vw,90px)}
+.paper-content h1{font-size:clamp(20px,4vw,34px);font-weight:400;line-height:1.25;margin:0 0 28px}
+.paper-content p{font-size:clamp(18px,2.8vw,25px);line-height:1.72;margin:0 0 1.15em}
+#under{z-index:1}
+#sheets{position:absolute;inset:10px 12px 24px;z-index:3;pointer-events:none;transform-style:preserve-3d}
+.sheet{position:absolute;top:0;height:100%;background-repeat:no-repeat;background-size:100% 100%;backface-visibility:hidden;transform-style:preserve-3d;will-change:transform,filter;box-shadow:0 0 0 transparent}
+.sheet::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.10),rgba(0,0,0,.38));opacity:0;transition:opacity .05s linear}
+.sheet.curling::after{opacity:.7}
+#sheets.dragging{cursor:grabbing}
+.pageNo{position:absolute;bottom:12px;left:0;right:0;text-align:center;font:700 9px Arial,sans-serif;letter-spacing:.2em;color:rgba(255,255,255,.38);z-index:6}
+.hint{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:10px Arial,sans-serif;letter-spacing:.14em;color:rgba(255,255,255,.34);pointer-events:none;z-index:8}
 #status{font:700 10px Arial,sans-serif;letter-spacing:.16em;color:rgba(255,255,255,.55)}
-</style></head>
-<body><div id="app">
-<header class="top"><span>CICAN</span><span id="status">PAGE 1 / 8</span><span>PAGE TURN EXPERIMENT</span></header>
-<main id="book" aria-label="CICAN page turn experiment">
-<section class="page next" id="pageA"><div class="paper"></div><div class="pageNo"></div></section>
-<section class="page prev" id="pageB"><div class="paper"></div><div class="pageNo"></div></section>
-<div class="hint">SWIPE LEFT / RIGHT &nbsp; • &nbsp; TAP EDGES</div></main></div>
+</style>
+</head>
+<body>
+<div id="app">
+<header class="top"><span>CICAN</span><span id="status">PAGE 1 / 8</span><span>PHYSICAL PAPER EXPERIMENT</span></header>
+<main id="book" aria-label="CICAN physical paper page turn experiment">
+  <section id="under" class="paper-layer"><div id="underContent" class="paper-content"></div></section>
+  <div id="sheets" aria-hidden="true"></div>
+  <div class="pageNo" id="pageNo"></div>
+  <div class="hint">PRESS &amp; HOLD • DRAG SLOWLY • THE PAPER FOLLOWS YOUR FINGER</div>
+</main>
+</div>
 <script>
 const pages=[
 ["TAO TE CHING","The Tao that can be expressed in words is not the eternal Tao. The name that can be named is not the eternal Name. The nameless is the beginning of heaven and earth; the named is the mother of ten thousand things."],
@@ -33,61 +47,162 @@ const pages=[
 ["PAGE SEVEN","Knowing others is intelligence; knowing yourself is true wisdom. Mastering others is strength; mastering yourself is true power. If you are satisfied with what you have, you can be rich."],
 ["PAGE EIGHT","A journey of a thousand miles begins beneath one's feet. What is firmly planted cannot be pulled up easily. What is embraced with care will endure. The work is complete when it is allowed to become complete."]
 ];
-let index=0,drag=null;
-const A=document.getElementById("pageA"),B=document.getElementById("pageB"),book=document.getElementById("book"),status=document.getElementById("status");
-function fill(el,i){const p=pages[i];el.querySelector(".paper").innerHTML=p?"<h1>"+p[0]+"</h1><p>"+p[1]+"</p>":"";el.querySelector(".pageNo").textContent=p?"PAGE "+(i+1)+" / "+pages.length:"";}
-function render(){fill(A,index);fill(B,index);A.className="page next";B.className="page prev";A.style.cssText="";B.style.cssText="";status.textContent="PAGE "+(index+1)+" / "+pages.length;}
+
+const book=document.getElementById("book");
+const under=document.getElementById("under");
+const underContent=document.getElementById("underContent");
+const sheets=document.getElementById("sheets");
+const status=document.getElementById("status");
+const pageNo=document.getElementById("pageNo");
+const N=32;
+let index=0, drag=null, imageCache=new Map();
+
+function safe(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+function htmlFor(i){
+ const p=pages[i];
+ return p?'<h1>'+safe(p[0])+'</h1><p>'+safe(p[1])+'</p>':'';
+}
+function setUnder(i){
+ underContent.innerHTML=htmlFor(i);
+ pageNo.textContent="PAGE "+(i+1)+" / "+pages.length;
+ status.textContent="PAGE "+(i+1)+" / "+pages.length;
+}
+function makePageImage(i){
+ const key=i+"@"+Math.round(book.clientWidth)+"x"+Math.round(book.clientHeight);
+ if(imageCache.has(key))return imageCache.get(key);
+ const w=Math.max(900,Math.round(book.clientWidth*2)),h=Math.max(1200,Math.round(book.clientHeight*2));
+ const c=document.createElement("canvas");c.width=w;c.height=h;
+ const ctx=c.getContext("2d");
+ ctx.fillStyle="#050505";ctx.fillRect(0,0,w,h);
+ ctx.strokeStyle="rgba(255,255,255,.12)";ctx.strokeRect(1,1,w-2,h-2);
+ const p=pages[i];
+ const padX=Math.round(w*.10),top=Math.round(h*.075),maxW=w-padX*2;
+ ctx.fillStyle="#fff";
+ ctx.font="400 "+Math.round(Math.min(68,w*.04))+"px Georgia";
+ ctx.fillText(p[0],padX,top+45);
+ ctx.font="400 "+Math.round(Math.min(50,w*.028))+"px Georgia";
+ const words=p[1].split(/\s+/);let line="",y=top+115;
+ const lh=Math.round(Math.min(86,w*.048));
+ for(const word of words){
+   const test=line?line+" "+word:word;
+   if(ctx.measureText(test).width>maxW&&line){ctx.fillText(line,padX,y);line=word;y+=lh;}else line=test;
+ }
+ if(line)ctx.fillText(line,padX,y);
+ const url=c.toDataURL("image/png");
+ imageCache.set(key,url);
+ return url;
+}
+function buildSheets(i){
+ sheets.innerHTML="";
+ const url=makePageImage(i);
+ const width=book.clientWidth-24;
+ for(let k=0;k<N;k++){
+   const el=document.createElement("div");
+   el.className="sheet";
+   el.dataset.k=k;
+   const left=(width*k/N);
+   el.style.left=left+"px";
+   el.style.width=(width/N+1)+"px";
+   el.style.backgroundImage='url("'+url+'")';
+   el.style.backgroundSize=width+"px 100%";
+   el.style.backgroundPosition=(-left)+"px 0";
+   sheets.appendChild(el);
+ }
+}
+function render(){
+ setUnder(index);
+ buildSheets(index);
+}
 function prepare(dir){
- const out=dir>0?A:B,inc=dir>0?B:A;
- if(dir>0&&index>=pages.length-1||dir<0&&index<=0)return null;
- fill(inc,index+dir);inc.style.zIndex=dir>0?"1":"2";out.style.zIndex=dir>0?"2":"1";
- return out;
+ const next=index+dir;
+ if(next<0||next>=pages.length)return false;
+ setUnder(next);
+ buildSheets(index);
+ return true;
 }
-function animateTo(out,dir,commit){
- out.classList.remove("dragging");
- out.style.transition="transform .38s cubic-bezier(.2,.75,.15,1),opacity .38s ease";
- out.style.transform=commit?(dir>0?"rotateY(-178deg)":"rotateY(178deg)"):"rotateY(0deg)";
- out.style.opacity=commit?".08":"1";
- setTimeout(()=>{if(commit)index+=dir;render();drag=null},400);
+function applyCurl(progress,dir){
+ const stripEls=sheets.children;
+ const width=book.clientWidth-24;
+ const maxAngle=Math.PI*.98;
+ const bend=Math.max(0.001,width*(1-progress));
+ for(let k=0;k<stripEls.length;k++){
+   const el=stripEls[k];
+   const t=k/(N-1);
+   let local;
+   if(dir>0){
+     // Right edge is being pulled left. Material near the pulled edge curls first.
+     local=Math.max(0,(t-progress)/Math.max(.001,1-progress));
+   }else{
+     // Left edge is being pulled right. Material near the pulled edge curls first.
+     local=Math.max(0,(progress-(1-t))/Math.max(.001,progress));
+   }
+   local=Math.min(1,local);
+   const angle=dir>0?-maxAngle*local:maxAngle*local;
+   const depth=(1-Math.cos(angle))*bend*.38;
+   const lift=Math.sin(Math.abs(angle))*bend*.55;
+   const x=(dir>0?1:-1)*depth;
+   const y=-lift*.035;
+   el.style.transform="translate3d("+x+"px,"+y+"px,"+(-depth*.22)+"px) rotateY("+angle+"rad)";
+   el.classList.toggle("curling",local>.03);
+ }
 }
-function down(e){
+function animateCommit(dir,commit){
+ sheets.style.transition="transform .42s cubic-bezier(.18,.78,.12,1)";
+ const start=drag?drag.progress:0;
+ const target=commit?1:0;
+ const t0=performance.now();
+ function frame(now){
+   const q=Math.min(1,(now-t0)/420);
+   const e=1-Math.pow(1-q,3);
+   applyCurl(start+(target-start)*e,dir);
+   if(q<1)requestAnimationFrame(frame);
+   else{
+     sheets.style.transition="";
+     if(commit){index+=dir;render();}
+     else{buildSheets(index);}
+     drag=null;
+   }
+ }
+ requestAnimationFrame(frame);
+}
+function pointerDown(e){
  if(drag)return;
- const x=e.clientX,y=e.clientY;
- drag={id:e.pointerId,x,y,lastX:x,dir:0,out:null,progress:0};
+ if(e.pointerType==="mouse"&&e.button!==0)return;
+ const r=book.getBoundingClientRect();
+ const x=e.clientX-r.left;
+ drag={id:e.pointerId,startX:x,startY:e.clientY-r.top,dir:0,progress:0};
  book.setPointerCapture?.(e.pointerId);
 }
-function move(e){
+function pointerMove(e){
  if(!drag)return;
- const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+ const r=book.getBoundingClientRect();
+ const x=e.clientX-r.left,y=e.clientY-r.top;
+ const dx=x-drag.startX,dy=y-drag.startY;
  if(!drag.dir){
-   if(Math.abs(dx)<5||Math.abs(dx)<Math.abs(dy))return;
+   if(Math.abs(dx)<2)return;
+   if(Math.abs(dx)<Math.abs(dy)*.75)return;
    drag.dir=dx<0?1:-1;
-   drag.out=prepare(drag.dir);
-   if(!drag.out){drag=null;return}
-   drag.out.classList.add("dragging");
+   if(!prepare(drag.dir)){drag=null;return;}
+   sheets.classList.add("dragging");
  }
- const width=book.clientWidth;
- drag.progress=Math.max(0,Math.min(1,Math.abs(dx)/(width*.9)));
- const angle=(drag.dir>0?-178:178)*drag.progress;
- const lift=Math.sin(drag.progress*Math.PI)*10;
- drag.out.style.transform="translateY("+(-lift*.18)+"px) rotateY("+angle+"deg)";
- drag.out.style.opacity=String(1-.92*drag.progress);
+ const w=book.clientWidth-24;
+ const progress=Math.max(0,Math.min(1,Math.abs(dx)/Math.max(1,w)));
+ drag.progress=progress;
+ applyCurl(progress,drag.dir);
 }
-function up(e){
+function pointerUp(){
  if(!drag)return;
- const d=drag;drag=null;
- if(!d.dir){
-   const r=book.getBoundingClientRect();
-   const dir=e.clientX<r.left+r.width/2?-1:1;
-   const out=prepare(dir);if(out)animateTo(out,dir,true);
-   return;
- }
- const dx=e.clientX-d.x,commit=d.progress>.24;
- animateTo(d.out,d.dir,commit);
+ const d=drag;
+ sheets.classList.remove("dragging");
+ const commit=d.progress>.18;
+ animateCommit(d.dir,commit);
 }
-book.addEventListener("pointerdown",down);
-book.addEventListener("pointermove",move);
-book.addEventListener("pointerup",up);
-book.addEventListener("pointercancel",e=>{if(drag){const d=drag;drag=null;if(d.out)animateTo(d.out,d.dir,false)}});
+book.addEventListener("pointerdown",pointerDown);
+book.addEventListener("pointermove",pointerMove);
+book.addEventListener("pointerup",pointerUp);
+book.addEventListener("pointercancel",pointerUp);
+window.addEventListener("resize",()=>{imageCache.clear();render();});
 render();
-</script></script></body></html>
+</script>
+</body>
+</html>
