@@ -3,19 +3,19 @@
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
   "candidates": [
     {
-      "id": "a-tale-of-two-cities",
-      "title": "A Tale of Two Cities",
-      "author": "Charles Dickens",
+      "id": "the-count-of-monte-cristo",
+      "title": "The Count of Monte Cristo",
+      "author": "Alexandre Dumas",
       "language": "en",
-      "originalPublicationYear": 1859,
+      "originalPublicationYear": 1844,
       "sourceRepo": "Project Gutenberg",
-      "sourceEbookId": "98",
-      "sourceUrl": "https://www.gutenberg.org/ebooks/98",
+      "sourceEbookId": "1184",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/1184",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Use verified source text and review territorial status before publication.",
+      "nextStep": "Use a verified English source edition and review territorial status before publication.",
       "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 6
+      "priority": 7
     }
   ],
   "completedAcquisitions": [
@@ -42,6 +42,12 @@
       "sourceEbookId": "174",
       "status": "ACQUIRED_SOURCE_READY",
       "notes": "Primary source verified at Project Gutenberg; complete text available; territorial review remains required before publication."
+    },
+    {
+      "id": "a-tale-of-two-cities",
+      "sourceEbookId": "98",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
     }
   ]
 }
