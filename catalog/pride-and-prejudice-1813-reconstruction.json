@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "bookId": "pride-and-prejudice",
+  "edition": {
+    "year": 1813,
+    "date": "1813-01-28",
+    "publisher": "T. Egerton, Whitehall",
+    "volumes": 3
+  },
+  "authority": {
+    "primary": "original_scan_image",
+    "secondary": [
+      "scan_embedded_ocr",
+      "wikisource_1813_transcription"
+    ],
+    "conflictRule": "When OCR or transcription conflicts with the scan image, the scan image controls."
+  },
+  "volumes": [
+    {
+      "id": "volume-1",
+      "pageCount": 320,
+      "chapters": 23,
+      "sourceRecord": "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_1).pdf",
+      "sourceInstitution": "Uttarpara Jaykrishna Public Library",
+      "licenseRecord": "Public Domain Mark"
+    },
+    {
+      "id": "volume-2",
+      "pageCount": 252,
+      "chapters": 19,
+      "sourceRecord": "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_2).pdf",
+      "sourceInstitution": "English Faculty Library, University of Oxford",
+      "licenseRecord": "Public Domain Mark"
+    },
+    {
+      "id": "volume-3",
+      "pageCount": 334,
+      "chapters": 19,
+      "sourceRecord": "https://commons.wikimedia.org/wiki/File:Jane_Austen,_Pride_and_Prejudice_(1st_ed,_1813,_vol_3).pdf",
+      "sourceInstitution": "Uttarpara Jaykrishna Public Library",
+      "licenseRecord": "Public Domain Mark"
+    }
+  ],
+  "extraction": {
+    "preserve": [
+      "printed spelling",
+      "printed punctuation",
+      "paragraph boundaries",
+      "chapter order"
+    ],
+    "remove": [
+      "title-page metadata",
+      "advertisements",
+      "library markings",
+      "scan transport material"
+    ],
+    "manualReviewTriggers": [
+      "OCR disagreement with scan",
+      "uncertain punctuation",
+      "uncertain spelling",
+      "line-wrap hyphenation ambiguity",
+      "missing or duplicated text"
+    ]
+  },
+  "gates": [
+    "All 906 scan pages accounted for across three volumes.",
+    "All 61 chapters mapped.",
+    "No transport contamination.",
+    "Representative pages validated against image.",
+    "Full comparison report generated before canonical replacement.",
+    "Ireland territorial review remains a separate gate."
+  ],
+  "status": "COMPARISON_WORKFLOW_READY__CANONICAL_UNCHANGED",
+  "referenceComparisonWorkflow": {
+    "status": "READY_MANUAL_RUN__REPORT_ONLY_ARTIFACT",
+    "workflow": ".github/workflows/compare-1813-reference.yml",
+    "reference": "Wikisource 1813 chapter transcription derived from first-edition scan pages",
+    "chapters": 61,
+    "policy": "Reference text is diagnostic only; it is not treated as primary scan evidence and is not committed as canonical content.",
+    "licensingNote": "Wikisource transcription is used as a comparison artifact; primary edition authority remains the scan image.",
+    "artifact": "tmp/pride-and-prejudice-1813-comparison.json",
+    "referenceRetention": "Temporary runner file; not uploaded or committed."
+  }
+}

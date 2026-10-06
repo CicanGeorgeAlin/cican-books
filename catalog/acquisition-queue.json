@@ -1,0 +1,83 @@
+{
+  "version": 2,
+  "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
+  "candidates": [
+    {
+      "id": "the-secret-garden",
+      "title": "The Secret Garden",
+      "author": "Frances Hodgson Burnett",
+      "language": "en",
+      "originalPublicationYear": 1911,
+      "sourceRepo": "Project Gutenberg",
+      "sourceEbookId": "17396",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/17396",
+      "sourceStatus": "SOURCE_VERIFIED",
+      "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
+      "nextStep": "Use a verified source edition and review territorial status before publication.",
+      "queueStage": "READY_FOR_ACQUISITION",
+      "priority": 12
+    }
+  ],
+  "completedAcquisitions": [
+    {
+      "id": "alice-adventures-in-wonderland",
+      "sourceEbookId": "11",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary source verified at Project Gutenberg; territorial review remains required before publication."
+    },
+    {
+      "id": "adventures-of-sherlock-holmes",
+      "sourceEbookId": "48320",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Improved Project Gutenberg edition #48320 verified; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "crime-and-punishment",
+      "sourceEbookId": "2554",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary source verified at Project Gutenberg; Constance Garnett translation; territorial review remains required before publication."
+    },
+    {
+      "id": "the-picture-of-dorian-gray",
+      "sourceEbookId": "174",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary source verified at Project Gutenberg; complete text available; territorial review remains required before publication."
+    },
+    {
+      "id": "a-tale-of-two-cities",
+      "sourceEbookId": "98",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "the-count-of-monte-cristo",
+      "sourceEbookId": "1184",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "the-three-musketeers",
+      "sourceEbookId": "1257",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "the-adventures-of-tom-sawyer",
+      "sourceEbookId": "74",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "the-adventures-of-huckleberry-finn",
+      "sourceEbookId": "76",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "little-women",
+      "sourceEbookId": "37106",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    }
+  ]
+}
