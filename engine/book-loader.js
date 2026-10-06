@@ -15,7 +15,7 @@ export function getBookSource(bookId) {
 
 export function isPublishedBook(bookId) {
   const record = getCatalogRecord(bookId);
-  return !!record && (!record.status || record.status === "PUBLISHED");
+  return !!record && record.visibility === "PUBLIC";
 }
 
 /*
