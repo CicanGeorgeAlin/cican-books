@@ -1,11 +1,11 @@
-const CACHE_NAME = "cican-shell-v23";
+const CACHE_NAME = "cican-shell-v24";
 
 const SHELL = [
   "./",
   "./index.html",
   "./library.html",
+  "./reader.html",
   "./understand.html",
-  "./play-v18-working.html",
   "./manifest.webmanifest",
   "./cican-preview.png",
   "./icons/icon-192.svg",
