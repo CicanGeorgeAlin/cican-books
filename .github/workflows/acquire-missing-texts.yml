@@ -20,9 +20,9 @@ jobs:
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/11/pg11.txt -o fulltext/alice-adventures-in-wonderland.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/48320/pg48320.txt -o fulltext/adventures-of-sherlock-holmes.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/2554/pg2554.txt -o fulltext/crime-and-punishment.txt
-          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/98/pg98.txt -o fulltext/a-tale-of-two-cities.txt fulltext/the-count-of-monte-cristo.txt
+          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/98/pg98.txt -o fulltext/a-tale-of-two-cities.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/1184/pg1184.txt -o fulltext/the-count-of-monte-cristo.txt
-          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/1259/pg1259.txt -o fulltext/the-three-musketeers.txt
+          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/1257/pg1257.txt -o fulltext/the-three-musketeers.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/1184/pg1184.txt -o fulltext/the-count-of-monte-cristo.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/74/pg74.txt -o fulltext/the-adventures-of-tom-sawyer.txt
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/76/pg76.txt -o fulltext/adventures-of-huckleberry-finn.txt
@@ -33,7 +33,6 @@ jobs:
           test $(wc -c < fulltext/a-tale-of-two-cities.txt) -gt 10000
           test $(wc -c < fulltext/the-count-of-monte-cristo.txt) -gt 10000
           test $(wc -c < fulltext/the-three-musketeers.txt) -gt 10000
-          test $(wc -c < fulltext/the-count-of-monte-cristo.txt) -gt 10000
           test $(wc -c < fulltext/the-adventures-of-tom-sawyer.txt) -gt 10000
           test $(wc -c < fulltext/adventures-of-huckleberry-finn.txt) -gt 10000
           test $(wc -c < fulltext/little-women.txt) -gt 10000
