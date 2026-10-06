@@ -1407,7 +1407,17 @@ function renderReaderText(sourceText) {
         if (text) blockTexts.push(text);
     }
 
-    const pageCount = config ? config.pageCount : 0;
+    /*
+        V2 VISUAL PREVIEW:
+        Until an edition's real printed page boundaries are verified,
+        show clearly-labelled preview markers so the reader UI can be
+        judged on-device without presenting invented pagination as fact.
+        These markers are only a design experiment and will be replaced
+        by evidence-backed edition markers book-by-book.
+    */
+    const previewPageCount = 8;
+    const pageCount = config ? config.pageCount : previewPageCount;
+    const isPreview = !config;
     const totalChars = blockTexts.reduce((n, t) => n + t.length, 0);
     let seenChars = 0;
     let nextPage = 2;
@@ -1416,10 +1426,20 @@ function renderReaderText(sourceText) {
         const marker = document.createElement("div");
         marker.className = "reader-page-marker";
         marker.dataset.page = String(page);
-        marker.setAttribute("aria-label", "Page " + page);
-        marker.textContent = "PAGE " + page + " / " + pageCount;
+        marker.dataset.preview = isPreview ? "true" : "false";
+        marker.setAttribute(
+            "aria-label",
+            isPreview ? "Page preview " + page : "Page " + page
+        );
+        marker.textContent = isPreview
+            ? "PAGE PREVIEW " + page + " / " + pageCount
+            : "PAGE " + page + " / " + pageCount;
         fragment.appendChild(marker);
-        readerPageMap.push({ page, marker });
+        readerPageMap.push({ page, marker, preview: isPreview });
+    }
+
+    if (pageCount > 1) {
+        appendPageMarker(1);
     }
 
     for (const text of blockTexts) {
