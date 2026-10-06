@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "",
     sourceNote: "The 15-minute reader begins at Chapter I after the author's preface. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/74",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/74/pg74.txt",
+    fullTextUrl: "./fulltext/the-adventures-of-tom-sawyer.txt",
     gameMode: "classic",
     gameTitle: "THE ADVENTURE",
     gameDNA: ["adventure","friendship","mischief","courage","freedom","loyalty","discovery"],
