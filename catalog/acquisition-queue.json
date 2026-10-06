@@ -3,21 +3,6 @@
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
   "candidates": [
     {
-      "id": "adventures-of-sherlock-holmes",
-      "title": "The Adventures of Sherlock Holmes",
-      "author": "Arthur Conan Doyle",
-      "language": "en",
-      "originalPublicationYear": 1892,
-      "sourceRepo": "Project Gutenberg",
-      "sourceEbookId": "48320",
-      "sourceUrl": "https://www.gutenberg.org/ebooks/48320",
-      "sourceStatus": "SOURCE_VERIFIED",
-      "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Use verified source text and review territorial status before publication.",
-      "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 4
-    },
-    {
       "id": "crime-and-punishment",
       "title": "Crime and Punishment",
       "author": "Fyodor Dostoyevsky",
@@ -39,6 +24,12 @@
       "sourceEbookId": "11",
       "status": "ACQUIRED_SOURCE_READY",
       "notes": "Primary source verified at Project Gutenberg; territorial review remains required before publication."
+    },
+    {
+      "id": "adventures-of-sherlock-holmes",
+      "sourceEbookId": "48320",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Improved Project Gutenberg edition #48320 verified; complete plain-text source available; territorial review remains required before publication."
     }
   ]
 }
