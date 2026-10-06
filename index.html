@@ -4,8 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CICAN BOOKS</title>
-<meta name="description" content="CICAN BOOKS — choose a book and read.">
+<meta name="description" content="CICAN BOOKS — choose a book and enter a focused reading experience.">
 <meta name="theme-color" content="#000000">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://cicangeorgealin.github.io/cican-books/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CICAN BOOKS">
+<meta property="og:description" content="Choose a book and enter a focused reading experience.">
+<meta property="og:url" content="https://cicangeorgealin.github.io/cican-books/">
+<meta property="og:site_name" content="CICAN BOOKS">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif}
@@ -39,7 +46,7 @@ h1{font-size:clamp(34px,10vw,58px);line-height:.95;letter-spacing:-.07em}
 </head>
 <body>
 <main class="page"><div class="shell">
-<header class="top"><a class="logo" href="index.html">CICAN</a><a class="support" href="https://buymeacoffee.com/cican" target="_blank" rel="noopener noreferrer">BUY CICAN A COFFEE ☕</a></header>
+<header class="top"><a class="logo" href="index.html" aria-label="CICAN Books home">CICAN</a><a class="support" href="https://buymeacoffee.com/cican" target="_blank" rel="noopener noreferrer">BUY CICAN A COFFEE ☕</a></header>
 <section class="hero"><div class="cican" aria-hidden="true"><div class="eye left"></div><div class="eye right"></div></div><h1>CICAN</h1><div class="subtitle">BOOKS · ENTER</div></section>
 <div class="search"><input id="search" type="search" placeholder="Search books, authors, subjects…" aria-label="Search books"></div>
 <div id="count" class="count"></div>
@@ -47,7 +54,7 @@ h1{font-size:clamp(34px,10vw,58px);line-height:.95;letter-spacing:-.07em}
 </div></main>
 <script type="module">
 import { CATALOG } from "./catalog/index.js";
-const books=CATALOG.filter(b=>b.status!=="DRAFT");
+const books=CATALOG.filter(b=>b.visibility==="PUBLIC");
 const list=document.getElementById("books"), search=document.getElementById("search"), count=document.getElementById("count");
 function render(q=""){
  const term=q.trim().toLowerCase();
