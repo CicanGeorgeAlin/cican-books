@@ -939,8 +939,8 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar {
         <div id="readerTitle"></div>
 
         <div class="reader-modebar" aria-label="Reading mode">
-            <button id="mode15" class="reader-mode active" type="button">15 MIN</button>
-            <button id="modeFull" class="reader-mode" type="button">FULL BOOK</button>
+            <button id="mode15" class="reader-mode active" type="button" aria-pressed="true">15 MIN</button>
+            <button id="modeFull" class="reader-mode" type="button" aria-pressed="false">FULL BOOK</button>
         </div>
 
         <div id="readerModeNote"></div>
@@ -949,11 +949,11 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar {
             <div id="readerProgressFill"></div>
         </div>
 
-        <div id="readerText"></div>
+        <div id="readerText" role="article" aria-label="Book text" tabindex="0"></div>
 
 
         <button id="readerFullscreen" type="button" aria-label="Enter full screen">FULL SCREEN</button>
-<div id="readerHUD">
+<div id="readerHUD" role="status" aria-live="polite" aria-label="Reading progress">
 
             <div id="readerTimer">
                 15:00
@@ -971,7 +971,8 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar {
             <button
                 id="readerPause"
                 class="reader-button"
-                type="button">
+                type="button"
+                aria-label="Pause automatic reading">
 
                 PAUSE
 
@@ -1130,6 +1131,8 @@ function updateReaderModeUI() {
 
     mode15.classList.toggle("active", readingMode === "15");
     modeFull.classList.toggle("active", readingMode === "full");
+    mode15.setAttribute("aria-pressed", readingMode === "15" ? "true" : "false");
+    modeFull.setAttribute("aria-pressed", readingMode === "full" ? "true" : "false");
 
     modeFull.disabled =
         fullTextLoading ||
@@ -1794,14 +1797,31 @@ async function openReader(modeOverride) {
 
     renderReaderText(activeReaderSource);
 
-    // Do not restore an old reading position: every opening starts at 0.
-    readerScrollPosition = 0;
+    const savedPosition = loadReaderPosition();
+    const availableScrollBeforeStart = Math.max(
+        0,
+        readerText.scrollHeight - readerText.clientHeight
+    );
 
-    const savedProgress = 0;
+    readerScrollPosition = Math.min(
+        Math.max(0, savedPosition),
+        availableScrollBeforeStart
+    );
+
+    const savedProgress =
+        availableScrollBeforeStart > 0
+            ? readerScrollPosition / availableScrollBeforeStart
+            : 0;
 
     readerModeNote.textContent =
         isFullBook
-            ? "FULL SOURCE TEXT"
+            ? (
+                savedProgress > 0.01
+                    ? "CONTINUING FROM " +
+                      Math.floor(savedProgress * 100) +
+                      "%"
+                    : "FULL SOURCE TEXT"
+            )
             : (
                 savedProgress > 0.01
                     ? "CONTINUING FROM " +
@@ -1860,22 +1880,9 @@ async function openReader(modeOverride) {
 
             updateReaderUI();
 
-            /*
-                Give the reader a short, stable view of the
-                first text before automatic movement begins.
-                Returning readers resume immediately.
-            */
-            // Force the beginning again after layout has settled.
-            readerProgrammaticScroll = true;
-            readerScrollPosition = 0;
-            readerText.scrollTop = 0;
-            readerProgrammaticScroll = false;
-            updateReaderUI();
-
-            // Hold the first text briefly, then start one controlled
-            // auto-reader loop.
+            // Hold only a new reading position; saved positions resume immediately.
             startReaderAnimation(
-                READER_FIRST_TEXT_HOLD_MS,
+                readerScrollPosition > 0 ? 0 : READER_FIRST_TEXT_HOLD_MS,
                 openToken
             );
         }
@@ -2183,6 +2190,8 @@ mode15.addEventListener("pointerdown", function(e) {
 
     readingMode = "15";
     saveReaderMode();
+    mode15.setAttribute("aria-pressed", "true");
+    modeFull.setAttribute("aria-pressed", "false");
     openReader("15");
 });
 
@@ -2192,6 +2201,8 @@ modeFull.addEventListener("pointerdown", async function(e) {
 
     readingMode = "full";
     saveReaderMode();
+    mode15.setAttribute("aria-pressed", "false");
+    modeFull.setAttribute("aria-pressed", "true");
     await openReader("full");
 });
 
@@ -2543,12 +2554,110 @@ readerPause.addEventListener(
    READER FULL SCREEN
 ================================================= */
 
+const READER_CONTROL_STATE_PREFIX = "cican_reader_control:";
+
+function readerControlKey(controlId) {
+    if (!window.CICAN_ACTIVE_BOOK_ID) return null;
+    return (
+        READER_CONTROL_STATE_PREFIX +
+        window.CICAN_ACTIVE_BOOK_ID +
+        ":" +
+        controlId
+    );
+}
+
+function clampReaderControlPosition(element, left, top) {
+    const panelRect = readerPanel.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    const padding = 6;
+
+    const maxLeft = Math.max(
+        padding,
+        panelRect.width - elementRect.width - padding
+    );
+
+    const maxTop = Math.max(
+        padding,
+        panelRect.height - elementRect.height - padding
+    );
+
+    return {
+        left: Math.max(padding, Math.min(maxLeft, left)),
+        top: Math.max(padding, Math.min(maxTop, top))
+    };
+}
+
+function saveReaderControlPosition(element, controlId) {
+    const key = readerControlKey(controlId);
+    if (!key || !element) return;
+
+    try {
+        const panelRect = readerPanel.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
+
+        const position = clampReaderControlPosition(
+            element,
+            rect.left - panelRect.left,
+            rect.top - panelRect.top
+        );
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(position)
+        );
+    } catch (_) {}
+}
+
+function restoreReaderControlPosition(element, controlId) {
+    const key = readerControlKey(controlId);
+    if (!key || !element) return;
+
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return;
+
+        const saved = JSON.parse(raw);
+
+        if (
+            !Number.isFinite(Number(saved.left)) ||
+            !Number.isFinite(Number(saved.top))
+        ) {
+            return;
+        }
+
+        const position = clampReaderControlPosition(
+            element,
+            Number(saved.left),
+            Number(saved.top)
+        );
+
+        element.style.left = position.left + "px";
+        element.style.top = position.top + "px";
+        element.style.right = "auto";
+        element.style.bottom = "auto";
+    } catch (_) {}
+}
+
+function saveHUDPosition() {
+    saveReaderControlPosition(readerHUD, "hud");
+}
+
+function restoreHUDPosition() {
+    restoreReaderControlPosition(readerHUD, "hud");
+}
+
+function saveFullscreenButtonPosition() {
+    saveReaderControlPosition(readerFullscreen, "fullscreen");
+}
+
+function restoreFullscreenButtonPosition() {
+    restoreReaderControlPosition(readerFullscreen, "fullscreen");
+}
+
 function makeReaderControlMovable(element, savePosition, onTap) {
     let dragging = false;
     let pointerId = null;
     let moved = false;
-    let offsetX = 0;
-    let offsetY = 0;
     let startPointerX = 0;
     let startPointerY = 0;
     let startLeft = 0;
@@ -2592,9 +2701,6 @@ function makeReaderControlMovable(element, savePosition, onTap) {
         dragging = true;
         moved = false;
         pointerId = e.pointerId;
-
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
 
         startPointerX = e.clientX;
         startPointerY = e.clientY;
