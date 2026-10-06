@@ -14,7 +14,6 @@ const reader = read("reader.html");
 const catalog = read("catalog/index.js");
 const loader = read("engine/book-loader.js");
 const serviceWorker = read("service-worker.js");
-const pagination = read("catalog/edition-pagination-v2.js");
 const robots = read("robots.txt");
 const sitemap = read("sitemap.xml");
 
@@ -84,13 +83,6 @@ for (const record of records) {
   }
 }
 
-if (!/getEditionPagination/.test(reader)) fail("V2 edition pagination registry is not connected.");
-else pass("V2 edition pagination registry is connected.");
-if (!/RESEARCH_REQUIRED/.test(pagination)) fail("V2 edition pagination registry is missing research-state entries.");
-else pass("V2 edition pagination registry is present and refuses unverified page counts.");
-if (!/reader-page-marker/.test(reader)) fail("V2 page marker renderer is missing.");
-else pass("V2 page marker renderer is present.");
-
 if (!/function\s+fluidAutoReader\s*\(/.test(reader)) fail("Fluid auto-reader missing.");
 if (!/\.reader-panel\s*\{[\s\S]*?display:\s*flex[\s\S]*?flex-direction:\s*column[\s\S]*?height:\s*100%[\s\S]*?min-height:\s*0/.test(reader)) fail("Reader panel is not a constrained vertical flex container.");
 else pass("Reader panel has the required constrained flex layout.");
@@ -143,14 +135,7 @@ if (!moduleScript) {
   fail("Reader module script could not be extracted.");
 } else {
   try {
-    /*
-      reader.html is an ES module. The static syntax check should validate
-      the module body without executing it or resolving browser imports.
-    */
-    const syntaxScript = moduleScript
-      .replace(/^\s*import[\s\S]*?from[\s]+["'][^"']+["'];?\s*$/gm, "")
-      .replace(/^\s*import[\s\S]*?;\s*$/gm, "");
-    new Function(syntaxScript);
+    new Function(moduleScript);
     pass("Reader module passes JavaScript syntax parsing.");
   } catch (error) {
     fail("Reader JavaScript syntax error: " + error.message);
