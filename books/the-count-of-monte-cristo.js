@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "",
     sourceNote: "The 15-minute reader begins at Chapter 1, Marseilles—The Arrival, in the verified complete source. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/1184",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/1184/pg1184.txt",
+    fullTextUrl: "./fulltext/the-count-of-monte-cristo.txt",
     gameMode: "classic",
     gameTitle: "THE COUNT",
     gameDNA: ["justice","revenge","identity","escape","strategy","mercy","forgiveness"],
