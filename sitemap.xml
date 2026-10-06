@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://cicangeorgealin.github.io/cican-play-the-book/</loc></url>
-  <url><loc>https://cicangeorgealin.github.io/cican-play-the-book/library.html</loc></url>
-  <url><loc>https://cicangeorgealin.github.io/cican-play-the-book/understand.html</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=dhammapada</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=tao-te-ching</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=the-republic</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=meditations</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=walden</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=thus-spake-zarathustra</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=frankenstein</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=dracula</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=the-great-gatsby</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=nineteen-eighty-four</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=moby-dick</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=pride-and-prejudice</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=alice-adventures-in-wonderland</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=adventures-of-sherlock-holmes</loc></url>
+  <url><loc>https://cicangeorgealin.github.io/cican-books/reader.html?book=crime-and-punishment</loc></url>
 </urlset>
