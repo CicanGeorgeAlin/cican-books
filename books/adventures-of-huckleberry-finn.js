@@ -16,7 +16,7 @@ window.BOOK_READ = {
     sourceTranslator: "",
     sourceNote: "The 15-minute reader begins at Chapter I after the Notice and Explanatory matter. FULL BOOK uses the same complete Project Gutenberg source asset.",
     sourceUrl: "https://www.gutenberg.org/ebooks/76",
-    fullTextUrl: "https://www.gutenberg.org/cache/epub/76/pg76.txt",
+    fullTextUrl: "./fulltext/adventures-of-huckleberry-finn.txt",
     gameMode: "classic",
     gameTitle: "DOWN THE MISSISSIPPI",
     gameDNA: ["freedom","friendship","conscience","adventure","identity","courage","choice"],
