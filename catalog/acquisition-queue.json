@@ -3,19 +3,19 @@
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
   "candidates": [
     {
-      "id": "the-count-of-monte-cristo",
-      "title": "The Count of Monte Cristo",
-      "author": "Alexandre Dumas",
+      "id": "the-three-musketeers",
+      "title": "The Three Musketeers",
+      "author": "Alexandre Dumas and Auguste Maquet",
       "language": "en",
       "originalPublicationYear": 1844,
       "sourceRepo": "Project Gutenberg",
-      "sourceEbookId": "1184",
-      "sourceUrl": "https://www.gutenberg.org/ebooks/1184",
+      "sourceEbookId": "1257",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/1257",
       "sourceStatus": "SOURCE_VERIFIED",
       "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
       "nextStep": "Use a verified English source edition and review territorial status before publication.",
       "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 7
+      "priority": 8
     }
   ],
   "completedAcquisitions": [
@@ -46,6 +46,12 @@
     {
       "id": "a-tale-of-two-cities",
       "sourceEbookId": "98",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "the-count-of-monte-cristo",
+      "sourceEbookId": "1184",
       "status": "ACQUIRED_SOURCE_READY",
       "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
     }
