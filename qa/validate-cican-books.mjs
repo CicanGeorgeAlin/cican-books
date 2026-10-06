@@ -99,7 +99,8 @@ if (/makeReaderControlMovable|saveHUDPosition|restoreHUDPosition|saveFullscreenB
 else pass("Obsolete movable-control logic absent.");
 if (!/reader\.addEventListener\(\s*"pointerup"[\s\S]*isReaderFullscreen\(\)[\s\S]*exitReaderFullscreenByDoubleTap/s.test(reader)) fail("Fullscreen double-tap exit gesture missing.");
 else pass("Fullscreen double-tap exit gesture is present.");
-if (!/const savedPosition = loadReaderPosition\(\)/.test(reader)) fail("Reader does not restore saved reading position.");
+if (!/loadReaderPosition\(\)/.test(reader) || !/FRESH_OPEN/.test(reader)) fail("Reader saved-position/fresh-open logic missing.");
+else pass("Reader saved-position restoration and fresh-open logic are present.");
 if (/Force the beginning again after layout has settled/.test(reader)) fail("Reader still contains the old forced-reset resume logic.");
 if (!/document\.documentElement\.requestFullscreen/.test(reader)) fail("Device fullscreen API missing.");
 if (!/navigationUI:\s*"hide"/.test(reader)) fail("Fullscreen navigation UI hint missing.");
