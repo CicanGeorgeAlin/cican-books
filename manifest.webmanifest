@@ -1,7 +1,7 @@
 {
   "name": "CICAN BOOKS",
   "short_name": "CICAN",
-  "description": "Discover and read books.",
+  "description": "Choose a book and enter a focused reading experience.",
   "lang": "en-GB",
   "dir": "ltr",
   "start_url": "./",
