@@ -122,11 +122,20 @@ html.cican-device-fullscreen #readerTitle,
 html.cican-device-fullscreen .reader-modebar,
 html.cican-device-fullscreen #readerModeNote,
 html.cican-device-fullscreen #readerProgress,
-html.cican-device-fullscreen #readerHUD,
 html.cican-device-fullscreen .reader-controls,
 html.cican-device-fullscreen #readerStatus,
 html.cican-device-fullscreen #readerFullscreen {
     display: none !important;
+}
+
+html.cican-device-fullscreen #readerHUD {
+    display: flex !important;
+    position: fixed;
+    height: auto !important;
+    min-height: 0 !important;
+    width: auto !important;
+    max-height: 64px;
+    z-index: 2147483646;
 }
 html.cican-device-fullscreen .reader-panel {
     width: 100vw;
@@ -173,7 +182,6 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar {
 #reader:fullscreen .reader-modebar,
 #reader:fullscreen #readerModeNote,
 #reader:fullscreen #readerProgress,
-#reader:fullscreen #readerHUD,
 #reader:fullscreen .reader-controls,
 #reader:fullscreen #readerStatus,
 #reader:fullscreen #readerFullscreen,
@@ -183,7 +191,6 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar {
 #reader:-webkit-full-screen .reader-modebar,
 #reader:-webkit-full-screen #readerModeNote,
 #reader:-webkit-full-screen #readerProgress,
-#reader:-webkit-full-screen #readerHUD,
 #reader:-webkit-full-screen .reader-controls,
 #reader:-webkit-full-screen #readerStatus,
 #reader:-webkit-full-screen #readerFullscreen {
@@ -566,6 +573,43 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar {
 
 }
 
+
+
+/* =================================================
+   MOVABLE FULL SCREEN BUTTON
+================================================= */
+
+#readerFullscreen {
+    position: absolute;
+    left: 18%;
+    top: 64px;
+    right: auto;
+    bottom: auto;
+    z-index: 30;
+    width: 118px;
+    min-width: 118px;
+    min-height: 38px;
+    padding: 9px 10px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 4px;
+    background: #fff;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#readerFullscreen.dragging {
+    cursor: grabbing;
+    box-shadow: 0 0 16px rgba(255,255,255,0.13);
+}
 
 /* =================================================
    SMALL MOVABLE READER TIMER
