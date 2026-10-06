@@ -47,6 +47,20 @@ else pass("Catalog contains 15 PUBLIC records.");
 if (draftRecords.length !== 7) fail(`Expected 7 DRAFT records, found ${draftRecords.length}.`);
 else pass("Catalog contains 7 DRAFT records.");
 
+const publicSourceChecks = [];
+for (const record of publicRecords) {
+  const sourcePath = path.join(root, record.source);
+  if (!fs.existsSync(sourcePath)) continue;
+  const sourceText = fs.readFileSync(sourcePath, "utf8");
+  if (!/BOOK_READ/.test(sourceText)) fail(`PUBLIC book source does not expose BOOK_READ: ${record.id}`);
+  else publicSourceChecks.push(record.id);
+  if (!/title\s*:/.test(sourceText)) fail(`Missing title in PUBLIC book source: ${record.id}`);
+  if (!/author\s*:/.test(sourceText)) fail(`Missing author in PUBLIC book source: ${record.id}`);
+  if (!/sourceUrl\s*:/.test(sourceText)) fail(`Missing sourceUrl in PUBLIC book source: ${record.id}`);
+  if (!/targetWords\s*:/.test(sourceText)) fail(`Missing targetWords in PUBLIC book source: ${record.id}`);
+}
+if (publicSourceChecks.length === publicRecords.length) pass(`All ${publicRecords.length} PUBLIC book sources expose valid reader records.`);
+
 for (const record of records) {
   if (!record.id || !record.title || !record.source) {
     fail(`Incomplete catalog record: ${JSON.stringify(record)}`);
