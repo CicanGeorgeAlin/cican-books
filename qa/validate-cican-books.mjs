@@ -87,6 +87,12 @@ if (!/const savedPosition = loadReaderPosition\(\)/.test(reader)) fail("Reader d
 if (/Force the beginning again after layout has settled/.test(reader)) fail("Reader still contains the old forced-reset resume logic.");
 if (!/document\.documentElement\.requestFullscreen/.test(reader)) fail("Device fullscreen API missing.");
 if (!/navigationUI:\s*"hide"/.test(reader)) fail("Fullscreen navigation UI hint missing.");
+if (!/readerWatchdogTimer/.test(reader)) fail("Auto-reader watchdog missing.");
+else pass("Auto-reader watchdog is present.");
+if (!/readerLastFrameTime/.test(reader)) fail("Auto-reader frame heartbeat missing.");
+else pass("Auto-reader frame heartbeat is present.");
+if (!/readerLayoutAttempts/.test(reader)) fail("Reader layout retry guard missing.");
+else pass("Reader layout retry guard is present.");
 if (!/reader\.classList\.contains\("open"\)/.test(reader)) fail("Reader lifecycle guard missing.");
 
 const moduleScript = [...reader.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].at(-1)?.[1];
@@ -114,7 +120,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v33/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
+if (!/cican-books-v34/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
 else pass("Service worker cache version is current.");
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
