@@ -416,22 +416,6 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar,
 .reader-block:first-child {
     margin-top: 0;
 }
-/* V2 EDITION-AWARE PAGE MARKERS */
-.reader-page-marker {
-    display: block;
-    margin: 2.2em 0 1.5em;
-    padding: .55em 0;
-    color: rgba(255,255,255,.42);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: .58em;
-    font-weight: 800;
-    letter-spacing: .18em;
-    line-height: 1;
-    text-align: center;
-    text-transform: uppercase;
-    break-inside: avoid;
-}
-.reader-page-marker:first-child { margin-top: .5em; }
 #readerText {
 
     color:
@@ -888,10 +872,8 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar,
 
 
 <script type="module">
-import { getEditionPagination } from "./catalog/edition-pagination-v2.js";
 const READER_PARAMS = new URLSearchParams(location.search);
 const BOOK_ID = READER_PARAMS.get("book");
-const SWIPE_MODE = READER_PARAMS.get("swipe") === "1";
 const FRESH_OPEN = READER_PARAMS.get("fresh") === "1";
 let BOOK_READ = null;
 let currentBook = null;
@@ -965,13 +947,6 @@ const mode15 = document.getElementById("mode15");
 const modeFull = document.getElementById("modeFull");
 const readerModeNote = document.getElementById("readerModeNote");
 const readerProgressFill = document.getElementById("readerProgressFill");
-let readerPageMap = [];
-let readerPageCount = 0;
-let swipePages = [];
-let swipePageIndex = 0;
-let swipePointerDownX = 0;
-let swipePointerDownY = 0;
-let swipePointerMoved = false;
 
 
 /* =================================================
@@ -1074,12 +1049,6 @@ function saveReaderMode() {
 }
 
 function updateReaderUI() {
-
-    if (SWIPE_MODE) {
-        if (swipePages.length) setSwipePage(swipePageIndex, false);
-        document.getElementById("readerTimer").textContent = formatReaderTime(readerSeconds);
-        return;
-    }
 
     const maxScroll =
         Math.max(
@@ -1394,201 +1363,41 @@ async function loadSourceTextForReader(
 }
 
 
-function getReaderPaginationConfig(book) {
-    const p = getEditionPagination(book && book.id) || (book && book.pagination);
-    if (!p || p.type !== "EDITION") return null;
-    const count = Number(p.pageCount);
-    if (!Number.isInteger(count) || count < 2) return null;
-    return { type: "EDITION", pageCount: count, source: String(p.source || "") };
-}
-
 function renderReaderText(sourceText) {
-    const raw = String(sourceText || "").replace(/\r\n/g, "\n").trim();
+    const raw = String(sourceText || "")
+        .replace(/\r\n/g, "\n")
+        .trim();
+
     readerText.replaceChildren();
-    readerPageMap = [];
-    readerPageCount = 0;
-    swipePages = [];
-    swipePageIndex = 0;
+
     if (!raw) return;
 
     const blocks = raw.split(/\n[ \t]*\n+/);
-    const blockTexts = [];
+    const fragment = document.createDocumentFragment();
 
     for (const block of blocks) {
-        const text = block.replace(/\n+/g, " ").replace(/[ \t]+/g, " ").trim();
-        if (text) blockTexts.push(text);
-    }
+        const text = block
+            .replace(/\n+/g, " ")
+            .replace(/[ \t]+/g, " ")
+            .trim();
 
-    /*
-        V2 SWIPE EXPERIMENT:
-        This mode intentionally uses preview pages only. It does not
-        claim to reproduce the printed pagination of any edition.
-        Natural text blocks are kept intact and distributed across
-        eight visual pages for on-device testing.
-    */
-    const config = getReaderPaginationConfig(currentBook);
-    const previewPageCount = 8;
-    const pageCount = config ? config.pageCount : previewPageCount;
-    const isPreview = !config;
-
-    if (SWIPE_MODE) {
-        readerPageCount = pageCount;
-        const totalChars = blockTexts.reduce((n, t) => n + t.length, 0);
-        let page = 0;
-        let seenChars = 0;
-
-        function makePage() {
-            const pageEl = document.createElement("section");
-            pageEl.className = "cican-swipe-page";
-            pageEl.dataset.page = String(page + 1);
-            pageEl.setAttribute("aria-label", "Page " + (page + 1) + " of " + pageCount);
-
-            const marker = document.createElement("div");
-            marker.className = "cican-swipe-page-marker";
-            marker.textContent = isPreview
-                ? "PAGE PREVIEW " + (page + 1) + " / " + pageCount
-                : "PAGE " + (page + 1) + " / " + pageCount;
-            pageEl.appendChild(marker);
-
-            swipePages.push(pageEl);
-            return pageEl;
-        }
-
-        let pageEl = makePage();
-        for (const text of blockTexts) {
-            const threshold = totalChars > 0
-                ? totalChars * (page + 1) / pageCount
-                : 0;
-
-            if (
-                page < pageCount - 1 &&
-                seenChars > 0 &&
-                seenChars >= threshold
-            ) {
-                page += 1;
-                pageEl = makePage();
-            }
-
-            const el = document.createElement("div");
-            el.className = "reader-block";
-            if (/^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) ||
-                (text.length < 90 && !/[.!?]$/.test(text))) {
-                el.classList.add("reader-heading");
-            }
-            el.textContent = text;
-            pageEl.appendChild(el);
-            seenChars += text.length;
-        }
-
-        readerText.append(...swipePages);
-        readerPageMap = swipePages.map((el, index) => ({
-            page: index + 1,
-            marker: el.querySelector(".cican-swipe-page-marker"),
-            preview: isPreview
-        }));
-        setSwipePage(0, false);
-        return;
-    }
-
-    const fragment = document.createDocumentFragment();
-    const configForScroll = getReaderPaginationConfig(currentBook);
-    const pageCountForScroll = configForScroll ? configForScroll.pageCount : previewPageCount;
-    const previewForScroll = !configForScroll;
-    const totalChars = blockTexts.reduce((n, t) => n + t.length, 0);
-    let seenChars = 0;
-    let nextPage = 2;
-
-    function appendPageMarker(pageNumber) {
-        const marker = document.createElement("div");
-        marker.className = "reader-page-marker";
-        marker.dataset.page = String(pageNumber);
-        marker.dataset.preview = previewForScroll ? "true" : "false";
-        marker.setAttribute(
-            "aria-label",
-            previewForScroll ? "Page preview " + pageNumber : "Page " + pageNumber
-        );
-        marker.textContent = previewForScroll
-            ? "PAGE PREVIEW " + pageNumber + " / " + pageCountForScroll
-            : "PAGE " + pageNumber + " / " + pageCountForScroll;
-        fragment.appendChild(marker);
-        readerPageMap.push({ page: pageNumber, marker, preview: previewForScroll });
-    }
-
-    if (pageCountForScroll > 1) appendPageMarker(1);
-
-    for (const text of blockTexts) {
-        if (pageCountForScroll > 1 && nextPage <= pageCountForScroll &&
-            seenChars > 0 &&
-            seenChars >= (totalChars * (nextPage - 1) / pageCountForScroll)) {
-            appendPageMarker(nextPage);
-            nextPage += 1;
-        }
+        if (!text) continue;
 
         const el = document.createElement("div");
         el.className = "reader-block";
-        if (/^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) ||
-            (text.length < 90 && !/[.!?]$/.test(text))) {
+
+        if (
+            /^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) ||
+            (text.length < 90 && !/[.!?]$/.test(text))
+        ) {
             el.classList.add("reader-heading");
         }
+
         el.textContent = text;
         fragment.appendChild(el);
-        seenChars += text.length;
     }
 
-    readerPageCount = pageCountForScroll;
     readerText.appendChild(fragment);
-}
-
-function setSwipePage(index, animate = true) {
-    if (!SWIPE_MODE || !swipePages.length) return;
-
-    swipePageIndex = Math.max(0, Math.min(index, swipePages.length - 1));
-
-    swipePages.forEach((page, i) => {
-        page.classList.toggle("active", i === swipePageIndex);
-        if (i === swipePageIndex) {
-            page.scrollTop = 0;
-        }
-    });
-
-    const percent = swipePages.length > 1
-        ? swipePageIndex / (swipePages.length - 1)
-        : 0;
-
-    readerSeconds = Math.max(
-        0,
-        TARGET_READING_SECONDS * (1 - percent)
-    );
-
-    document.getElementById("readerPercent").textContent =
-        Math.round(percent * 100) + "%";
-
-    if (readerProgressFill) {
-        readerProgressFill.style.width = (percent * 100).toFixed(2) + "%";
-    }
-
-    readerStatus.textContent =
-        (isSwipeAtFirstPage() ? "SWIPE TO READ" : "") +
-        (isSwipeAtFirstPage() && swipePages.length > 1 ? "  •  " : "") +
-        "PAGE " + (swipePageIndex + 1) + " / " + swipePages.length;
-
-    if (swipePageIndex === swipePages.length - 1) {
-        readerStatus.textContent = "PAGE " + swipePages.length + " / " + swipePages.length + "  •  END";
-    }
-}
-
-function isSwipeAtFirstPage() {
-    return swipePageIndex === 0;
-}
-
-function nextSwipePage() {
-    if (!SWIPE_MODE || swipePageIndex >= swipePages.length - 1) return;
-    setSwipePage(swipePageIndex + 1);
-}
-
-function previousSwipePage() {
-    if (!SWIPE_MODE || swipePageIndex <= 0) return;
-    setSwipePage(swipePageIndex - 1);
 }
 
 async function openReader(modeOverride) {
@@ -1948,7 +1757,6 @@ async function openReader(modeOverride) {
     readerStatus.textContent = "AUTO-READING";
 
 
-    reader.classList.toggle("cican-swipe-mode", SWIPE_MODE);
     reader.classList.add(
         "open"
     );
@@ -1962,12 +1770,6 @@ async function openReader(modeOverride) {
 
     requestAnimationFrame(
         function() {
-
-            if (SWIPE_MODE) {
-                readerText.scrollTop = 0;
-                setSwipePage(swipePageIndex, false);
-                return;
-            }
 
             const availableScroll =
                 Math.max(
@@ -2222,13 +2024,6 @@ function clearReaderPosition() {
 
 function finishReader() {
 
-    if (SWIPE_MODE) {
-        setSwipePage(swipePages.length - 1);
-        readerComplete = true;
-        readerStatus.textContent = "PAGE " + swipePages.length + " / " + swipePages.length + "  •  END";
-        return;
-    }
-
     if (
         readerComplete
     ) {
@@ -2448,50 +2243,8 @@ readerText.addEventListener(
 
 
 /* =================================================
-   V2 SWIPE PAGE GESTURE
-================================================= */
-
-readerText.addEventListener("pointerdown", function(e) {
-    if (!SWIPE_MODE) return;
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    swipePointerDownX = e.clientX;
-    swipePointerDownY = e.clientY;
-    swipePointerMoved = false;
-});
-
-readerText.addEventListener("pointermove", function(e) {
-    if (!SWIPE_MODE) return;
-    const dx = e.clientX - swipePointerDownX;
-    const dy = e.clientY - swipePointerDownY;
-    if (Math.hypot(dx, dy) >= 8) swipePointerMoved = true;
-});
-
-readerText.addEventListener("pointerup", function(e) {
-    if (!SWIPE_MODE || !swipePointerMoved) return;
-
-    const dx = e.clientX - swipePointerDownX;
-    const dy = e.clientY - swipePointerDownY;
-    swipePointerMoved = false;
-
-    if (Math.abs(dx) < 55 || Math.abs(dx) <= Math.abs(dy) * 1.15) return;
-
-    e.preventDefault();
-
-    if (dx < 0) {
-        nextSwipePage();
-    } else {
-        previousSwipePage();
-    }
-}, { passive: false });
-
-readerText.addEventListener("pointercancel", function() {
-    swipePointerMoved = false;
-});
-
-/* =================================================
    FULLSCREEN DOUBLE-TAP EXIT
 ================================================= */
-
 
 let readerFullscreenLastTapTime = 0;
 let readerFullscreenLastTapX = 0;
@@ -2598,8 +2351,12 @@ readerPause.addEventListener(
         e.stopPropagation();
 
 
-        if (!currentBook) return;
-        if (SWIPE_MODE) return;
+        if (
+            !currentBook
+        ) {
+
+            return;
+        }
 
 
         /*
@@ -2650,7 +2407,7 @@ readerPause.addEventListener(
 
         readerPause.textContent = "PAUSE";
 
-        if (!SWIPE_MODE) startReaderAnimation(0, readerOpenToken);
+        startReaderAnimation(0, readerOpenToken);
     }
 );
 
