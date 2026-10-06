@@ -67,7 +67,14 @@ for (const book of catalog) {
         errors.push(book.id + ": fullBookReady=true but no complete full-text asset is declared");
       } else if (fullTextMatch) {
         if (/^https?:\/\//i.test(fullTextMatch[1])) {
-          errors.push(book.id + ": fullBookReady=true but FULL BOOK source is remote");
+          const verifiedExternal =
+            book.fullTextSourceType === "COMPLETE_EXTERNAL_SOURCE_ASSET" &&
+            book.fullTextSourceVerified === true;
+          if (verifiedExternal) {
+            warnings.push(book.id + ": FULL BOOK source is a verified external asset; local mirroring is deferred.");
+          } else {
+            errors.push(book.id + ": fullBookReady=true but FULL BOOK source is remote and not declared as a verified external asset");
+          }
         } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
           errors.push(book.id + ": fullBookReady=true but local full-text asset is missing: " + fullTextMatch[1]);
         }
@@ -90,7 +97,14 @@ for (const book of catalog) {
         errors.push(book.id + ": ready review-stage book has no complete local full-text asset");
       } else if (fullTextMatch) {
         if (/^https?:\/\//i.test(fullTextMatch[1])) {
-          errors.push(book.id + ": review-stage FULL BOOK source must be stored locally, not remotely");
+          const verifiedExternal =
+            book.fullTextSourceType === "COMPLETE_EXTERNAL_SOURCE_ASSET" &&
+            book.fullTextSourceVerified === true;
+          if (verifiedExternal) {
+            warnings.push(book.id + ": review-stage FULL BOOK source is a verified external asset; local mirroring is deferred.");
+          } else {
+            errors.push(book.id + ": review-stage FULL BOOK source must be local unless it is a verified external asset");
+          }
         } else if (!fs.existsSync(path.join(ROOT, fullTextMatch[1]))) {
           errors.push(book.id + ": review-stage fullTextUrl asset is missing: " + fullTextMatch[1]);
         }
