@@ -148,8 +148,8 @@ if (!moduleScript) {
       the module body without executing it or resolving browser imports.
     */
     const syntaxScript = moduleScript
-      .replace(/^\\s*import[ \\s\\S]*?from[ \\s]+["'][^"']+["'];?\\s*$/gm, "")
-      .replace(/^\\s*import[ \\s\\S]*?;\\s*$/gm, "");
+      .replace(/^\s*import[\s\S]*?from[\s]+["'][^"']+["'];?\s*$/gm, "")
+      .replace(/^\s*import[\s\S]*?;\s*$/gm, "");
     new Function(syntaxScript);
     pass("Reader module passes JavaScript syntax parsing.");
   } catch (error) {
