@@ -90,13 +90,26 @@ if (/Force the beginning again after layout has settled/.test(reader)) fail("Rea
 if (!/document\.documentElement\.requestFullscreen/.test(reader)) fail("Device fullscreen API missing.");
 if (!/navigationUI:\s*"hide"/.test(reader)) fail("Fullscreen navigation UI hint missing.");
 if (!/readerWatchdogTimer/.test(reader)) fail("Auto-reader watchdog missing.");
-if (!/readerPlaybackInterval/.test(reader) || !/setInterval\(function\(\) \{\s*fluidAutoReader\(performance\.now\(\)\)/.test(reader)) fail("Deterministic auto-reader playback interval missing."); else pass("Deterministic auto-reader playback interval is present.");
 else pass("Auto-reader watchdog is present.");
+if (!/readerPlaybackInterval/.test(reader) || !/setInterval\(function\(\) \{\s*fluidAutoReader\(performance\.now\(\)\)/.test(reader)) fail("Deterministic auto-reader playback interval missing.");
+else pass("Deterministic auto-reader playback interval is present.");
 if (!/readerLastFrameTime/.test(reader)) fail("Auto-reader frame heartbeat missing.");
 else pass("Auto-reader frame heartbeat is present.");
 if (!/readerLayoutAttempts/.test(reader)) fail("Reader layout retry guard missing.");
 else pass("Reader layout retry guard is present.");
 if (!/reader\.classList\.contains\("open"\)/.test(reader)) fail("Reader lifecycle guard missing.");
+
+
+if (!/id="alphabet"/.test(index) || !/ABCDEFGHIJKLMNOPQRSTUVWXYZ/.test(index)) fail("A-Z library navigation is missing.");
+else pass("A-Z library navigation is present.");
+if (!/type="search"/.test(index)) fail("Library search input is missing.");
+else pass("Library search input is present.");
+if (!/cover\.medium\.jpg/.test(index) || !/class="cover"/.test(index)) fail("Book cover rendering is missing.");
+else pass("Book cover rendering is present.");
+if (!/localeCompare\(b\.title\)/.test(index)) fail("Alphabetical book sorting is missing.");
+else pass("Alphabetical book sorting is present.");
+if (!/reader\.html\?book=/.test(index)) fail("Landing-page book navigation is missing.");
+else pass("Landing-page book navigation is present.");
 
 const moduleScript = [...reader.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].at(-1)?.[1];
 if (!moduleScript) {
@@ -123,7 +136,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v36/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
+if (!/cican-books-v37/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
 else pass("Service worker cache version is current.");
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
