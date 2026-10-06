@@ -416,6 +416,22 @@ html.cican-device-fullscreen #readerText::-webkit-scrollbar,
 .reader-block:first-child {
     margin-top: 0;
 }
+/* V2 EDITION-AWARE PAGE MARKERS */
+.reader-page-marker {
+    display: block;
+    margin: 2.2em 0 1.5em;
+    padding: .55em 0;
+    color: rgba(255,255,255,.42);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .58em;
+    font-weight: 800;
+    letter-spacing: .18em;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    break-inside: avoid;
+}
+.reader-page-marker:first-child { margin-top: .5em; }
 #readerText {
 
     color:
@@ -947,6 +963,8 @@ const mode15 = document.getElementById("mode15");
 const modeFull = document.getElementById("modeFull");
 const readerModeNote = document.getElementById("readerModeNote");
 const readerProgressFill = document.getElementById("readerProgressFill");
+let readerPageMap = [];
+let readerPageCount = 0;
 
 
 /* =================================================
@@ -1363,40 +1381,65 @@ async function loadSourceTextForReader(
 }
 
 
+function getReaderPaginationConfig(book) {
+    const p = book && book.pagination;
+    if (!p || p.type !== "EDITION") return null;
+    const count = Number(p.pageCount);
+    if (!Number.isInteger(count) || count < 2) return null;
+    return { type: "EDITION", pageCount: count, source: String(p.source || "") };
+}
+
 function renderReaderText(sourceText) {
-    const raw = String(sourceText || "")
-        .replace(/\r\n/g, "\n")
-        .trim();
-
+    const raw = String(sourceText || "").replace(/\r\n/g, "\n").trim();
     readerText.replaceChildren();
-
+    readerPageMap = [];
+    readerPageCount = 0;
     if (!raw) return;
 
     const blocks = raw.split(/\n[ \t]*\n+/);
     const fragment = document.createDocumentFragment();
+    const config = getReaderPaginationConfig(currentBook);
+    const blockTexts = [];
 
     for (const block of blocks) {
-        const text = block
-            .replace(/\n+/g, " ")
-            .replace(/[ \t]+/g, " ")
-            .trim();
+        const text = block.replace(/\n+/g, " ").replace(/[ \t]+/g, " ").trim();
+        if (text) blockTexts.push(text);
+    }
 
-        if (!text) continue;
+    const pageCount = config ? config.pageCount : 0;
+    const totalChars = blockTexts.reduce((n, t) => n + t.length, 0);
+    let seenChars = 0;
+    let nextPage = 2;
+
+    function appendPageMarker(page) {
+        const marker = document.createElement("div");
+        marker.className = "reader-page-marker";
+        marker.dataset.page = String(page);
+        marker.setAttribute("aria-label", "Page " + page);
+        marker.textContent = "PAGE " + page + " / " + pageCount;
+        fragment.appendChild(marker);
+        readerPageMap.push({ page, marker });
+    }
+
+    for (const text of blockTexts) {
+        if (pageCount > 1 && nextPage <= pageCount &&
+            seenChars >= (totalChars * (nextPage - 1) / pageCount)) {
+            appendPageMarker(nextPage);
+            nextPage += 1;
+        }
 
         const el = document.createElement("div");
         el.className = "reader-block";
-
-        if (
-            /^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) ||
-            (text.length < 90 && !/[.!?]$/.test(text))
-        ) {
+        if (/^(chapter|part|book|preface|introduction|contents|epilogue|prologue|section)\b/i.test(text) ||
+            (text.length < 90 && !/[.!?]$/.test(text))) {
             el.classList.add("reader-heading");
         }
-
         el.textContent = text;
         fragment.appendChild(el);
+        seenChars += text.length;
     }
 
+    readerPageCount = pageCount;
     readerText.appendChild(fragment);
 }
 
