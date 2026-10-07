@@ -36,7 +36,7 @@
 .library-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px}.count{color:#fff;font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.mode{color:rgba(255,255,255,.72);font-size:8px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.book{position:relative;width:100%;display:grid;text-decoration:none;grid-template-columns:76px 1fr;gap:11px;align-items:center;min-height:104px;padding:9px;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:#050505;color:#fff;text-align:left;cursor:pointer}.book:hover{border-color:rgba(255,255,255,.28);background:#0a0a0a}.book-number{position:absolute;top:8px;right:9px;display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;padding:0 7px;border:1px solid rgba(255,255,255,.72);border-radius:999px;background:#fff;color:#000;font-size:8px;font-weight:900;letter-spacing:.08em;line-height:1;box-shadow:0 0 10px rgba(255,255,255,.12)}
 .cover{width:76px;height:88px;border-radius:7px;object-fit:cover;background:#111;border:1px solid rgba(255,255,255,.12)}.cover-fallback{display:flex;align-items:center;justify-content:center;text-align:center;padding:7px;color:#fff;font-size:9px;font-weight:900;line-height:1.08;background:linear-gradient(145deg,#202020,#050505)}
-.title{display:block;font-size:13px;font-weight:900;line-height:1.18}.meta{display:block;margin-top:9px;color:rgba(255,255,255,.72);font-size:8px;font-weight:700;line-height:1.35;letter-spacing:.05em;text-transform:uppercase}.enter{display:block;margin-top:10px;color:#fff;font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.empty{text-align:center;padding:34px;color:rgba(255,255,255,.72);font-size:9px;letter-spacing:.15em}
+.title{display:block;font-size:13px;font-weight:900;line-height:1.18}.meta{display:block;margin-top:9px;color:rgba(255,255,255,.72);font-size:8px;font-weight:700;line-height:1.35;letter-spacing:.05em;text-transform:uppercase}.enter{display:block;margin-top:10px;color:#fff;font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.empty{text-align:center;padding:34px;color:rgba(255,255,255,.72);font-size:9px;letter-spacing:.15em}.creator{margin:42px 0 0;text-align:center;color:rgba(255,255,255,.58);font-size:8px;font-weight:800;letter-spacing:.22em;text-transform:uppercase}
 @media(max-width:620px){.page{padding-left:12px;padding-right:12px}.hero{padding:38px 0 24px}.books{grid-template-columns:1fr}.book{grid-template-columns:82px 1fr}.cover{width:82px;height:96px}}
 </style><link rel="manifest" href="manifest.webmanifest">
 </head>
@@ -47,6 +47,7 @@
 <nav id="alphabet" class="alphabet" aria-label="Browse books A to Z"></nav>
 <div class="library-head"><div id="count" class="count"></div><div id="mode" class="mode">ALL BOOKS</div></div>
 <div id="books" class="books" role="list"></div>
+<footer class="creator" aria-label="Creator">CICAN GEORGE ALIN</footer>
 </div></main>
 <script type="module">
 import { CATALOG } from "./catalog/index.js";
