@@ -29,13 +29,14 @@ jobs:
 
       - name: Install Chromium
         run: |
+          npm install --no-save --prefix .smoke-test-deps playwright@1.55.0
           npx --yes playwright@1.55.0 install --with-deps chromium
 
       - name: Test the live library and every PUBLIC book
         run: |
           set -euo pipefail
-          cat > smoke-test.mjs <<'JS'
-          import { chromium } from "playwright";
+          cat > smoke-test.cjs <<'JS'
+          const { chromium } = require("playwright");
 
           const BASE = "https://cicangeorgealin.github.io/cican-books/";
           const browser = await chromium.launch({ headless: true });
@@ -99,7 +100,7 @@ jobs:
             await browser.close();
           }
           JS
-          npx --yes -p playwright@1.55.0 node smoke-test.mjs
+          NODE_PATH="$GITHUB_WORKSPACE/.smoke-test-deps/node_modules" node smoke-test.cjs
 
       - name: Record successful deployment smoke test
         if: success()
