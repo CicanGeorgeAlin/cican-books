@@ -1,0 +1,27 @@
+{
+  "result": "PASS",
+  "testedCommit": "05e978425ebc582a072fd33a7a486102892da2b8",
+  "testedAt": "2026-10-07T09:39:28.858Z",
+  "publicBooks": [
+    "dhammapada",
+    "tao-te-ching",
+    "the-republic",
+    "meditations",
+    "walden",
+    "thus-spake-zarathustra",
+    "frankenstein",
+    "dracula",
+    "the-great-gatsby",
+    "nineteen-eighty-four",
+    "moby-dick",
+    "pride-and-prejudice",
+    "alice-adventures-in-wonderland",
+    "adventures-of-sherlock-holmes",
+    "crime-and-punishment",
+    "the-picture-of-dorian-gray",
+    "a-tale-of-two-cities",
+    "the-count-of-monte-cristo",
+    "the-three-musketeers",
+    "the-adventures-of-tom-sawyer"
+  ]
+}
