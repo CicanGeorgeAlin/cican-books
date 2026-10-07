@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "d618bd22a975f6840055c90e613e4965010876ce",
-  "testedAt": "2026-10-07T10:07:27.211Z",
+  "testedCommit": "0d29064a0d3fc4e2c02cdd6c1f5cc0002a5f64b1",
+  "testedAt": "2026-10-07T10:10:14.726Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -24,6 +24,7 @@
     "the-three-musketeers",
     "the-adventures-of-tom-sawyer",
     "adventures-of-huckleberry-finn",
+    "treasure-island",
     "little-women"
   ]
 }
