@@ -37,6 +37,7 @@ jobs:
           set -euo pipefail
           cat > smoke-test.cjs <<'JS'
           const { chromium } = require("playwright");
+          (async () => {
 
           const BASE = "https://cicangeorgealin.github.io/cican-books/";
           const browser = await chromium.launch({ headless: true });
@@ -99,6 +100,7 @@ jobs:
           } finally {
             await browser.close();
           }
+          })();
           JS
           NODE_PATH="$GITHUB_WORKSPACE/.smoke-test-deps/node_modules" node smoke-test.cjs
 
