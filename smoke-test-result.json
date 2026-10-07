@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "b0bb0187187793f389be61e4b1e2891f60349789",
-  "testedAt": "2026-10-07T10:23:19.562Z",
+  "testedCommit": "5f4ca8322596579dc57b2f7b23fbc10d623ae9d9",
+  "testedAt": "2026-10-07T10:31:27.211Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -26,6 +26,7 @@
     "adventures-of-huckleberry-finn",
     "treasure-island",
     "jane-eyre",
-    "little-women"
+    "little-women",
+    "the-wonderful-wizard-of-oz"
   ]
 }
