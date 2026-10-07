@@ -47,11 +47,13 @@ jobs:
           test $(wc -c < fulltext/the-wonderful-wizard-of-oz.txt) -gt 10000
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/35/pg35.txt -o fulltext/the-time-machine.txt
           test $(wc -c < fulltext/the-time-machine.txt) -gt 10000
+          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/46/pg46.txt -o fulltext/a-christmas-carol.txt
+          test $(wc -c < fulltext/a-christmas-carol.txt) -gt 10000
       - name: Commit mirrored sources
         run: |
           git config user.name "CICAN Books Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add fulltext/the-time-machine.txt fulltext/the-wonderful-wizard-of-oz.txt fulltext/jane-eyre.txt fulltext/treasure-island.txt fulltext/the-secret-garden.txt fulltext/the-picture-of-dorian-gray.txt fulltext/alice-adventures-in-wonderland.txt fulltext/adventures-of-sherlock-holmes.txt fulltext/crime-and-punishment.txt fulltext/a-tale-of-two-cities.txt fulltext/the-three-musketeers.txt fulltext/the-count-of-monte-cristo.txt fulltext/the-adventures-of-tom-sawyer.txt fulltext/adventures-of-huckleberry-finn.txt fulltext/little-women.txt
+          git add fulltext/a-christmas-carol.txt fulltext/the-time-machine.txt fulltext/the-wonderful-wizard-of-oz.txt fulltext/jane-eyre.txt fulltext/treasure-island.txt fulltext/the-secret-garden.txt fulltext/the-picture-of-dorian-gray.txt fulltext/alice-adventures-in-wonderland.txt fulltext/adventures-of-sherlock-holmes.txt fulltext/crime-and-punishment.txt fulltext/a-tale-of-two-cities.txt fulltext/the-three-musketeers.txt fulltext/the-count-of-monte-cristo.txt fulltext/the-adventures-of-tom-sawyer.txt fulltext/adventures-of-huckleberry-finn.txt fulltext/little-women.txt
           git diff --cached --quiet && exit 0
           git commit -m "Mirror missing complete public-domain texts"
           git push
