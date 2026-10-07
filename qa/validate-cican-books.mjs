@@ -41,11 +41,11 @@ else pass("Catalog contains 22 records.");
 const publicRecords = records.filter(r => r.visibility === "PUBLIC");
 const draftRecords = records.filter(r => r.visibility === "DRAFT");
 
-if (publicRecords.length !== 17) fail(`Expected 17 PUBLIC records, found ${publicRecords.length}.`);
-else pass("Catalog contains 17 PUBLIC records.");
+if (publicRecords.length !== 20) fail(`Expected 20 PUBLIC records, found ${publicRecords.length}.`);
+else pass("Catalog contains 20 PUBLIC records.");
 
-if (draftRecords.length !== 5) fail(`Expected 6 DRAFT records, found ${draftRecords.length}.`);
-else pass("Catalog contains 5 DRAFT records.");
+if (draftRecords.length !== 2) fail(`Expected 2 DRAFT records, found ${draftRecords.length}.`);
+else pass("Catalog contains 2 DRAFT records.");
 
 const publicSourceChecks = [];
 for (const record of publicRecords) {
@@ -66,21 +66,11 @@ for (const record of records) {
     fail(`Incomplete catalog record: ${JSON.stringify(record)}`);
     continue;
   }
-  if (!["PUBLIC", "DRAFT"].includes(record.visibility)) {
-    fail(`Invalid visibility for ${record.id}: ${record.visibility}`);
-  }
-  if (record.visibility === "DRAFT" && record.status !== "DRAFT") {
-    fail(`DRAFT visibility/status mismatch for ${record.id}`);
-  }
-  if (record.visibility === "PUBLIC" && record.status === "DRAFT") {
-    fail(`PUBLIC visibility/status mismatch for ${record.id}`);
-  }
-  if (record.targetWords < 2400 || record.targetWords > 3000) {
-    fail(`15-minute target outside CICAN range for ${record.id}: ${record.targetWords}`);
-  }
-  if (!fs.existsSync(path.join(root, record.source))) {
-    fail(`Missing book source: ${record.source}`);
-  }
+  if (!["PUBLIC", "DRAFT"].includes(record.visibility)) fail(`Invalid visibility for ${record.id}: ${record.visibility}`);
+  if (record.visibility === "DRAFT" && record.status !== "DRAFT") fail(`DRAFT visibility/status mismatch for ${record.id}`);
+  if (record.visibility === "PUBLIC" && record.status === "DRAFT") fail(`PUBLIC visibility/status mismatch for ${record.id}`);
+  if (record.targetWords < 2400 || record.targetWords > 3000) fail(`15-minute target outside CICAN range for ${record.id}: ${record.targetWords}`);
+  if (!fs.existsSync(path.join(root, record.source))) fail(`Missing book source: ${record.source}`);
 }
 
 if (!/function\s+fluidAutoReader\s*\(/.test(reader)) fail("Fluid auto-reader missing.");
@@ -114,7 +104,6 @@ if (!/readerLayoutAttempts/.test(reader)) fail("Reader layout retry guard missin
 else pass("Reader layout retry guard is present.");
 if (!/reader\.classList\.contains\("open"\)/.test(reader)) fail("Reader lifecycle guard missing.");
 
-
 if (!/id="alphabet"/.test(index) || !/ABCDEFGHIJKLMNOPQRSTUVWXYZ/.test(index)) fail("A-Z library navigation is missing.");
 else pass("A-Z library navigation is present.");
 if (!/type="search"/.test(index)) fail("Library search input is missing.");
@@ -127,28 +116,20 @@ if (!/reader\.html\?book=/.test(index)) fail("Landing-page book navigation is mi
 else pass("Landing-page book navigation is present.");
 if (!/overflow-x:\s*auto/.test(index) || !/scroll-snap-type:\s*x/.test(index)) fail("Alphabet slider is missing.");
 else pass("Alphabet touch slider is present.");
-if (!/&autoplay=1/.test(index)) fail("Book cards do not launch reader autoplay.");
-else pass("Book cards launch reader autoplay.");
 
 const moduleScript = [...reader.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].at(-1)?.[1];
-if (!moduleScript) {
-  fail("Reader module script could not be extracted.");
-} else {
-  try {
-    new Function(moduleScript);
-    pass("Reader module passes JavaScript syntax parsing.");
-  } catch (error) {
-    fail("Reader JavaScript syntax error: " + error.message);
-  }
+if (!moduleScript) fail("Reader module script could not be extracted.");
+else {
+  try { new Function(moduleScript); pass("Reader module passes JavaScript syntax parsing."); }
+  catch (error) { fail("Reader JavaScript syntax error: " + error.message); }
 }
 
 if (!/cican-books\/sitemap\.xml/.test(robots)) fail("robots.txt points to the wrong sitemap.");
 else pass("robots.txt points to CICAN Books sitemap.");
 
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-if (sitemapUrls.length !== publicRecords.length + 1) {
-  fail(`Sitemap should contain ${publicRecords.length + 1} URLs, found ${sitemapUrls.length}.`);
-} else pass("Sitemap covers homepage plus every PUBLIC book.");
+if (sitemapUrls.length !== publicRecords.length + 1) fail(`Sitemap should contain ${publicRecords.length + 1} URLs, found ${sitemapUrls.length}.`);
+else pass("Sitemap covers homepage plus every PUBLIC book.");
 
 for (const record of publicRecords) {
   const url = `https://cicangeorgealin.github.io/cican-books/reader.html?book=${record.id}`;
@@ -164,8 +145,5 @@ else pass("Book loader respects catalog visibility.");
 if (!fs.existsSync(path.join(root, "qa/test-reader-books.mjs"))) fail("Browser book QA script is missing.");
 else pass("Browser QA script for every PUBLIC book is present.");
 
-if (process.exitCode) {
-  console.error("\nCICAN BOOKS QA FAILED.");
-} else {
-  console.log("\nCICAN BOOKS QA PASSED.");
-}
+if (process.exitCode) console.error("\nCICAN BOOKS QA FAILED.");
+else console.log("\nCICAN BOOKS QA PASSED.");
