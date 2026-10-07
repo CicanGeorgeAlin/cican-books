@@ -6,7 +6,7 @@ window.BOOK_READ = {
     difficulty: "CLASSIC",
     targetMinutes: 15,
     targetWords: 2700,
-    fifteenMinuteStartMarker: "CHAPTER I.",
+    fifteenMinuteStartMarker: "The Old Sea-dog at the Admiral Benbow",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
