@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "0a60bcdce66b98b4e81c26e7b4bccf0116e78259",
-  "testedAt": "2026-10-07T14:03:06.974Z",
+  "testedCommit": "27534b31add15c8d1e886654a7fdb917806955ac",
+  "testedAt": "2026-10-07T14:05:34.518Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -29,6 +29,7 @@
     "little-women",
     "the-wonderful-wizard-of-oz",
     "the-time-machine",
-    "a-christmas-carol"
+    "a-christmas-carol",
+    "the-war-of-the-worlds"
   ]
 }
