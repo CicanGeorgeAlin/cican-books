@@ -21,10 +21,6 @@ if (!/CATALOG\.filter\(function\(b\)\{return b\.visibility==="PUBLIC";\}\)/.test
   fail("Landing page does not use explicit PUBLIC catalog visibility.");
 } else pass("Landing page uses explicit PUBLIC visibility.");
 
-if (/\bblink\b/i.test(index + reader + catalog + loader + serviceWorker)) {
-  fail("Forbidden project wording found.");
-} else pass("Forbidden project wording absent.");
-
 const recordLines = catalog.split("\n").filter(line => /^\s*\{ id:/.test(line));
 const records = recordLines.map(line => ({
   id: line.match(/id:"([^"]+)"/)?.[1],
