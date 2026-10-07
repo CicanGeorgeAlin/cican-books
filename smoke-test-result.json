@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "0d29064a0d3fc4e2c02cdd6c1f5cc0002a5f64b1",
-  "testedAt": "2026-10-07T10:10:14.726Z",
+  "testedCommit": "b0bb0187187793f389be61e4b1e2891f60349789",
+  "testedAt": "2026-10-07T10:23:19.562Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -25,6 +25,7 @@
     "the-adventures-of-tom-sawyer",
     "adventures-of-huckleberry-finn",
     "treasure-island",
+    "jane-eyre",
     "little-women"
   ]
 }
