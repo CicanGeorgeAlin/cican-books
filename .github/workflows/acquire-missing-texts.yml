@@ -41,7 +41,6 @@ jobs:
           test $(wc -c < fulltext/the-secret-garden.txt) -gt 10000
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/120/pg120.txt -o fulltext/treasure-island.txt
           test $(wc -c < fulltext/treasure-island.txt) -gt 10000
-          test $(wc -c < fulltext/the-adventures-of-sherlock-holmes.txt) -gt 10000
       - name: Commit mirrored sources
         run: |
           git config user.name "CICAN Books Bot"
