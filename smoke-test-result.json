@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "83e6e69f2f8e262d036be3412b0624edf348dbc8",
-  "testedAt": "2026-10-07T09:43:23.671Z",
+  "testedCommit": "468848995e34c9c901c8233c938ed7e47bdb64d3",
+  "testedAt": "2026-10-07T09:49:39.001Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -23,6 +23,7 @@
     "the-count-of-monte-cristo",
     "the-three-musketeers",
     "the-adventures-of-tom-sawyer",
-    "adventures-of-huckleberry-finn"
+    "adventures-of-huckleberry-finn",
+    "little-women"
   ]
 }
