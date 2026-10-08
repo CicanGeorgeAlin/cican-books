@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "c1c5d9abd678d652d40be6625a6e48e5780718f0",
-  "testedAt": "2026-10-08T12:20:24.513Z",
+  "testedCommit": "9a3eb0070f151c0e56ecdd039da91e5881111c0e",
+  "testedAt": "2026-10-08T16:51:43.848Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -35,6 +35,7 @@
     "the-wind-in-the-willows",
     "around-the-world-in-eighty-days",
     "the-scarlet-letter",
-    "the-jungle-book"
+    "the-jungle-book",
+    "the-adventures-of-pinocchio"
   ]
 }
