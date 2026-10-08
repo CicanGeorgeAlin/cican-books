@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "956d05080709bc04e3e9048906f0aa578fe56bf0",
-  "testedAt": "2026-10-07T16:44:00.643Z",
+  "testedCommit": "ba198348451d33979133008b40ff6d4738d8159e",
+  "testedAt": "2026-10-08T09:12:22.843Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -33,6 +33,7 @@
     "the-war-of-the-worlds",
     "the-call-of-the-wild",
     "the-wind-in-the-willows",
-    "around-the-world-in-eighty-days"
+    "around-the-world-in-eighty-days",
+    "the-scarlet-letter"
   ]
 }
