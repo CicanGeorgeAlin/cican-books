@@ -57,8 +57,10 @@ jobs:
           test $(wc -c < fulltext/the-wind-in-the-willows.txt) -gt 10000
           curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/103/pg103.txt -o fulltext/around-the-world-in-eighty-days.txt
           test $(wc -c < fulltext/around-the-world-in-eighty-days.txt) -gt 10000
-          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/25344/pg25344.txt -o fulltext/the-scarlet-letter.txt
+          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/25344/pg25344.txt -o fulltext/the-jungle-book.txt fulltext/the-scarlet-letter.txt
           test $(wc -c < fulltext/the-scarlet-letter.txt) -gt 10000
+          curl -L --fail --retry 3 --silent --show-error https://www.gutenberg.org/cache/epub/236/pg236.txt -o fulltext/the-jungle-book.txt
+          test $(wc -c < fulltext/the-jungle-book.txt) -gt 10000
       - name: Commit mirrored sources
         run: |
           git config user.name "CICAN Books Bot"
