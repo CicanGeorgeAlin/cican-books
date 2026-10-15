@@ -7,7 +7,7 @@ window.BOOK_READ = {
     targetMinutes: 15,
     targetWords: 2700,
     fifteenMinuteStartMarker: "CHAPTER I",
-    readerSourceStatus: "SOURCE_PENDING_MIRROR",
+    readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
     fullTextSourceVerified: true,
