@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "856f567128b35d58736f8e89db1f61d1719095c9",
-  "testedAt": "2026-10-15T09:20:04.492Z",
+  "testedCommit": "38044d5b58a101c8033856e6f3d892be6310182f",
+  "testedAt": "2026-10-15T09:25:09.143Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -38,6 +38,7 @@
     "the-jungle-book",
     "the-adventures-of-pinocchio",
     "the-invisible-man",
-    "the-island-of-doctor-moreau"
+    "the-island-of-doctor-moreau",
+    "anne-of-green-gables"
   ]
 }
