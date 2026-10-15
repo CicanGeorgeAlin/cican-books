@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "19513edaa9d0073de7b5d382653692436832fab5",
-  "testedAt": "2026-10-15T09:29:43.290Z",
+  "testedCommit": "23c0484c992cd2f6e5cb8c7a19413ac874ee63cd",
+  "testedAt": "2026-10-15T09:38:40.229Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -40,6 +40,7 @@
     "the-invisible-man",
     "the-island-of-doctor-moreau",
     "anne-of-green-gables",
-    "peter-pan"
+    "peter-pan",
+    "a-little-princess"
   ]
 }
