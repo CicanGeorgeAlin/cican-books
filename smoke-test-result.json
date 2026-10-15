@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "228d3930d94af438db9c56a0c71560eb6c6199b8",
-  "testedAt": "2026-10-15T09:48:52.487Z",
+  "testedCommit": "ee25808360068db4785d7c23f88e49f42fcf4e25",
+  "testedAt": "2026-10-15T09:54:09.910Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -43,6 +43,7 @@
     "peter-pan",
     "a-little-princess",
     "black-beauty",
-    "the-railway-children"
+    "the-railway-children",
+    "heidi"
   ]
 }
