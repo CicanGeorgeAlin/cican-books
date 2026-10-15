@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "9a3eb0070f151c0e56ecdd039da91e5881111c0e",
-  "testedAt": "2026-10-08T16:51:43.848Z",
+  "testedCommit": "847c614d2365bf99cab6ac68640367239b4ad0fd",
+  "testedAt": "2026-10-15T09:15:10.952Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -36,6 +36,7 @@
     "around-the-world-in-eighty-days",
     "the-scarlet-letter",
     "the-jungle-book",
-    "the-adventures-of-pinocchio"
+    "the-adventures-of-pinocchio",
+    "the-island-of-doctor-moreau"
   ]
 }
