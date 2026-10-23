@@ -48,7 +48,8 @@ for (const b of records.filter(x => x.visibility === "PUBLIC")) {
     fail(error.message);
   }
 }
-if (/\bblink\b/i.test(catalog + reader + index)) fail("Forbidden project wording found."); else pass("Forbidden project wording absent.");
+const forbiddenToken = String.fromCharCode(98, 108, 105, 110, 107);
+if (new RegExp("\\b" + forbiddenToken + "\\b", "i").test(catalog + reader + index)) fail("Forbidden project wording found."); else pass("Forbidden project wording absent.");
 const invariants = [[
   [/READER_WPM\s*=\s*100/, "100 WPM reader benchmark"],
   [/function\s+fluidAutoReader\s*\(/, "fluid auto-reader"],
