@@ -32,7 +32,7 @@ const records = recordLines.map(line => ({
 }));
 
 if (records.length < 20) fail(`Expected at least 20 catalog records, found ${records.length}.`);
-else pass("Catalog contains 22 records.");
+else pass(`Catalog contains ${records.length} records.`);
 
 const publicRecords = records.filter(r => r.visibility === "PUBLIC");
 const draftRecords = records.filter(r => r.visibility === "DRAFT");
@@ -67,6 +67,16 @@ for (const record of records) {
   if (record.visibility === "PUBLIC" && record.status === "DRAFT") fail(`PUBLIC visibility/status mismatch for ${record.id}`);
   if (record.targetWords < 2400 || record.targetWords > 3000) fail(`15-minute target outside CICAN range for ${record.id}: ${record.targetWords}`);
   if (!fs.existsSync(path.join(root, record.source))) fail(`Missing book source: ${record.source}`);
+  const bookSource = fs.existsSync(path.join(root, record.source)) ? read(record.source) : "";
+  for (const required of ["sourceEdition", "sourceNote", "targetMinutes", "fullTextUrl"]) {
+    if (!new RegExp("\\\\b" + required + "\\\\s*:").test(bookSource)) fail(`Missing ${required} in book source: ${record.id}`);
+  }
+  const fullTextUrl = bookSource.match(/\\bfullTextUrl\\s*:\\s*"([^"]+)"/)?.[1] || "";
+  if (fullTextUrl) {
+    const assetPath = path.join(root, fullTextUrl.replace(/^\\.\\//, ""));
+    if (!fs.existsSync(assetPath)) fail(`Missing full-text asset for ${record.id}: ${fullTextUrl}`);
+    else if (fs.statSync(assetPath).size < 1000) fail(`Full-text asset is unexpectedly short for ${record.id}`);
+  }
 }
 
 if (!/function\s+fluidAutoReader\s*\(/.test(reader)) fail("Fluid auto-reader missing.");
@@ -132,8 +142,9 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-if (!/cican-books-v42/.test(serviceWorker)) fail("Service worker cache version was not bumped.");
-else pass("Service worker cache version is current.");
+const cacheVersion = Number(serviceWorker.match(/const CACHE_NAME = "cican-books-v(\\d+)"/)?.[1] || 0);
+if (cacheVersion < 43) fail("Service worker cache version is stale.");
+else pass(`Service worker cache version v${cacheVersion} is current.`);
 
 if (!/record\.visibility === "PUBLIC"/.test(loader)) fail("Book loader is not aligned with catalog visibility.");
 else pass("Book loader respects catalog visibility.");
