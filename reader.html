@@ -1204,25 +1204,22 @@ function normalizeSourceText(sourceText) {
         String(sourceText || "")
             .replace(/\r\n/g, "\n");
 
-    const startMarker =
-        normalizedText.indexOf(
-            "*** START OF THE PROJECT GUTENBERG EBOOK"
-        );
+    const startMatch =
+        normalizedText.match(/\\*\\*\\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*\\*/i);
 
-    const endMarker =
-        normalizedText.indexOf(
-            "*** END OF THE PROJECT GUTENBERG EBOOK"
-        );
+    const endMatch =
+        normalizedText.match(/\\*\\*\\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*/i);
 
     if (
-        startMarker >= 0 &&
-        endMarker > startMarker
+        startMatch &&
+        endMatch &&
+        endMatch.index > startMatch.index
     ) {
         normalizedText =
             normalizedText
                 .slice(
-                    normalizedText.indexOf("\n", startMarker) + 1,
-                    endMarker
+                    normalizedText.indexOf("\\n", startMatch.index) + 1,
+                    endMatch.index
                 )
                 .trim();
     }
