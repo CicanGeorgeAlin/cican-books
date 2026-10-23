@@ -6,7 +6,7 @@ window.BOOK_READ = {
     difficulty: "CLASSIC",
     targetMinutes: 15,
     targetWords: 2700,
-    fifteenMinuteStartMarker: "Chapter 1. Marseilles",
+    fifteenMinuteStartMarker: "On the 24th of February, 1815",
     readerSourceStatus: "SOURCE_READY",
     fullBookReady: true,
     fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
