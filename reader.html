@@ -1205,10 +1205,10 @@ function normalizeSourceText(sourceText) {
             .replace(/\r\n/g, "\n");
 
     const startMatch =
-        normalizedText.match(/\\*\\*\\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*\\*/i);
+        normalizedText.match(/\*\*\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[\s\S]*?\*\*\*/i);
 
     const endMatch =
-        normalizedText.match(/\\*\\*\\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*/i);
+        normalizedText.match(/\*\*\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[\s\S]*?\*\*\*/i);
 
     if (
         startMatch &&
@@ -1218,7 +1218,7 @@ function normalizeSourceText(sourceText) {
         normalizedText =
             normalizedText
                 .slice(
-                    normalizedText.indexOf("\\n", startMatch.index) + 1,
+                    normalizedText.indexOf("\n", startMatch.index) + 1,
                     endMatch.index
                 )
                 .trim();
