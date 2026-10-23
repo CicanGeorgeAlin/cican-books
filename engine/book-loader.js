@@ -35,12 +35,12 @@ export function getCatalogRecord(bookId) {
 function normalizeReaderSource(sourceText) {
   let text = String(sourceText || "").replace(/\r\n/g, "\n");
 
-  const startMatch = text.match(/\\*\\*\\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*\\*/i);
-  const endMatch = text.match(/\\*\\*\\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*/i);
+  const startMatch = text.match(/\*\*\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[\s\S]*?\*\*\*/i);
+  const endMatch = text.match(/\*\*\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[\s\S]*?\*\*\*/i);
 
   if (startMatch && endMatch && endMatch.index > startMatch.index) {
     text = text
-      .slice(text.indexOf("\\n", startMatch.index) + 1, endMatch.index)
+      .slice(text.indexOf("\n", startMatch.index) + 1, endMatch.index)
       .trim();
   }
 
