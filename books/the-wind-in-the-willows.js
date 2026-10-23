@@ -14,6 +14,7 @@ window.BOOK_READ = {
   fullTextSourceVerification:"Project Gutenberg eBook #289; complete verified plain-text source.",
   sourceEdition:"Project Gutenberg eBook #289, The Wind in the Willows",
   sourceUrl:"https://www.gutenberg.org/ebooks/289",
+    sourceNote: "Complete Project Gutenberg eBook #289 source is stored locally in fulltext/the-wind-in-the-willows.txt. The 15-minute reader begins at CHAPTER I; FULL BOOK uses the same complete source asset.",
   fullTextUrl:"./fulltext/the-wind-in-the-willows.txt",
   gameMode:"classic",
   gameTitle:"THE RIVER JOURNEY",
