@@ -12,8 +12,8 @@ window.BOOK_READ = {
   fullTextSourceType: "COMPLETE_SOURCE_ASSET",
   fullTextSourceVerified: true,
   fullBookReady: true,
-  fifteenMinuteStartMarker: "CHAPTER 1. Loomings.",
-  sourceNote: "Complete Moby Dick source is stored locally in fulltext/moby-dick.txt. The 15 MIN reader is calibrated directly from the verified source beginning at CHAPTER 1. Loomings.; FULL BOOK uses the same complete source asset.",
+  fifteenMinuteStartMarker: "Call me Ishmael.",
+  sourceNote: "Complete Moby Dick source is stored locally in fulltext/moby-dick.txt. The 15 MIN reader is calibrated directly from the verified source beginning at the opening line, Call me Ishmael.; FULL BOOK uses the same complete source asset.",
   sourceUrl: "https://www.gutenberg.org/ebooks/2701",
 prologueScenes: [
     { text: "Enter a world of the sea, wandering, work, danger, and obsession. Before the white whale appears, Ishmael is already searching for a life beyond the ordinary.", button: "CONTINUE" },
