@@ -69,13 +69,13 @@ for (const record of records) {
   if (!fs.existsSync(path.join(root, record.source))) fail(`Missing book source: ${record.source}`);
   const bookSource = fs.existsSync(path.join(root, record.source)) ? read(record.source) : "";
   for (const required of ["sourceEdition", "sourceNote", "targetMinutes", "fullTextUrl"]) {
-    if (!new RegExp("\\\\b" + required + "\\\\s*:").test(bookSource)) fail(`Missing ${required} in book source: ${record.id}`);
+    if (!new RegExp("\\b" + required + "\\s*:").test(bookSource)) fail(\`Missing \${required} in book source: \${record.id}\`);
   }
-  const fullTextUrl = bookSource.match(/\\bfullTextUrl\\s*:\\s*"([^"]+)"/)?.[1] || "";
+  const fullTextUrl = bookSource.match(/\bfullTextUrl\s*:\s*"([^"]+)"/)?.[1] || "";
   if (fullTextUrl) {
-    const assetPath = path.join(root, fullTextUrl.replace(/^\\.\\//, ""));
-    if (!fs.existsSync(assetPath)) fail(`Missing full-text asset for ${record.id}: ${fullTextUrl}`);
-    else if (fs.statSync(assetPath).size < 1000) fail(`Full-text asset is unexpectedly short for ${record.id}`);
+    const assetPath = path.join(root, fullTextUrl.replace(/^\.\//, ""));
+    if (!fs.existsSync(assetPath)) fail(\`Missing full-text asset for \${record.id}: \${fullTextUrl}\`);
+    else if (fs.statSync(assetPath).size < 1000) fail(\`Full-text asset is unexpectedly short for \${record.id}\`);
   }
 }
 
@@ -142,7 +142,7 @@ for (const record of publicRecords) {
   if (!sitemapUrls.includes(url)) fail(`Missing sitemap URL for ${record.id}`);
 }
 
-const cacheVersion = Number(serviceWorker.match(/const CACHE_NAME = "cican-books-v(\\d+)"/)?.[1] || 0);
+const cacheVersion = Number(serviceWorker.match(/const CACHE_NAME = "cican-books-v(\d+)"/)?.[1] || 0);
 if (cacheVersion < 43) fail("Service worker cache version is stale.");
 else pass(`Service worker cache version v${cacheVersion} is current.`);
 
