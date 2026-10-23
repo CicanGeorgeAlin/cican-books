@@ -35,12 +35,12 @@ export function getCatalogRecord(bookId) {
 function normalizeReaderSource(sourceText) {
   let text = String(sourceText || "").replace(/\r\n/g, "\n");
 
-  const startMarker = text.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK");
-  const endMarker = text.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK");
+  const startMatch = text.match(/\\*\\*\\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*\\*/i);
+  const endMatch = text.match(/\\*\\*\\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\\n]*\\*\\*/i);
 
-  if (startMarker >= 0 && endMarker > startMarker) {
+  if (startMatch && endMatch && endMatch.index > startMatch.index) {
     text = text
-      .slice(text.indexOf("\n", startMarker) + 1, endMarker)
+      .slice(text.indexOf("\\n", startMatch.index) + 1, endMatch.index)
       .trim();
   }
 
@@ -156,6 +156,7 @@ export async function loadBook(bookId) {
     }
   }
 
+  validateBook(book);
   return book;
 }
 
