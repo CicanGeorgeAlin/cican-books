@@ -14,6 +14,7 @@ window.BOOK_READ = {
     fullTextSourceVerification: "Project Gutenberg eBook #215; complete verified plain-text source.",
     sourceEdition: "Project Gutenberg eBook #215, The Call of the Wild",
     sourceUrl: "https://www.gutenberg.org/ebooks/215",
+    sourceNote: "Complete Project Gutenberg eBook #215 source is stored locally in fulltext/the-call-of-the-wild.txt. The 15-minute reader begins at CHAPTER I; FULL BOOK uses the same complete source asset.",
     fullTextUrl: "./fulltext/the-call-of-the-wild.txt",
     gameMode: "classic",
     gameTitle: "THE WILD NORTH",
