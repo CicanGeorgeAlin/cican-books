@@ -14,6 +14,7 @@ window.BOOK_READ = {
     fullTextSourceVerification: "Project Gutenberg eBook #36; complete verified plain-text source.",
     sourceEdition: "Project Gutenberg eBook #36, The War of the Worlds",
     sourceUrl: "https://www.gutenberg.org/ebooks/36",
+    sourceNote: "Complete Project Gutenberg eBook #36 source is stored locally in fulltext/the-war-of-the-worlds.txt. The 15-minute reader begins at BOOK ONE; FULL BOOK uses the same complete source asset.",
     fullTextUrl: "./fulltext/the-war-of-the-worlds.txt",
     gameMode: "classic",
     gameTitle: "THE INVASION",
