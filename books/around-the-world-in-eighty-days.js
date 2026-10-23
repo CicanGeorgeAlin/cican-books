@@ -14,6 +14,7 @@ window.BOOK_READ = {
   fullTextSourceVerification:"Project Gutenberg eBook #103; complete verified plain-text source.",
   sourceEdition:"Project Gutenberg eBook #103, Around the World in Eighty Days",
   sourceUrl:"https://www.gutenberg.org/ebooks/103",
+    sourceNote: "Complete Project Gutenberg eBook #103 source is stored locally in fulltext/around-the-world-in-eighty-days.txt. The 15-minute reader begins at CHAPTER I; FULL BOOK uses the same complete source asset.",
   fullTextUrl:"./fulltext/around-the-world-in-eighty-days.txt",
   gameMode:"classic",
   gameTitle:"THE GREAT JOURNEY",
