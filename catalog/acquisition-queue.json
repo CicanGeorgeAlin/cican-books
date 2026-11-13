@@ -1,23 +1,7 @@
 {
   "version": 2,
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
-  "candidates": [
-    {
-      "id": "the-secret-garden",
-      "title": "The Secret Garden",
-      "author": "Frances Hodgson Burnett",
-      "language": "en",
-      "originalPublicationYear": 1911,
-      "sourceRepo": "Project Gutenberg",
-      "sourceEbookId": "17396",
-      "sourceUrl": "https://www.gutenberg.org/ebooks/17396",
-      "sourceStatus": "SOURCE_VERIFIED",
-      "rightsStatus": "TERRITORIAL_REVIEW_REQUIRED",
-      "nextStep": "Use a verified source edition and review territorial status before publication.",
-      "queueStage": "READY_FOR_ACQUISITION",
-      "priority": 12
-    }
-  ],
+  "candidates": [],
   "completedAcquisitions": [
     {
       "id": "alice-adventures-in-wonderland",
@@ -78,6 +62,12 @@
       "sourceEbookId": "37106",
       "status": "ACQUIRED_SOURCE_READY",
       "notes": "Primary English source verified at Project Gutenberg; complete plain-text source available; territorial review remains required before publication."
+    },
+    {
+      "id": "the-scarlet-pimpernel",
+      "sourceEbookId": "60",
+      "status": "ACQUIRED_SOURCE_READY",
+      "notes": "Complete Project Gutenberg eBook #60 text mirrored from GITenberg; full text and opening/ending markers verified; exact normalized source comparison enforced in autopilot QA. Territorial review remains required for non-US publication."
     }
   ]
 }

@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 
 export function sourceTextUrl(record) {
   if (record.sourceRepo === "Project Gutenberg Australia") return record.sourceUrl;
+  if (record.sourceRepo === "GITenberg" && record.sourceId === "60") return "https://raw.githubusercontent.com/GITenberg/The-Scarlet-Pimpernel_60/master/60-0.txt";
   if (record.sourceRepo === "Project Gutenberg" && /^\d+$/.test(record.sourceId)) {
     return "https://www.gutenberg.org/cache/epub/" + record.sourceId + "/pg" + record.sourceId + ".txt";
   }
@@ -15,7 +16,7 @@ export function normalizeSourceText(value) {
   let text = String(value).replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
   text = text.replace(/^---BEGIN AUTHOR TEXT---\s*\n?/m, "");
   text = text.replace(/\n?---END AUTHOR TEXT---\s*$/m, "");
-  const start = text.match(/\*\*\* START OF (?:THE )?PROJECT GUTENBERG EBOOK[^\n]*\*\*\*/i);
+  const start = text.match(/\*\*\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\n]*\*\*\*/i);
   if (start) text = text.slice(start.index + start[0].length);
   const end = text.search(/\*\*\* END OF (?:THE )?PROJECT GUTENBERG EBOOK[^\n]*\*\*\*/i);
   if (end >= 0) text = text.slice(0, end);

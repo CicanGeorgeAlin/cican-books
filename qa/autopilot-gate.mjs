@@ -19,6 +19,7 @@ const records = lines.map(line => ({
   words: Number(line.match(/targetWords:(\d+)/)?.[1] || 0),
   source: line.match(/bookSource:"([^"]+)"/)?.[1] || "",
   sourceUrl: line.match(/sourceUrl:"([^"]+)"/)?.[1] || "",
+  sourceRepo: line.match(/sourceRepo:"([^"]+)"/)?.[1] || "",
   sourceId: line.match(/sourceEbookId:"([^"]+)"/)?.[1] || ""
 }));
 const ids = new Set();
