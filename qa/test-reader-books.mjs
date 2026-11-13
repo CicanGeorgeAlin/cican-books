@@ -28,7 +28,7 @@ for (const book of books) {
   page.on("pageerror", e => errors.push("pageerror: " + e.message));
   page.on("console", m => { if (m.type() === "error") errors.push("console: " + m.text()); });
   try {
-    await page.goto(\`http://127.0.0.1:4173/reader.html?book=\${encodeURIComponent(book.id)}&autoplay=1&fresh=1\`, {waitUntil:"networkidle", timeout:30000});
+    await page.goto(`http://127.0.0.1:4173/reader.html?book=${encodeURIComponent(book.id)}&autoplay=1&fresh=1`, {waitUntil:"networkidle", timeout:30000});
     await page.waitForSelector("#reader.open", {timeout:15000});
     const title = (await page.locator("#readerTitle").innerText()).trim();
     if (title.toUpperCase() !== book.title.toUpperCase()) throw new Error("wrong reader title: " + title + " (expected " + book.title + ")");
@@ -38,9 +38,9 @@ for (const book of books) {
     const after = await page.locator("#readerText").evaluate(el => ({scrollTop:el.scrollTop, text:el.innerText.length, timer:document.getElementById("readerTimer")?.textContent, status:document.getElementById("readerStatus")?.textContent}));
     const moved = after.scrollTop > before.scrollTop + 0.5;
     const timerMoved = after.timer !== before.timer;
-    if (!moved && !timerMoved) throw new Error(\`auto-reader did not advance (scroll \${before.scrollTop}->\${after.scrollTop}, timer \${before.timer}->\${after.timer})\`);
+    if (!moved && !timerMoved) throw new Error(`auto-reader did not advance (scroll ${before.scrollTop}->${after.scrollTop}, timer ${before.timer}->${after.timer})`);
     if (errors.length) throw new Error("browser reported errors: " + errors.join(" | "));
-    results.push({id:book.id, ok:true, title, textChars:after.text, scroll:\`\${before.scrollTop}->\${after.scrollTop}\`, timer:\`\${before.timer}->\${after.timer}\`});
+    results.push({id:book.id, ok:true, title, textChars:after.text, scroll:`${before.scrollTop}->${after.scrollTop}`, timer:`${before.timer}->${after.timer}`});
   } catch (e) {
     results.push({id:book.id, ok:false, error:e.message, errors});
   } finally {
@@ -53,4 +53,4 @@ server.kill();
 for (const r of results) console.log(r.ok ? "PASS:" : "FAIL:", JSON.stringify(r));
 const failed = results.filter(r => !r.ok);
 if (failed.length) process.exitCode = 1;
-else console.log(\`ALL \${results.length} PUBLIC BOOKS PASSED MOBILE BROWSER READER QA.\`);
+else console.log(`ALL ${results.length} PUBLIC BOOKS PASSED MOBILE BROWSER READER QA.`);
