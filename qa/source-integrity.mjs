@@ -18,7 +18,7 @@ export function normalizeSourceText(value) {
   text = text.replace(/\n?---END AUTHOR TEXT---\s*$/m, "");
   const start = text.match(/\*\*\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\n]*\*\*\*/i);
   if (start) text = text.slice(start.index + start[0].length);
-  const end = text.search(/\*\*\* END OF (?:THE )?PROJECT GUTENBERG EBOOK[^\n]*\*\*\*/i);
+  const end = text.search(/\*\*\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\n]*\*\*\*/i);
   if (end >= 0) text = text.slice(0, end);
   return text.split("\n").map(line => line.replace(/[ \t]+$/g, "")).join("\n").trim();
 }

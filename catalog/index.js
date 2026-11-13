@@ -60,7 +60,8 @@ export const CATALOG = Object.freeze([
   { id:"the-railway-children", title:"THE RAILWAY CHILDREN", author:"E. Nesbit", category:"Classic Fiction", translator:"", targetMinutes:15, targetWords:2700, status:"RIGHTS_REVIEW", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg", sourceEbookId:"1874", sourceUrl:"https://www.gutenberg.org/ebooks/1874", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/the-railway-children.js" },
   { id:"heidi", title:"HEIDI", author:"Johanna Spyri", category:"Classic Fiction", translator:"", targetMinutes:15, targetWords:2700, status:"RIGHTS_REVIEW", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg", sourceEbookId:"1448", sourceUrl:"https://www.gutenberg.org/ebooks/1448", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/heidi.js" },
   { id:"the-scarlet-pimpernel", title:"THE SCARLET PIMPERNEL", author:"Baroness Orczy", category:"Historical Fiction", translator:"", targetMinutes:15, targetWords:2700, status:"RIGHTS_REVIEW", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"GITenberg", sourceEbookId:"60", sourceUrl:"https://www.gutenberg.org/ebooks/60", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/the-scarlet-pimpernel.js" },
-]);\nexport function findCatalogBook(id) {
+]);
+export function findCatalogBook(id) {
   return CATALOG.find(book => book.id === id) || null;
 }
 
