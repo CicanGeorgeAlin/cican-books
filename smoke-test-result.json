@@ -1,7 +1,7 @@
 {
   "result": "PASS",
-  "testedCommit": "6d90f6d925389194bf77d1d7d602ff630f317a61",
-  "testedAt": "2026-11-13T15:54:08.276Z",
+  "testedCommit": "7962f000e1ada2c8212fb94489a402c6500d336c",
+  "testedAt": "2026-11-19T23:24:35.399Z",
   "publicBooks": [
     "dhammapada",
     "tao-te-ching",
@@ -46,6 +46,7 @@
     "black-beauty",
     "the-railway-children",
     "heidi",
-    "the-scarlet-pimpernel"
+    "the-scarlet-pimpernel",
+    "the-wars-of-jehovah"
   ]
 }
