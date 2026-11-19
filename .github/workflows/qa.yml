@@ -23,7 +23,7 @@ jobs:
       - name: Run CICAN Books QA
         run: node qa/validate-cican-books.mjs
       - name: Install Playwright
-        run: npm install --no-save playwright@1.55.0
+        run: npm install --no-save playwright@1.65.1
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Run browser QA for every PUBLIC book

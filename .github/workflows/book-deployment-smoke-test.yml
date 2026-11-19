@@ -42,8 +42,8 @@ jobs:
 
       - name: Install Chromium
         run: |
-          npm install --no-save --prefix .smoke-test-deps playwright@1.55.0
-          npx --yes playwright@1.55.0 install --with-deps chromium
+          npm install --no-save --prefix .smoke-test-deps playwright@1.65.1
+          npx --yes playwright@1.65.1 install --with-deps chromium
 
       - name: Test the live library and every PUBLIC book
         run: |
