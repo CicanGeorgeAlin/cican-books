@@ -4,7 +4,7 @@
  * Book content remains in books/*.js and is loaded only when a reader opens a title.
  */
 
-export const CATALOG_VERSION = 9;
+export const CATALOG_VERSION = 10;
 
 export const CATALOG_STATUS = Object.freeze({
   PUBLISHED: "PUBLISHED",

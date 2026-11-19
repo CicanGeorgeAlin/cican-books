@@ -1,0 +1,54 @@
+name: Acquire and prepare The Wars of Jehovah OCR
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  acquire:
+    if: github.event.head_commit.message != 'Mirror The Wars of Jehovah archival OCR source'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Download original Internet Archive OCR
+        run: |
+          set -euo pipefail
+          curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 --silent --show-error https://archive.org/download/warsofjehovahinh00hawk/warsofjehovahinh00hawk_djvu.txt -o fulltext/the-wars-of-jehovah-ocr.txt
+          test $(wc -c < fulltext/the-wars-of-jehovah-ocr.txt) -gt 100000
+      - name: Prepare readable text and provenance
+        run: |
+          set -euo pipefail
+          python3 qa/normalize-archive-ocr.py
+          test $(wc -c < fulltext/the-wars-of-jehovah.txt) -gt 100000
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json
+          raw = Path("fulltext/the-wars-of-jehovah-ocr.txt").read_bytes()
+          clean = Path("fulltext/the-wars-of-jehovah.txt").read_bytes()
+          record = {
+            "title": "The Wars of Jehovah, in Heaven, Earth, and Hell",
+            "author": "Thomas Hawkins",
+            "publication": "London: Francis Baisler, 1844",
+            "illustrator": "John Martin",
+            "source": "https://archive.org/details/warsofjehovahinh00hawk",
+            "ocr_source": "https://archive.org/download/warsofjehovahinh00hawk/warsofjehovahinh00hawk_djvu.txt",
+            "original_ocr_sha256": hashlib.sha256(raw).hexdigest(),
+            "normalized_text_sha256": hashlib.sha256(clean).hexdigest(),
+            "method": "Whitespace normalization only; original OCR retained separately",
+            "quality_note": "Machine OCR has not been manually proofread against every scanned page."
+          }
+          Path("catalog/the-wars-of-jehovah-verification.json").write_text(json.dumps(record, indent=2) + "\n")
+          PY
+      - name: Commit source, readable text and verification record
+        run: |
+          set -euo pipefail
+          git config user.name "CICAN Books Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fulltext/the-wars-of-jehovah-ocr.txt fulltext/the-wars-of-jehovah.txt catalog/the-wars-of-jehovah-verification.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Mirror The Wars of Jehovah archival OCR source"
+          git push
