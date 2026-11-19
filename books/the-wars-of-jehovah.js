@@ -5,7 +5,7 @@ window.BOOK_READ = {
   difficulty: "VERY_DENSE",
   targetMinutes: 15,
   targetWords: 2700,
-  fifteenMinuteStartMarker: "BOOK    I.",
+  fifteenMinuteStartMarker: "BOOK I.",
   readerSourceStatus: "SOURCE_READY",
   fullBookReady: true,
   sourceEdition: "London: Francis Baisler, 1844",
