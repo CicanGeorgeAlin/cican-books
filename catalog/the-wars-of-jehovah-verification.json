@@ -6,7 +6,7 @@
   "source": "https://archive.org/details/warsofjehovahinh00hawk",
   "ocr_source": "https://archive.org/download/warsofjehovahinh00hawk/warsofjehovahinh00hawk_djvu.txt",
   "original_ocr_sha256": "2a47bc440cb09d13f43eb4e5450137f090304a2b924f668d4eb32b42df33640e",
-  "method": "Line-preserving OCR normalization: retains source OCR line breaks and stanza gaps; removes running page headers, isolated page numbers, and marginal verse-count numerals. Original OCR retained separately.",
-  "quality_note": "This improves fidelity to the printed poetic layout, but it remains machine OCR and has not been manually proofread word-for-word against all scanned pages. Exact wording still requires page-by-page visual verification.",
-  "normalized_text_characters": 506215
+  "normalized_text_sha256": "6da793b2f054bdc08ff5634d19d9fe7c703e00dca81eda3c22dd3933e3e7e379",
+  "method": "Whitespace normalization only; original OCR retained separately",
+  "quality_note": "Machine OCR has not been manually proofread against every scanned page."
 }
