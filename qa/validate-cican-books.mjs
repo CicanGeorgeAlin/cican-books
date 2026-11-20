@@ -115,8 +115,8 @@ if (!/id="alphabet"/.test(index) || !/ABCDEFGHIJKLMNOPQRSTUVWXYZ/.test(index)) f
 else pass("A-Z library navigation is present.");
 if (!/type="search"/.test(index)) fail("Library search input is missing.");
 else pass("Library search input is present.");
-if (!/cover\.medium\.jpg/.test(index) || !/class="cover"/.test(index)) fail("Book cover rendering is missing.");
-else pass("Book cover rendering is present.");
+if (!/cover-fallback/.test(index) || !/cover-art-title/.test(index) || !/cover-art-author/.test(index) || !/CICAN CLASSICS/.test(index)) fail("Generated local book cover rendering is missing.");
+else pass("Generated local book cover rendering is present.");
 if (!/localeCompare\(b\.title\)/.test(index)) fail("Alphabetical book sorting is missing.");
 else pass("Alphabetical book sorting is present.");
 if (!/reader\.html\?book=/.test(index)) fail("Landing-page book navigation is missing.");
