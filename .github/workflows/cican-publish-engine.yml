@@ -35,8 +35,59 @@ jobs:
         with:
           node-version: "24"
 
+      - name: Resolve candidate ID
+        id: candidate
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_CANDIDATE_ID: ${{ inputs.candidate_id }}
+          EVENT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            candidate_id="$DISPATCH_CANDIDATE_ID"
+          else
+            mapfile -t candidates < <(git diff-tree --no-commit-id --name-only -r "$EVENT_SHA" | grep -E '^pipeline/inbox/[a-z0-9-]+\.json
+      - name: Run catalogue and repository QA
+        run: |
+          node qa/validate-cican-books.mjs
+
+      - name: Install browser test dependencies
+        run: |
+          npm install --no-save playwright@1.65.1
+          npx playwright install --with-deps chromium
+
+      - name: Test every PUBLIC book in the reader
+        run: node qa/test-reader-books.mjs
+
+      - name: Commit verified book
+        run: |
+          set -euo pipefail
+          git config user.name "CICAN Books Publisher"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog/index.js books/ fulltext/ verification/ pipeline/inbox/ pipeline/processed/
+          git diff --cached --quiet && { echo "No publishable changes."; exit 1; }
+          git commit -m "Publish verified original book: ${{ inputs.candidate_id }}"
+          git push origin main
+ || true)
+            if [ "${#candidates[@]}" -ne 1 ]; then
+              echo "Expected exactly one new/changed candidate manifest in this push; found ${#candidates[@]}."
+              exit 1
+            fi
+            candidate_id="$(basename "${candidates[0]}" .json)"
+          fi
+          if [[ ! "$candidate_id" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+            echo "Invalid candidate ID: $candidate_id"
+            exit 1
+          fi
+          echo "id=$candidate_id" >> "$GITHUB_OUTPUT"
+          echo "Publishing candidate: $candidate_id"
+
+      - name: Syntax-check publisher
+        run: node --check qa/publish-verified-book.mjs
+
       - name: Verify original edition, rights, complete text and exact source
-        run: node qa/publish-verified-book.mjs "${{ inputs.candidate_id }}"
+        run: node qa/publish-verified-book.mjs "${{ steps.candidate.outputs.id }}"
 
       - name: Run catalogue and repository QA
         run: |
