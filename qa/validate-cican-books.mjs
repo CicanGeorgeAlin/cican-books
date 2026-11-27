@@ -115,8 +115,8 @@ if (!/id="alphabet"/.test(index) || !/ABCDEFGHIJKLMNOPQRSTUVWXYZ/.test(index)) f
 else pass("A-Z library navigation is present.");
 if (!/type="search"/.test(index)) fail("Library search input is missing.");
 else pass("Library search input is present.");
-if (!/function coverFor\(b\)/.test(index) || !/Project Gutenberg/.test(index) || !/makeDesignedCover\(b\)/.test(index) || !/makeCover\(b\)/.test(index) || !/Original Project Gutenberg cover/.test(index) || !/addEventListener\("error"/.test(index) || !/CICAN CLASSICS/.test(index)) fail("Verified original-cover loading with designed fallback is missing.");
-else pass("Original Project Gutenberg covers load with a graceful CICAN-designed fallback.");
+if (!/function coverTheme\(b\)/.test(index) || !/function makeCover\(b\)/.test(index) || !/A CICAN READING EDITION/.test(index) || !/cican-cover-art/.test(index) || /gutenberg\.org\/cache\/epub/.test(index)) fail("Locally generated, title-themed CICAN cover artwork is missing or depends on remote cover images.");
+else pass("Every book uses self-contained, title-themed CICAN cover artwork with no external image dependency.");
 if (!/localeCompare\(b\.title\)/.test(index)) fail("Alphabetical book sorting is missing.");
 else pass("Alphabetical book sorting is present.");
 if (!/reader\.html\?book=/.test(index)) fail("Landing-page book navigation is missing.");

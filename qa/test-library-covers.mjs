@@ -24,16 +24,16 @@ try {
       await card.scrollIntoViewIfNeeded();
       await card.locator(".cover, .cover-fallback").waitFor({state:"attached"});
       await page.waitForFunction(el => {
-        const img=el.querySelector("img.cover-image");
-        return !img || (img.complete && img.naturalWidth>0) || !!el.querySelector(".cover-fallback");
-      }, await card.elementHandle(), {timeout:12000}).catch(async () => {
-        throw new Error(viewport.name + ": cover did not load or fall back for card " + i);
+        const img=el.querySelector("img.cican-cover-art");
+        return !!img && img.complete && img.naturalWidth===600 && img.naturalHeight===840 && img.src.startsWith("data:image/svg+xml");
+      }, await card.elementHandle(), {timeout:12000}).catch(() => {
+        throw new Error(viewport.name + ": bespoke local CICAN cover failed to render for card " + i);
       });
       const state = await card.evaluate(el => {
         const image=el.querySelector("img.cover-image");
         const fallback=el.querySelector(".cover-fallback");
         const rect=el.getBoundingClientRect();
-        return {title:el.querySelector(".title")?.textContent?.trim(),cover:!!fallback || (!!image && image.complete && image.naturalWidth>0),width:rect.width,height:rect.height};
+        return {title:el.querySelector(".title")?.textContent?.trim(),cover:!!image && image.complete && image.naturalWidth===600 && image.naturalHeight===840 && image.src.startsWith("data:image/svg+xml"),width:rect.width,height:rect.height};
       });
       if (!state.title || !state.cover || state.width<=0 || state.height<=0) throw new Error(viewport.name + ": invalid card/cover at index " + i);
       results.push({viewport:viewport.name,index:i+1,title:state.title,cover:state.cover});
