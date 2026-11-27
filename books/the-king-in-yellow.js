@@ -1,0 +1,23 @@
+window.BOOK_READ = {
+    title: "The King in Yellow",
+    author: "Robert W. Chambers",
+    category: "Classic Fiction",
+    tradition: "American Literature",
+    difficulty: "CLASSIC",
+    targetMinutes: 15,
+    targetWords: 2700,
+    fifteenMinuteStartMarker: "THE REPAIRER OF REPUTATIONS",
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
+    fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Complete Project Gutenberg eBook #8492 plain-text transcription from the GITenberg mirror, including the complete collection and attached Gutenberg license.",
+    sourceEdition: "Project Gutenberg eBook #8492, The King in Yellow (1895)",
+    sourceTranslator: "",
+    sourceNote: "The 15-minute reader begins at THE REPAIRER OF REPUTATIONS. FULL BOOK uses the complete Project Gutenberg eBook #8492 text asset, including all ten contents entries and its attached license.",
+    sourceUrl: "https://www.gutenberg.org/ebooks/8492",
+    fullTextUrl: "./fulltext/the-king-in-yellow.txt",
+    gameMode: "classic",
+    gameTitle: "THE YELLOW SIGN",
+    gameDNA: ["Carcosa","forbidden literature","identity","madness","mystery","art","reputation"]
+};
