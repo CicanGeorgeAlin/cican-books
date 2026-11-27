@@ -1,0 +1,13 @@
+{
+  "id": "strange-case-dr-jekyll-mr-hyde",
+  "title": "The Strange Case of Dr Jekyll and Mr Hyde",
+  "author": "Robert Louis Stevenson",
+  "category": "Classic Fiction",
+  "publicationYear": 1886,
+  "authorDeathYear": 1894,
+  "publisher": "Longmans, Green & Co.",
+  "sourceEdition": "First published in 1886; CICAN reader text acquired from Project Gutenberg eBook 42.",
+  "gutenbergId": "42",
+  "textSourceUrl": "https://www.gutenberg.org/files/42/42-0.txt",
+  "targetWords": 2700
+}
