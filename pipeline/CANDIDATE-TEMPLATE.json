@@ -1,0 +1,46 @@
+{
+  "id": "example-book-id",
+  "title": "Exact title from original title page",
+  "author": "Author exactly as printed",
+  "category": "Classic Fiction",
+  "publicationYear": 1895,
+  "publisher": "Publisher as printed",
+  "sourceEdition": "Exact edition statement, imprint and year",
+  "translator": "",
+  "sourceUrl": "https://archive.example.org/catalogue-record",
+  "originalScanUrl": "https://archive.example.org/original-scan",
+  "textSourceUrl": "https://archive.example.org/plain-text-for-the-same-edition.txt",
+  "fullTextPath": "fulltext/example-book-id.txt",
+  "expectedSha256": "replace-with-64-character-lowercase-sha256-of-normalized-full-text",
+  "targetWords": 2700,
+  "fifteenMinuteStartMarker": "",
+  "originalEdition": {
+    "verified": false,
+    "evidenceUrl": "https://archive.example.org/edition-evidence"
+  },
+  "fidelity": {
+    "status": "REVIEW_REQUIRED",
+    "method": "PAGE_BY_PAGE",
+    "scanPageCount": 0,
+    "comparedPages": 0,
+    "transcriptionReviewed": false
+  },
+  "rights": {
+    "status": "REVIEW_REQUIRED",
+    "jurisdictions": [],
+    "evidenceUrls": [],
+    "checkedAt": ""
+  },
+  "structure": {
+    "includedSections": [],
+    "openingVerified": false,
+    "endingVerified": false,
+    "allPagesAccountedFor": false
+  },
+  "transcription": {
+    "punctuationVerified": false,
+    "paragraphsVerified": false,
+    "headingsVerified": false,
+    "footnotesAndAppendicesVerified": false
+  }
+}
