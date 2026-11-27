@@ -1,8 +1,6 @@
 name: CICAN Books deployment smoke test
 
 on:
-  push:
-    branches: [main]
   workflow_run:
     workflows: ["CICAN Books — Verified Original Book Publisher"]
     types: [completed]
@@ -13,7 +11,7 @@ permissions:
 
 jobs:
   smoke-test:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout published main branch
@@ -25,9 +23,9 @@ jobs:
         id: target
         run: |
           set -euo pipefail
-          target_sha="$(git rev-parse HEAD)"
+          target_sha="${{ github.event.workflow_run.head_sha }}"
           echo "sha=$target_sha" >> "$GITHUB_OUTPUT"
-          echo "Testing published main commit: $target_sha"
+          echo "Testing published commit: $target_sha"
 
       - name: Wait for the GitHub Pages deployment for this commit
         env:
@@ -74,69 +72,39 @@ jobs:
           cat > smoke-test.cjs <<'JS'
           const { chromium } = require("playwright");
           (async () => {
-
           const BASE = "https://cicangeorgealin.github.io/cican-books/";
           const browser = await chromium.launch({ headless: true });
           const page = await browser.newPage();
-
           try {
             await page.goto(BASE, { waitUntil: "networkidle", timeout: 60000 });
-
             const publicBooks = await page.evaluate(async () => {
               const mod = await import("./catalog/index.js?smoke=" + Date.now());
-              return mod.CATALOG.filter(b => b.visibility === "PUBLIC").map(b => ({
-                id: b.id,
-                title: b.title
-              }));
+              return mod.CATALOG.filter(b => b.visibility === "PUBLIC").map(b => ({ id: b.id, title: b.title }));
             });
-
             if (!publicBooks.length) throw new Error("No PUBLIC books found.");
-
             for (const book of publicBooks) {
               await page.goto(BASE, { waitUntil: "networkidle", timeout: 60000 });
-
               await page.waitForFunction(() => document.querySelectorAll("#books a.book").length > 0, null, { timeout: 30000 });
               const button = page.locator(`a.book[href$="book=${encodeURIComponent(book.id)}"]`).first();
               await button.waitFor({ state: "visible", timeout: 30000 });
               await button.click();
-
-              await page.waitForURL(
-                url => url.searchParams.get("book") === book.id,
-                { timeout: 30000 }
-              );
-
-              await page.waitForFunction(
-                () => document.querySelector("#reader")?.classList.contains("open"),
-                null,
-                { timeout: 30000 }
-              );
-
+              await page.waitForURL(url => url.searchParams.get("book") === book.id, { timeout: 30000 });
+              await page.waitForFunction(() => document.querySelector("#reader")?.classList.contains("open"), null, { timeout: 30000 });
               const result = await page.evaluate(() => ({
                 title: document.querySelector("#readerTitle")?.textContent?.trim() || "",
-                text: document.querySelector("#readerText")?.textContent?.trim() || "",
-                status: document.querySelector("#readerStatus")?.textContent?.trim() || ""
+                text: document.querySelector("#readerText")?.textContent?.trim() || ""
               }));
-
               if (!result.title) throw new Error("Reader title did not load for " + book.id);
               if (!result.text) throw new Error("Reader text did not load for " + book.id);
-
-              if (!result.title.toUpperCase().includes(book.title.toUpperCase().replace(/^THE /,"THE "))) throw new Error("Reader title mismatch for " + book.id);
-              console.log("PASS:", book.id, "| catalog link → reader → book text loaded");
+              if (!result.title.toUpperCase().includes(book.title.toUpperCase())) throw new Error("Reader title mismatch for " + book.id);
+              console.log("PASS:", book.id, "| catalogue → reader → text");
             }
-
             console.log("PASS:", publicBooks.length, "PUBLIC books opened successfully in Chromium.");
-            await import("node:fs/promises").then(fs => fs.writeFile(
-              "smoke-test-result.json",
-              JSON.stringify({
-                result: "PASS",
-                testedCommit: process.env.TARGET_SHA,
-                testedAt: new Date().toISOString(),
-                publicBooks: publicBooks.map(b => b.id)
-              }, null, 2) + "\n"
-            ));
-          } finally {
-            await browser.close();
-          }
+            await import("node:fs/promises").then(fs => fs.writeFile("smoke-test-result.json", JSON.stringify({
+              result: "PASS", testedCommit: process.env.TARGET_SHA, testedAt: new Date().toISOString(),
+              publicBooks: publicBooks.map(b => b.id)
+            }, null, 2) + "\n"));
+          } finally { await browser.close(); }
           })();
           JS
           NODE_PATH="$GITHUB_WORKSPACE/.smoke-test-deps/node_modules" node smoke-test.cjs
