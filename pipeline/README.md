@@ -1,39 +1,34 @@
 # CICAN Books — Verified Original Book Publisher
 
-This is a new, fail-closed publishing pipeline. It does not modify the reader, landing page, shared engine, cover renderer, or the legacy Autopilot Gate.
+This pipeline is a **fail-closed publication validator**, not an autonomous copyright lawyer or a substitute for source research. It preserves the existing reader, landing page, shared engine, cover renderer and legacy Autopilot Gate.
 
-## Intake
+## Token-free execution
 
-1. Prepare an original-edition full-text asset at `fulltext/<id>.txt`.
-2. Add `pipeline/inbox/<id>.json` using `pipeline/CANDIDATE-TEMPLATE.json`.
-3. Establish the exact edition using the original title page / authoritative catalogue and scan.
-4. A reviewer must attest that every page was compared, the transcription preserves punctuation/paragraphs/headings and all included matter, and the complete opening and ending are present.
-5. Add evidence-based rights clearance for both Ireland and the United States. Uncertain rights remain on hold.
-6. Set `expectedSha256` to the SHA-256 of the full-text asset after only UTF-8 BOM removal and CRLF-to-LF newline normalization. The remote text endpoint must resolve to the same exact edition and produce the same normalized hash.
+The publisher now uses the repository-provided `GITHUB_TOKEN` through the standard checkout action. No personal access token and no `CICAN_PUBLISH_TOKEN` secret are required.
 
-## Publish
+1. Prepare one candidate manifest at `pipeline/inbox/<id>.json` and its complete text at `fulltext/<id>.txt`.
+2. Commit those files to `main` (or use the publisher's manual workflow dispatch with the candidate ID).
+3. The publisher validates the manifest, original-edition evidence, rights evidence, full-text hashes and required review attestations.
+4. It runs repository QA and browser reader tests before committing the new book and verification record.
+5. After the publisher completes successfully, the QA and deployment smoke-test workflows are also triggered through `workflow_run`. The smoke test resolves the current published `main` commit, waits for a successful Pages deployment for that exact SHA, then tests the live library and every PUBLIC book in Chromium.
 
-Run GitHub Actions → **CICAN Books — Verified Original Book Publisher** → Run workflow. Enter the candidate ID.
+## What the engine actually verifies
 
-The workflow fails closed unless:
-- the candidate ID is valid and not already in the catalogue;
-- the original edition evidence exists;
-- every page in the scan is recorded as compared;
-- complete-book structure and transcription checks pass;
-- rights evidence covers IE and US;
-- local full text matches the declared SHA-256;
-- the HTTPS authoritative text endpoint returns exactly the same normalized text;
-- existing repository QA and browser reader QA pass.
+- Candidate ID, required fields, HTTPS evidence URLs and duplicate catalogue IDs.
+- The full-text asset exists, is non-trivial, and matches its declared SHA-256 after transport normalization.
+- The authoritative text endpoint returns the same normalized bytes and hash.
+- The candidate manifest contains explicit original-edition, rights, complete-structure and page-by-page review attestations.
+- Repository validation and browser tests pass before the publisher commits.
 
-On success it generates the book source in the existing `window.BOOK_READ` format, appends a PUBLIC catalogue record, writes an auditable `verification/<id>.json`, archives the manifest under `pipeline/processed/`, then commits to main. Existing push workflows handle Pages deployment and deployment smoke tests.
+**Important distinction:** a matching text hash proves the local text matches the remote text endpoint. It does not prove that the endpoint matches every page of the original scan. The publisher also cannot independently prove that a human actually completed page-by-page comparison or legal review. Those remain genuine reviewer responsibilities; never mark them PASS unless they were actually completed and documented. A candidate with missing or uncertain evidence must remain on hold.
 
-## Important limits
+## Current limits
 
-- The workflow does not discover books autonomously or decide copyright law. Research and evidence collection are part of candidate preparation.
-- Page-by-page comparison and rights clearance are explicit reviewer attestations, not magically inferred from a URL.
-- The exact text endpoint must represent the same edition as the scan. If a scan has no reliable matching text endpoint, the candidate remains on hold until a faithful transcription is prepared and reviewed.
-- No source, rights or completeness failure is bypassed just to meet a one-book-per-CONTINUE target.
-- The legacy `book-autopilot-gate.yml` is not invoked or reused.
+- Candidate discovery, archival research, source acquisition, transcription correction and rights analysis are not yet fully automated end-to-end.
+- Machine OCR must not be described as proofread transcription.
+- A public-domain conclusion must be supported for both Ireland and the United States and must account for the exact edition, translator, editor and other separately protected material.
+- One book per CONTINUE is a target, never a reason to bypass a failed check.
+- No new book is considered published until the publisher, post-publish QA, Pages deployment and live reader smoke test all pass.
 
 ## Paths
 
