@@ -4,6 +4,8 @@
   "author": "Author exactly as printed",
   "category": "Classic Fiction",
   "publicationYear": 1895,
+  "authorDeathYear": 1920,
+  "gutenbergId": "12345",
   "publisher": "Publisher as printed",
   "sourceEdition": "Exact edition statement, imprint and year",
   "translator": "",
@@ -23,7 +25,9 @@
     "method": "PAGE_BY_PAGE",
     "scanPageCount": 0,
     "comparedPages": 0,
-    "transcriptionReviewed": false
+    "transcriptionReviewed": false,
+    "reviewerName": "",
+    "reviewedAt": ""
   },
   "rights": {
     "status": "REVIEW_REQUIRED",
