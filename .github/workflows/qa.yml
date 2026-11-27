@@ -6,12 +6,16 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  workflow_run:
+    workflows: ["CICAN Books — Verified Original Book Publisher"]
+    types: [completed]
 
 permissions:
   contents: read
 
 jobs:
   qa:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
