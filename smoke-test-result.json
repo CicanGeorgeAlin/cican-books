@@ -1,8 +1,13 @@
 {
   "result": "PASS",
-  "testedCommit": "0e0602908fbf3d7446de645a409be06e90ea97d9",
-  "testedAt": "2026-11-27T11:45:19.633Z",
+  "testedCommit": "e92077228df3bb7dba7bc184093b2397b7684f59",
+  "testedAt": "2026-11-27T20:44:10.173Z",
   "publicBooks": [
+    "the-enchanted-april",
+    "herland",
+    "the-four-million",
+    "the-king-in-yellow",
+    "strange-case-dr-jekyll-mr-hyde",
     "dhammapada",
     "tao-te-ching",
     "the-republic",
