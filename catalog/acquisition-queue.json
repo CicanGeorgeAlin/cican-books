@@ -1,7 +1,23 @@
 {
   "version": 2,
   "sourcePolicy": "Project Gutenberg first; verify territorial rights before publication",
-  "candidates": [],
+  "candidates": [
+    {
+      "id": "the-moonstone",
+      "sourceEbookId": "155",
+      "status": "RESEARCH_IN_PROGRESS",
+      "author": "Wilkie Collins",
+      "publicationYear": 1868,
+      "authorDeathYear": 1889,
+      "sourceEdition": "The Moonstone: A Romance, Tinsley Brothers, London, 1868, three-volume first edition",
+      "originalScanRecords": [
+        "https://archive.org/details/moonstoneromance01coll",
+        "https://archive.org/details/moonstoneromance02coll",
+        "https://archive.org/details/moonstoneromance03coll"
+      ],
+      "notes": "Project Gutenberg eBook #155 exists, but its text must be compared against the original three-volume 1868 edition. Internet Archive OCR for volume I is accessible and visibly contains OCR errors; OCR for volumes II and III still needs acquisition and all three volumes require page-by-page collation. Rights review for Ireland and US and a named transcription reviewer remain outstanding. Do not publish until all gates pass."
+    }
+  ],
   "completedAcquisitions": [
     {
       "id": "alice-adventures-in-wonderland",
