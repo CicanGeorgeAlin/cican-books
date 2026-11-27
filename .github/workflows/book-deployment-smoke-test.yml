@@ -23,7 +23,7 @@ jobs:
         id: target
         run: |
           set -euo pipefail
-          target_sha="${{ github.event.workflow_run.head_sha }}"
+          target_sha="$(git rev-parse HEAD)"
           echo "sha=$target_sha" >> "$GITHUB_OUTPUT"
           echo "Testing published commit: $target_sha"
 
