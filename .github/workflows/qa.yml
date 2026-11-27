@@ -28,3 +28,5 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run browser QA for every PUBLIC book
         run: node qa/test-reader-books.mjs
+      - name: Test library covers and responsive grid
+        run: node qa/test-library-covers.mjs
