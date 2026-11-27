@@ -1,0 +1,23 @@
+window.BOOK_READ = {
+    title: "The Four Million",
+    author: "O. Henry",
+    category: "Short Stories",
+    tradition: "American Literature",
+    difficulty: "CLASSIC",
+    targetMinutes: 15,
+    targetWords: 2700,
+    fifteenMinuteStartMarker: "TOBIN'S PALM",
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
+    fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Complete Project Gutenberg eBook #2776 plain-text transcription from the GITenberg mirror, containing all twenty-five stories and the attached Project Gutenberg license.",
+    sourceEdition: "Project Gutenberg eBook #2776, The Four Million (1906)",
+    sourceTranslator: "",
+    sourceNote: "The 15-minute reader begins at TOBIN'S PALM. FULL BOOK uses the complete Project Gutenberg eBook #2776 text asset, including all twenty-five stories and its attached license.",
+    sourceUrl: "https://www.gutenberg.org/ebooks/2776",
+    fullTextUrl: "./fulltext/the-four-million.txt",
+    gameMode: "classic",
+    gameTitle: "FOUR MILLION STORIES",
+    gameDNA: ["new-york","humanity","kindness","irony","love","chance","city-life"]
+};
