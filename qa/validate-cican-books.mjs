@@ -115,7 +115,7 @@ if (!/id="alphabet"/.test(index) || !/ABCDEFGHIJKLMNOPQRSTUVWXYZ/.test(index)) f
 else pass("A-Z library navigation is present.");
 if (!/type="search"/.test(index)) fail("Library search input is missing.");
 else pass("Library search input is present.");
-if (!/function escCover\\(value\\)/.test(index) || !/function makeCover\\(b\\)/.test(index) || !/CICAN BOOKS/.test(index) || !/A CLASSIC READING EDITION/.test(index) || !/font-family="Georgia,Times New Roman,serif"/.test(index) || !/fill="#050505"/.test(index) || !/cican-cover-art/.test(index) || /const coverMotifs=|const coverScenes=/.test(index)) fail("Monochrome typographic CICAN cover system or SVG text escaping helper is missing.");
+if (!index.includes("function escCover(value)") || !index.includes("function makeCover(b)") || !index.includes("CICAN BOOKS") || !index.includes("A CLASSIC READING EDITION") || !index.includes('font-family="Georgia,Times New Roman,serif"') || !index.includes('fill="#050505"') || !index.includes("cican-cover-art") || index.includes("const coverMotifs=") || index.includes("const coverScenes=")) fail("Monochrome typographic CICAN cover system or SVG text escaping helper is missing.");
 else pass("Monochrome typographic CICAN cover system is present.");
 if (!/localeCompare\(b\.title\)/.test(index)) fail("Alphabetical book sorting is missing.");
 else pass("Alphabetical book sorting is present.");
