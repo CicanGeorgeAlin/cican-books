@@ -77,3 +77,10 @@ The comparison must:
 - fail closed when an authoritative text endpoint cannot be established.
 
 A title/author/source-page check is not sufficient. A book is not PUBLIC until exact source comparison passes.
+
+
+## Implemented publishing engine (2026-11-27)
+
+A new workflow, `.github/workflows/cican-publish-engine.yml`, and validator, `qa/publish-verified-book.mjs`, implement a fail-closed release path. Prepared candidate manifests are placed in `pipeline/inbox/<id>.json`; the complete text asset is placed at `fulltext/<id>.txt`. Adding a candidate manifest to the inbox on main automatically starts the publisher. The workflow checks edition evidence, reviewer attestations for page-by-page fidelity and rights in Ireland and the United States, complete-book structure, and an exact normalized SHA-256 match between the local asset and the declared HTTPS text source. It then generates the existing BOOK_READ format, adds a PUBLIC catalogue entry, writes an auditable verification report, archives the manifest, runs repository QA and browser reader QA, and commits only on success.
+
+This engine does not use or invoke the legacy `book-autopilot-gate.yml`. It does not alter the reader, landing page, cover renderer or shared engine. Discovery, acquisition, source identity, scan comparison and legal assessment still require evidence-led preparation; a workflow cannot infer these facts merely from a URL. A failed candidate remains in the inbox and is not published.
