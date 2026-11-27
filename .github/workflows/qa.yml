@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: "24"
+      - name: Syntax-check the verified book publisher
+        run: node --check qa/publish-verified-book.mjs
       - name: Run CICAN Books QA
         run: node qa/validate-cican-books.mjs
       - name: Install Playwright
