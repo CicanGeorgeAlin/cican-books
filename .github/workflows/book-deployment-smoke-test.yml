@@ -3,6 +3,9 @@ name: CICAN Books deployment smoke test
 on:
   push:
     branches: [main]
+  workflow_run:
+    workflows: ["CICAN Books — Verified Original Book Publisher"]
+    types: [completed]
 
 permissions:
   contents: write
@@ -10,14 +13,28 @@ permissions:
 
 jobs:
   smoke-test:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout published main branch
         uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Resolve exact published commit
+        id: target
+        run: |
+          set -euo pipefail
+          target_sha="$(git rev-parse HEAD)"
+          echo "sha=$target_sha" >> "$GITHUB_OUTPUT"
+          echo "Testing published main commit: $target_sha"
 
       - name: Wait for the GitHub Pages deployment for this commit
         env:
           GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
         run: |
           set -euo pipefail
           for i in {1..36}; do
@@ -25,7 +42,7 @@ jobs:
               -H "Authorization: Bearer $GH_TOKEN" \
               -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/CicanGeorgeAlin/cican-books/deployments?environment=github-pages&per_page=100")
-            deployment_id=$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.sha == $sha)] | .[0].id // empty' <<< "$deployment_json")
+            deployment_id=$(jq -r --arg sha "$TARGET_SHA" '[.[] | select(.sha == $sha)] | .[0].id // empty' <<< "$deployment_json")
             if [ -n "$deployment_id" ]; then
               state=$(curl -L --fail --silent --show-error                 -H "Authorization: Bearer $GH_TOKEN"                 -H "Accept: application/vnd.github+json"                 "https://api.github.com/repos/CicanGeorgeAlin/cican-books/deployments/$deployment_id/statuses?per_page=1" |
                 jq -r '.[0].state // empty')
@@ -34,7 +51,7 @@ jobs:
                 break
               fi
             else
-              echo "Waiting for GitHub Pages deployment for $GITHUB_SHA..."
+              echo "Waiting for GitHub Pages deployment for $TARGET_SHA..."
             fi
             sleep 10
           done
@@ -49,6 +66,8 @@ jobs:
           npx --yes playwright@1.65.1 install --with-deps chromium
 
       - name: Test the live library and every PUBLIC book
+        env:
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
         run: |
           set -euo pipefail
           cat > smoke-test.cjs <<'JS'
@@ -109,7 +128,7 @@ jobs:
               "smoke-test-result.json",
               JSON.stringify({
                 result: "PASS",
-                testedCommit: process.env.GITHUB_SHA,
+                testedCommit: process.env.TARGET_SHA,
                 testedAt: new Date().toISOString(),
                 publicBooks: publicBooks.map(b => b.id)
               }, null, 2) + "\n"
