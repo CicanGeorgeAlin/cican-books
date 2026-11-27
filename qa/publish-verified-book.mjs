@@ -27,9 +27,11 @@ if (!/^fulltext\/[a-z0-9-]+\.txt$/.test(m.fullTextPath)) fail("fullTextPath must
 if (m.fullTextPath !== "fulltext/" + id + ".txt") fail("fullTextPath must match candidate ID.");
 if (!/^[a-f0-9]{64}$/.test(m.expectedSha256)) fail("expectedSha256 must be a lowercase SHA-256.");
 if (m.originalEdition?.verified !== true || !m.originalEdition?.evidenceUrl) fail("Original edition is not explicitly verified with evidence.");
+try { if (new URL(m.originalEdition.evidenceUrl).protocol !== "https:") fail("Original-edition evidence must use HTTPS."); } catch { fail("Invalid original-edition evidence URL."); }
 if (m.fidelity?.status !== "PASS" || m.fidelity?.comparedPages !== m.fidelity?.scanPageCount || !Number.isInteger(m.fidelity?.scanPageCount) || m.fidelity.scanPageCount < 1) fail("Every page of the original scan must be recorded as compared and passed.");
 if (m.fidelity?.method !== "PAGE_BY_PAGE" || m.fidelity?.transcriptionReviewed !== true) fail("Page-by-page human transcription review is required.");
-if (m.rights?.status !== "PASS" || !Array.isArray(m.rights?.jurisdictions) || !["IE","US"].every(x => m.rights.jurisdictions.includes(x)) || !Array.isArray(m.rights?.evidenceUrls) || m.rights.evidenceUrls.length < 1 || !m.rights?.checkedAt) fail("Rights evidence for Ireland and the United States is required.");
+if (m.rights?.status !== "PASS" || !Array.isArray(m.rights?.jurisdictions) || !["IE","US"].every(x => m.rights.jurisdictions.includes(x)) || !Array.isArray(m.rights?.evidenceUrls) || m.rights.evidenceUrls.length < 1 || !m.rights?.checkedAt || Number.isNaN(Date.parse(m.rights.checkedAt))) fail("Rights evidence for Ireland and the United States is required.");
+for (const evidenceUrl of m.rights.evidenceUrls) { try { if (new URL(evidenceUrl).protocol !== "https:") fail("Rights evidence URLs must use HTTPS."); } catch { fail("Invalid rights evidence URL."); } }
 if (!Array.isArray(m.structure?.includedSections) || m.structure.includedSections.length < 1 || m.structure?.openingVerified !== true || m.structure?.endingVerified !== true || m.structure?.allPagesAccountedFor !== true) fail("Cover-to-cover structure verification is incomplete.");
 if (!m.transcription?.punctuationVerified || !m.transcription?.paragraphsVerified || !m.transcription?.headingsVerified || !m.transcription?.footnotesAndAppendicesVerified) fail("Textual and structural fidelity checks are incomplete.");
 
@@ -50,7 +52,10 @@ const catalogPath = path.join(root, "catalog", "index.js");
 let catalog = fs.readFileSync(catalogPath, "utf8");
 if (catalog.includes('id:"' + id + '"') || catalog.includes("id: '" + id + "'")) fail("Duplicate catalogue ID.");
 const titleUpper = m.title.toUpperCase();
-if (catalog.toLowerCase().includes(m.title.toLowerCase()) && catalog.toLowerCase().includes(m.author.toLowerCase())) fail("Possible title/author duplicate already exists in catalogue.");
+const catalogRecords = catalog.split("\\n").filter(line => /^\\s*\\{ id:/.test(line));
+if (catalogRecords.some(line => line.toLowerCase().includes(m.title.toLowerCase()) && line.toLowerCase().includes(m.author.toLowerCase()))) fail("Possible title/author duplicate already exists in catalogue.");
+const versionMatch = catalog.match(/export const CATALOG_VERSION = (\\d+);/);
+if (!versionMatch) fail("Could not read CATALOG_VERSION.");
 const targetWords = Number.isInteger(m.targetWords) && m.targetWords >= 2400 && m.targetWords <= 3000 ? m.targetWords : 2700;
 const marker = String(m.fifteenMinuteStartMarker || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 const book = {
