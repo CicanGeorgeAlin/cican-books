@@ -21,6 +21,7 @@ concurrency:
 
 jobs:
   verify-and-publish:
+    if: github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'Publish verified original book:')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
