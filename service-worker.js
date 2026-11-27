@@ -1,4 +1,4 @@
-const CACHE_NAME = "cican-books-v54";
+const CACHE_NAME = "cican-books-v55";
 self.addEventListener("install", event => self.skipWaiting());
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
