@@ -61,10 +61,10 @@ function makeCover(b){
   const title=escCover(b.title);
   const author=escCover(b.author);
   const category=escCover((b.category||"CLASSIC").toUpperCase());
-  const words=String(b.title||"").trim().split(/\\s+/);
+  const words=String(b.title||"").trim().split(/\s+/);
   const lines=[];
   let line="";
-  const maxChars=19;
+  const maxChars=16;
   for(const word of words){
     const next=(line+" "+word).trim();
     if(next.length>maxChars&&line){lines.push(line);line=word;}
@@ -76,12 +76,12 @@ function makeCover(b){
     lines.slice(2,4).join(" "),
     lines.slice(4).join(" ")
   ].filter(Boolean):lines;
-  const fontSize=fitted.length>=4?27:fitted.some(x=>x.length>19)?29:fitted.some(x=>x.length>14)?33:39;
+  const fontSize=fitted.length>=4?34:fitted.length===3?38:42;
   const lineHeight=fontSize*1.22;
   const totalHeight=(fitted.length-1)*lineHeight;
   const firstY=438-totalHeight/2;
   const titleSvg=fitted.map((part,i)=>
-    '<text x="300" y="'+(firstY+i*lineHeight)+'" text-anchor="middle" font-family="Georgia,Times New Roman,serif" font-size="'+fontSize+'" font-weight="600" letter-spacing="1.1" fill="#ffffff">'+escCover(part)+'</text>'
+    '<text x="300" y="'+(firstY+i*lineHeight)+'" text-anchor="middle" font-family="Georgia,Times New Roman,serif" font-size="'+fontSize+'" font-weight="700" letter-spacing="0.4" textLength="450" lengthAdjust="spacingAndGlyphs" fill="#ffffff">'+escCover(part)+'</text>'
   ).join("");
   const svg='<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1800" viewBox="0 0 600 900" role="img"><title>'+title+' — '+author+'</title><rect width="600" height="900" fill="#050505"/><rect x="22" y="22" width="556" height="856" fill="none" stroke="#f5f5f5" stroke-width="2"/><rect x="34" y="34" width="532" height="832" fill="none" stroke="#777777" stroke-width="1"/><path d="M72 125H528M72 775H528" stroke="#eeeeee" stroke-width="1.5"/><text x="300" y="91" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" letter-spacing="8" fill="#ffffff">CICAN BOOKS</text><text x="300" y="165" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" letter-spacing="4" fill="#aaaaaa">'+category+'</text><path d="M250 205H350" stroke="#777777" stroke-width="1"/><g>'+titleSvg+'</g><path d="M250 665H350" stroke="#777777" stroke-width="1"/><text x="300" y="720" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" font-weight="600" letter-spacing="2.2" fill="#eeeeee">'+author+'</text><text x="300" y="815" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" letter-spacing="4" fill="#aaaaaa">A CLASSIC READING EDITION</text></svg>';
   const image=document.createElement("img");
