@@ -72,8 +72,10 @@ jobs:
             for (const book of publicBooks) {
               await page.goto(BASE, { waitUntil: "networkidle", timeout: 60000 });
 
-              const button = page.locator("a.book").filter({ hasText: book.title }).first();
-              await button.waitFor({ state: "visible", timeout: 30000 });
+              const button = page.locator('a.book[href*="book="]').filter({ has: page.locator("span.title").filter({ hasText: book.title }) }).first();
+              await page.waitForFunction(() => document.querySelectorAll("#books a.book").length > 0, null, { timeout: 30000 });
+      const button = page.locator(`a.book[href$="book=${encodeURIComponent(book.id)}"]`).first();
+      await button.waitFor({ state: "visible", timeout: 30000 });
               await button.click();
 
               await page.waitForURL(
