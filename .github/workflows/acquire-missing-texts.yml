@@ -1,8 +1,7 @@
 name: Acquire missing complete public-domain texts
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
