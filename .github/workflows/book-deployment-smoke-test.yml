@@ -122,4 +122,4 @@ jobs:
           git add smoke-test-result.json
           git diff --cached --quiet && exit 0
           git commit -m "Record deployment smoke test result [skip ci]"
-          git push
+          git push origin HEAD:main
