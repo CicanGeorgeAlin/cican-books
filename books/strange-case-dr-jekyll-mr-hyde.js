@@ -1,0 +1,23 @@
+window.BOOK_READ = {
+    title: "The Strange Case of Dr Jekyll and Mr Hyde",
+    author: "Robert Louis Stevenson",
+    category: "Classic Fiction",
+    tradition: "English Literature",
+    difficulty: "CLASSIC",
+    targetMinutes: 15,
+    targetWords: 2700,
+    fifteenMinuteStartMarker: "STORY OF THE DOOR",
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
+    fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Complete Project Gutenberg eBook #42 plain-text transcription, including the Gutenberg license.",
+    sourceEdition: "Project Gutenberg eBook #42, The Strange Case of Dr. Jekyll and Mr. Hyde",
+    sourceTranslator: "",
+    sourceNote: "The 15-minute reader begins at STORY OF THE DOOR. FULL BOOK uses the complete Project Gutenberg eBook #42 text asset, including its attached license.",
+    sourceUrl: "https://www.gutenberg.org/ebooks/42",
+    fullTextUrl: "./fulltext/strange-case-dr-jekyll-mr-hyde.txt",
+    gameMode: "classic",
+    gameTitle: "THE DOUBLE",
+    gameDNA: ["identity","duality","reputation","desire","science","secrecy","consequence"]
+};
