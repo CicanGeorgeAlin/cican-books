@@ -1,0 +1,23 @@
+window.BOOK_READ = {
+    title: "Herland",
+    author: "Charlotte Perkins Gilman",
+    category: "Classic Fiction",
+    tradition: "American Literature",
+    difficulty: "CLASSIC",
+    targetMinutes: 15,
+    targetWords: 2700,
+    fifteenMinuteStartMarker: "CHAPTER 1. A Not Unnatural Enterprise",
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
+    fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Complete Project Gutenberg eBook #32 plain-text transcription from the GITenberg mirror, including all twelve chapters and the attached Gutenberg license.",
+    sourceEdition: "Project Gutenberg eBook #32, Herland (1915)",
+    sourceTranslator: "",
+    sourceNote: "The 15-minute reader begins at CHAPTER 1. A Not Unnatural Enterprise. FULL BOOK uses the complete Project Gutenberg eBook #32 text asset, including all twelve chapters and its attached license.",
+    sourceUrl: "https://www.gutenberg.org/ebooks/32",
+    fullTextUrl: "./fulltext/herland.txt",
+    gameMode: "classic",
+    gameTitle: "THE HIDDEN COUNTRY",
+    gameDNA: ["utopia","discovery","society","gender","education","community","progress"]
+};
