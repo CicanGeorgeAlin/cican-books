@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
+import { spawnSync } from "node:child_process";
 
 const root = process.cwd();
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
@@ -127,8 +129,16 @@ else pass("Alphabet touch slider is present.");
 const moduleScript = [...reader.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].at(-1)?.[1];
 if (!moduleScript) fail("Reader module script could not be extracted.");
 else {
-  try { new Function(moduleScript); pass("Reader module passes JavaScript syntax parsing."); }
-  catch (error) { fail("Reader JavaScript syntax error: " + error.message); }
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "cican-reader-module-"));
+  const tempFile = path.join(tempDir, "reader-module.mjs");
+  try {
+    fs.writeFileSync(tempFile, moduleScript, "utf8");
+    const check = spawnSync(process.execPath, ["--check", tempFile], { encoding: "utf8" });
+    if (check.status === 0) pass("Reader ES module passes Node syntax parsing.");
+    else fail("Reader ES module syntax error: " + (check.stderr || check.stdout || "unknown error").trim());
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
 }
 
 if (!/cican-books\/sitemap\.xml/.test(robots)) fail("robots.txt points to the wrong sitemap.");

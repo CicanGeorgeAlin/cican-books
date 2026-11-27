@@ -2,7 +2,7 @@ name: CICAN Books deployment smoke test
 
 on:
   workflow_run:
-    workflows: ["CICAN Books — Verified Original Book Publisher"]
+    workflows: ["pages build and deployment"]
     types: [completed]
 
 permissions:

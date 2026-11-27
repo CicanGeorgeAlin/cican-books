@@ -61,7 +61,27 @@ export async function verifySourceIntegrity({ root, record }) {
     const sourceText = normalizeSourceText(remoteText);
     return { url, sha256: sha256(sourceText), characters: sourceText.length, mode: "DIRECT_AUTHORITATIVE_SOURCE" };
   }
-  const localText = normalizeSourceText(book.fullText);
+  let localRawText = book.fullText;
+  if (!localRawText && book.fullTextUrl) {
+    if (/^https?:\\/\\//i.test(book.fullTextUrl)) {
+      if (book.fullTextUrl === url) {
+        const sourceText = normalizeSourceText(remoteText);
+        return { url, sha256: sha256(sourceText), characters: sourceText.length, mode: "DIRECT_AUTHORITATIVE_SOURCE" };
+      }
+      const bundledResponse = await fetch(book.fullTextUrl, {
+        headers: { "User-Agent": "CICAN-Books-Autopilot/1.0" }
+      });
+      if (!bundledResponse.ok) throw new Error("Book text HTTP " + bundledResponse.status + ": " + book.fullTextUrl);
+      localRawText = await bundledResponse.text();
+    } else {
+      const assetPath = path.resolve(root, book.fullTextUrl.replace(/^\\.\\//, ""));
+      const rootPath = path.resolve(root) + path.sep;
+      if (!assetPath.startsWith(rootPath)) throw new Error("Book text path escapes repository: " + record.id);
+      if (!fs.existsSync(assetPath)) throw new Error("Missing local full-text asset: " + book.fullTextUrl);
+      localRawText = fs.readFileSync(assetPath, "utf8");
+    }
+  }
+  const localText = normalizeSourceText(localRawText);
   const sourceText = normalizeSourceText(remoteText);
   const localHash = sha256(localText);
   const sourceHash = sha256(sourceText);
