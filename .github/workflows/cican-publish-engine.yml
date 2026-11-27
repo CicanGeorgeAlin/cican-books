@@ -1,0 +1,56 @@
+name: CICAN Books — Verified Original Book Publisher
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_id:
+        description: "ID of a fully prepared candidate in pipeline/inbox/<id>.json"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cican-book-publisher-main
+  cancel-in-progress: false
+
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Verify original edition, rights, complete text and exact source
+        run: node qa/publish-verified-book.mjs "${{ inputs.candidate_id }}"
+
+      - name: Run catalogue and repository QA
+        run: |
+          node qa/validate-cican-books.mjs
+
+      - name: Install browser test dependencies
+        run: |
+          npm install --no-save playwright@1.65.1
+          npx playwright install --with-deps chromium
+
+      - name: Test every PUBLIC book in the reader
+        run: node qa/test-reader-books.mjs
+
+      - name: Commit verified book
+        run: |
+          set -euo pipefail
+          git config user.name "CICAN Books Publisher"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog/index.js books/ fulltext/ verification/ pipeline/processed/
+          git diff --cached --quiet && { echo "No publishable changes."; exit 1; }
+          git commit -m "Publish verified original book: ${{ inputs.candidate_id }}"
+          git push origin main
