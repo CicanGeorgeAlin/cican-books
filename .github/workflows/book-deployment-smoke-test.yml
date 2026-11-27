@@ -21,8 +21,11 @@ jobs:
         run: |
           set -euo pipefail
           for i in {1..36}; do
-            deployment_id=$(curl -L --fail --silent --show-error               -H "Authorization: Bearer $GH_TOKEN"               -H "Accept: application/vnd.github+json"               "https://api.github.com/repos/CicanGeorgeAlin/cican-books/deployments?environment=github-pages&per_page=1" |
-              jq -r '.[0].id // empty')
+            deployment_json=$(curl -L --fail --silent --show-error \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/CicanGeorgeAlin/cican-books/deployments?environment=github-pages&per_page=100")
+            deployment_id=$(jq -r --arg sha "$GITHUB_SHA" '[.[] | select(.sha == $sha)] | .[0].id // empty' <<< "$deployment_json")
             if [ -n "$deployment_id" ]; then
               state=$(curl -L --fail --silent --show-error                 -H "Authorization: Bearer $GH_TOKEN"                 -H "Accept: application/vnd.github+json"                 "https://api.github.com/repos/CicanGeorgeAlin/cican-books/deployments/$deployment_id/statuses?per_page=1" |
                 jq -r '.[0].state // empty')
