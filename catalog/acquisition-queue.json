@@ -16,6 +16,20 @@
         "https://archive.org/details/moonstoneromance03coll"
       ],
       "notes": "Project Gutenberg eBook #155 exists, but its text must be compared against the original three-volume 1868 edition. Internet Archive OCR for volume I is accessible and visibly contains OCR errors; OCR for volumes II and III still needs acquisition and all three volumes require page-by-page collation. Rights review for Ireland and US and a named transcription reviewer remain outstanding. Do not publish until all gates pass."
+    },
+    {
+      "id": "the-man-who-was-thursday",
+      "sourceEbookId": "1695",
+      "status": "RESEARCH_IN_PROGRESS",
+      "author": "G. K. Chesterton",
+      "publicationYear": 1908,
+      "authorDeathYear": 1936,
+      "sourceEdition": "The Man Who Was Thursday: A Nightmare, J. W. Arrowsmith, Bristol, with London distribution by Simpkin, Marshall, Hamilton, Kent & Co., 1908",
+      "originalScanRecords": [
+        "https://en.wikisource.org/wiki/Index:Chesterton_-_The_Man_Who_Was_Thursday.djvu",
+        "https://archive.org/details/manwhowasthursda00chesrich"
+      ],
+      "notes": "Project Gutenberg eBook #1695 is the complete-text candidate and is listed public domain in the USA. The 1908 original scan is identified by Wikisource with 340 pages; all pages of the work proper are marked validated and fully transcluded there, but that Wikisource transcription is CC BY-SA and must not be copied into CICAN without meeting its attribution/share-alike terms. The original scan must be independently collated against the Project Gutenberg text, including front matter, chapter structure, and ending. Irish term calculation: author died 1936; Ireland's life+70 rule indicates expiry at the end of 2006 (public domain from 1 Jan 2007), subject to edition-specific rights review. US publication date is 1908; Gutenberg identifies its edition as public domain in the USA. Territorial legal sign-off and named human transcription review remain outstanding. Do not publish until all gates pass."
     }
   ],
   "completedAcquisitions": [
