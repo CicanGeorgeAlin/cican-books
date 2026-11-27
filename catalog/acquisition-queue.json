@@ -30,6 +30,20 @@
         "https://archive.org/details/manwhowasthursda00chesrich"
       ],
       "notes": "Project Gutenberg eBook #1695 is the complete-text candidate and identifies the work as public domain in the USA. The 1908 original scan is identified by Wikimedia Commons as a 340-page file from the Internet Archive, published by J. W. Arrowsmith and Simpkin, Marshall, Hamilton, Kent & Co.; author death is recorded as 14 June 1936. The Intellectual Property Office of Ireland states literary copyright expires 70 years after the author's death and typographical arrangement of a published edition after 50 years; this supports a preliminary calculation of the underlying text entering the Irish public domain on 1 January 2007 and the 1908 edition layout term expiring after 1958. This is a preliminary source-based calculation, not legal sign-off; edition-specific additions and territorial exceptions still require review. Gutenberg HTML confirms chapter I and the ending marker; sampled chapter headings include I, IV, X and XIV, but a full page-by-page comparison of the Gutenberg text against the original scan remains outstanding. The Wikisource transcription is CC BY-SA and must not be copied into CICAN without meeting its attribution/share-alike terms. A named human transcription reviewer remains outstanding. Do not publish until all gates pass."
+    },
+    {
+      "id": "the-thirty-nine-steps",
+      "sourceEbookId": "558",
+      "status": "RESEARCH_IN_PROGRESS",
+      "author": "John Buchan",
+      "publicationYear": 1915,
+      "authorDeathYear": 1940,
+      "sourceEdition": "The Thirty-Nine Steps, William Blackwood and Sons, Edinburgh and London, 1915, first book edition (reported publication date 19 October 1915)",
+      "originalScanRecords": [
+        "https://archive.org/details/thirtyninesteps00buchgoog",
+        "https://archive.org/details/thirtyninesteps00buch_2"
+      ],
+      "notes": "Project Gutenberg eBook #558 supplies a complete English text candidate, with ten chapter headings and a September 1915 dedication; Gutenberg explicitly marks it public domain in the USA. John Buchan is recorded as 1875–1940, supporting a preliminary Irish life-plus-70 calculation of 1 January 2011 for the underlying text under IPOI guidance. A digitised 1915 scan is identified in Wikimedia Commons as a 249-page Grosset & Dunlap US edition; a separate Internet Archive record is identified as a 1915 New York G. H. Doran Company microfilm, 248 pages. Neither scan is yet established as the exact UK first book edition from William Blackwood and Sons. A rare-book catalogue independently identifies the UK first edition as Edinburgh/London, William Blackwood & Sons, 1915, but Gutenberg text has not been compared page by page against that edition. Rights assessment remains preliminary, and a named human transcription reviewer is outstanding. Do not publish until exact-edition collation, Ireland/US rights review, and all human attestations pass."
     }
   ],
   "completedAcquisitions": [
