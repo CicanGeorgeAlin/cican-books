@@ -4,7 +4,7 @@
  * Book content remains in books/*.js and is loaded only when a reader opens a title.
  */
 
-export const CATALOG_VERSION = 14;
+export const CATALOG_VERSION = 15;
 
 export const CATALOG_STATUS = Object.freeze({
   PUBLISHED: "PUBLISHED",
@@ -15,6 +15,8 @@ export const CATALOG_STATUS = Object.freeze({
 });
 
 export const CATALOG = Object.freeze([
+  { id:"the-enchanted-april", title:"THE ENCHANTED APRIL", author:"Elizabeth von Arnim", category:"Classic Fiction", translator:"", targetMinutes:15, targetWords:2700, status:"PUBLISHED", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg / GITenberg", sourceEbookId:"16389", sourceUrl:"https://www.gutenberg.org/ebooks/16389", rightsStatus:"PUBLIC_DOMAIN_US_IRELAND", bookSource:"books/the-enchanted-april.js" },
+
   { id:"herland", title:"HERLAND", author:"Charlotte Perkins Gilman", category:"Utopian Fiction", translator:"", targetMinutes:15, targetWords:2700, status:"PUBLISHED", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg / GITenberg", sourceEbookId:"32", sourceUrl:"https://www.gutenberg.org/ebooks/32", rightsStatus:"PUBLIC_DOMAIN_US_IRELAND", bookSource:"books/herland.js" },
   { id:"the-four-million", title:"THE FOUR MILLION", author:"O. Henry", category:"Short Stories", translator:"", targetMinutes:15, targetWords:2700, status:"PUBLISHED", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg / GITenberg", sourceEbookId:"2776", sourceUrl:"https://www.gutenberg.org/ebooks/2776", rightsStatus:"PUBLIC_DOMAIN_US_IRELAND", bookSource:"books/the-four-million.js" },
 

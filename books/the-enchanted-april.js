@@ -1,0 +1,23 @@
+window.BOOK_READ = {
+    title: "The Enchanted April",
+    author: "Elizabeth von Arnim",
+    category: "Classic Fiction",
+    tradition: "British Literature",
+    difficulty: "CLASSIC",
+    targetMinutes: 15,
+    targetWords: 2700,
+    fifteenMinuteStartMarker: "Chapter 1",
+    readerSourceStatus: "SOURCE_READY",
+    fullBookReady: true,
+    fullTextSourceType: "COMPLETE_EXTERNAL_SOURCE_ASSET",
+    fullTextSourceVerified: true,
+    fullTextSourceVerification: "Complete Project Gutenberg eBook #16389 plain-text transcription from the GITenberg mirror, including all twenty-two chapters and the attached Project Gutenberg licence.",
+    sourceEdition: "Project Gutenberg eBook #16389, The Enchanted April (1922)",
+    sourceTranslator: "",
+    sourceNote: "The 15-minute reader begins at Chapter 1. FULL BOOK uses the complete Project Gutenberg eBook #16389 text asset, including all twenty-two chapters and its attached licence.",
+    sourceUrl: "https://www.gutenberg.org/ebooks/16389",
+    fullTextUrl: "./fulltext/the-enchanted-april.txt",
+    gameMode: "classic",
+    gameTitle: "THE ENCHANTED APRIL",
+    gameDNA: ["friendship","renewal","italy","sunshine","escape","kindness","transformation"]
+};
