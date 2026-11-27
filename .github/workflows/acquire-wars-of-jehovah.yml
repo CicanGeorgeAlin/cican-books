@@ -1,8 +1,7 @@
 name: Acquire and prepare The Wars of Jehovah OCR
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
