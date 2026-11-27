@@ -1,6 +1,10 @@
 name: CICAN Books — Verified Original Book Publisher
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "pipeline/inbox/**"
   workflow_dispatch:
     inputs:
       candidate_id:
@@ -50,7 +54,7 @@ jobs:
           set -euo pipefail
           git config user.name "CICAN Books Publisher"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add catalog/index.js books/ fulltext/ verification/ pipeline/processed/
+          git add catalog/index.js books/ fulltext/ verification/ pipeline/inbox/ pipeline/processed/
           git diff --cached --quiet && { echo "No publishable changes."; exit 1; }
           git commit -m "Publish verified original book: ${{ inputs.candidate_id }}"
           git push origin main
