@@ -17,6 +17,23 @@ for (const key of ["id","title","author","category","publicationYear","authorDea
   if (m[key] === undefined || m[key] === null || m[key] === "") fail("Missing " + key);
 }
 if (m.id !== id) fail("Candidate ID mismatch.");
+// Human-review gates: never infer or manufacture these attestations.
+if (!m.originalEdition || m.originalEdition.verified !== true || !/^https:\/\//.test(m.originalEdition.evidenceUrl || "")) fail("Original-edition verification attestation is missing.");
+if (!m.fidelity || m.fidelity.status !== "PASS" || m.fidelity.method !== "PAGE_BY_PAGE" ||
+    !Number.isInteger(m.fidelity.scanPageCount) || m.fidelity.scanPageCount < 1 ||
+    m.fidelity.comparedPages !== m.fidelity.scanPageCount || m.fidelity.transcriptionReviewed !== true ||
+    !m.fidelity.reviewerName || !m.fidelity.reviewedAt) fail("Page-by-page fidelity review is incomplete or lacks a named reviewer and review date.");
+if (!m.rights || m.rights.status !== "PASS" ||
+    !Array.isArray(m.rights.jurisdictions) || !m.rights.jurisdictions.includes("IE") || !m.rights.jurisdictions.includes("US") ||
+    !Array.isArray(m.rights.evidenceUrls) || m.rights.evidenceUrls.length < 2 ||
+    m.rights.evidenceUrls.some(url => !/^https:\/\//.test(url)) || !m.rights.checkedAt) fail("Ireland and US rights review evidence is incomplete.");
+if (!m.structure || !Array.isArray(m.structure.includedSections) || m.structure.includedSections.length < 1 ||
+    m.structure.openingVerified !== true || m.structure.endingVerified !== true ||
+    m.structure.allPagesAccountedFor !== true) fail("Complete-work structure review is incomplete.");
+if (!m.transcription || m.transcription.punctuationVerified !== true ||
+    m.transcription.paragraphsVerified !== true || m.transcription.headingsVerified !== true ||
+    m.transcription.footnotesAndAppendicesVerified !== true) fail("Transcription detail review is incomplete.");
+if (!/^[a-f0-9]{64}$/.test(m.expectedSha256 || "")) fail("A normalized full-text SHA-256 from the reviewed source is required.");
 if (!Number.isInteger(m.publicationYear) || m.publicationYear > 1930) fail("This simple publisher accepts editions published no later than 1930.");
 if (!Number.isInteger(m.authorDeathYear) || m.authorDeathYear > 1955) fail("Author death year does not meet the conservative Ireland life+70 check for 2026.");
 if (!/^\d+$/.test(String(m.gutenbergId))) fail("Invalid Project Gutenberg ebook number.");
@@ -44,6 +61,7 @@ const fullTextPath = "fulltext/" + id + ".txt";
 fs.mkdirSync(path.dirname(path.join(root, fullTextPath)), { recursive: true });
 fs.writeFileSync(path.join(root, fullTextPath), text + "\n", "utf8");
 const hash = sha256(text);
+if (hash !== m.expectedSha256) fail("Downloaded complete source does not match the reviewed expected SHA-256.");
 
 const catalogPath = path.join(root, "catalog", "index.js");
 let catalog = fs.readFileSync(catalogPath, "utf8");
@@ -80,6 +98,13 @@ const report = {
   source: { provider: "Project Gutenberg", ebookId: String(m.gutenbergId), catalogueUrl: sourceUrl, textUrl, publicationYear: m.publicationYear, authorDeathYear: m.authorDeathYear, publisher: m.publisher, edition: m.sourceEdition },
   rightsCheck: { result: "PASS_BY_DECLARED_DATES", rule: "US publication before 1931; Ireland author death before 1956; no translator declared", note: "Conservative automated screening, not a legal opinion." },
   text: { path: fullTextPath, characters: text.length, words: wordCount, sha256: hash, startMarkerFound: true, endMarkerFound: true },
+  review: {
+    originalEditionVerified: true,
+    fidelity: m.fidelity,
+    rights: m.rights,
+    structure: m.structure,
+    transcription: m.transcription
+  },
   acquiredAt: new Date().toISOString(), releaseStatus: "PUBLISHED"
 };
 fs.writeFileSync(path.join(verificationDir, id + ".json"), JSON.stringify(report, null, 2) + "\n");
