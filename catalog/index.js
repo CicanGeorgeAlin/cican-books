@@ -4,7 +4,7 @@
  * Book content remains in books/*.js and is loaded only when a reader opens a title.
  */
 
-export const CATALOG_VERSION = 10;
+export const CATALOG_VERSION = 11;
 
 export const CATALOG_STATUS = Object.freeze({
   PUBLISHED: "PUBLISHED",
@@ -15,6 +15,8 @@ export const CATALOG_STATUS = Object.freeze({
 });
 
 export const CATALOG = Object.freeze([
+  { id:"strange-case-dr-jekyll-mr-hyde", title:"THE STRANGE CASE OF DR JEKYLL AND MR HYDE", author:"Robert Louis Stevenson", category:"Classic Fiction", translator:"", targetMinutes:15, targetWords:2700, status:"PUBLISHED", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg", sourceEbookId:"42", sourceUrl:"https://www.gutenberg.org/ebooks/42", rightsStatus:"PUBLIC_DOMAIN_US_IRELAND", bookSource:"books/strange-case-dr-jekyll-mr-hyde.js" },
+
   { id:"dhammapada", title:"THE DHAMMAPADA", author:"F. Max Müller", category:"Buddhism", translator:"F. Max Müller", targetMinutes:15, targetWords:2807, status:"RIGHTS_REVIEW", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg", sourceEbookId:"2017", sourceUrl:"https://www.gutenberg.org/ebooks/2017", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/dhammapada.js" },
   { id:"tao-te-ching", title:"TAO TE CHING", author:"Laozi", category:"Taoism", translator:"James Legge", targetMinutes:15, targetWords:2917, status:"CONTENT_REVIEW", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg", sourceEbookId:"216", sourceUrl:"https://www.gutenberg.org/ebooks/216", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/tao-te-ching.js" },
   { id:"the-republic", title:"THE REPUBLIC", author:"Plato", category:"Philosophy", translator:"Benjamin Jowett", targetMinutes:15, targetWords:3000, status:"CONTENT_REVIEW", visibility:"PUBLIC", fullBookReady:true, sourceRepo:"Project Gutenberg", sourceEbookId:"1497", sourceUrl:"https://www.gutenberg.org/ebooks/1497", rightsStatus:"TERRITORIAL_REVIEW_REQUIRED", bookSource:"books/the-republic.js" },
