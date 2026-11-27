@@ -21,12 +21,20 @@ if (!Number.isInteger(m.publicationYear) || m.publicationYear > 1930) fail("This
 if (!Number.isInteger(m.authorDeathYear) || m.authorDeathYear > 1955) fail("Author death year does not meet the conservative Ireland life+70 check for 2026.");
 if (!/^\d+$/.test(String(m.gutenbergId))) fail("Invalid Project Gutenberg ebook number.");
 const sourceUrl = "https://www.gutenberg.org/ebooks/" + m.gutenbergId;
-const textUrl = m.textSourceUrl || "https://www.gutenberg.org/files/" + m.gutenbergId + "/" + m.gutenbergId + "-0.txt";
-let response;
-try {
-  response = await fetch(textUrl, { redirect: "follow", signal: AbortSignal.timeout(90000), headers: { "User-Agent": "CICAN-Books/1.0 (public-domain text acquisition)" } });
-} catch (error) { fail("Could not retrieve Project Gutenberg text: " + error.message); }
-if (!response.ok) fail("Project Gutenberg text returned HTTP " + response.status + " at " + textUrl);
+const textUrls = m.textSourceUrl ? [m.textSourceUrl] : [
+  "https://www.gutenberg.org/ebooks/" + m.gutenbergId + ".txt.utf-8",
+  "https://gutenberg.pglaf.org/cache/epub/" + m.gutenbergId + "/pg" + m.gutenbergId + ".txt",
+  "https://www.gutenberg.org/files/" + m.gutenbergId + "/" + m.gutenbergId + "-0.txt"
+];
+let response = null;
+let textUrl = "";
+for (const candidateUrl of textUrls) {
+  try {
+    const candidate = await fetch(candidateUrl, { redirect: "follow", signal: AbortSignal.timeout(90000), headers: { "User-Agent": "CICAN-Books/1.0 (public-domain text acquisition)" } });
+    if (candidate.ok) { response = candidate; textUrl = candidateUrl; break; }
+  } catch (error) { console.log("Source attempt failed:", candidateUrl, error.message); }
+}
+if (!response) fail("Could not retrieve Project Gutenberg text from the available official download locations.");
 const text = normalize(await response.text());
 if (text.length < 5000) fail("Downloaded text is too short to be a complete book.");
 if (!/\*\*\* START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK/i.test(text) || !/\*\*\* END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK/i.test(text)) fail("Project Gutenberg start/end markers missing; refusing incomplete text.");
